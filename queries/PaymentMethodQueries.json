@@ -1,0 +1,4 @@
+{
+  "SelectAll": "SELECT pm.PaymentMethodKey,pm.PaymentMethodName,pm.IsActive,pm.LastUpdatedDate FROM homebudget.dimpaymentmethod pm"
+}
+
