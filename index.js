@@ -1,12 +1,16 @@
-var ApiServer = require('apiserver');
-var routes = require('./config/routes');
+// required configurations
+var routesConfig = require('./config/routes');
+var serverConfig = require('./config/server');
 var dbCredentials = require('./config/dbCredentials');
+
+// required classes
+var ApiServer = require('apiserver');
 var DBUtil = require('./framework/sql/DBUtil');
 var PaymentMethodModule = require('./modules/PaymentMethodModule');
 
 // instantiate the server
 var server = new ApiServer({
-  timeout: 2000
+  timeout: serverConfig.timeout
 });
 
 // instantiate a class of DBUtil with the credentials from configuration
@@ -16,7 +20,7 @@ var dbUtility = new DBUtil(dbCredentials);
 server.addModule('v1', 'paymentMethods', new PaymentMethodModule(dbUtility));
 
 // add supported routes
-server.router.addRoutes(routes);
+server.router.addRoutes(routesConfig);
 
 // enable console logging on events
 server.on('requestStart', function (pathname, time) {
@@ -24,7 +28,7 @@ server.on('requestStart', function (pathname, time) {
 });
 
 // begin listening for requests
-server.listen(8888, function() {
+server.listen(serverConfig.port, function() {
 
-  console.info('ApiServer listening at http://localhost:8888\n')
+  console.info('ApiServer listening at http://localhost:' + serverConfig.port + '\n')
 });

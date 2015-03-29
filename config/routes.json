@@ -1,3 +1,3 @@
 [
-  ["/paymentMethods/get-all", "v1/paymentMethods#GetAll"]
+  ["/paymentMethods/all", "v1/paymentMethods#GetAll"]
 ]
