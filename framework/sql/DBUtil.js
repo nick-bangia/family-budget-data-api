@@ -7,7 +7,6 @@ function DBUtil(credentials) {
 
 DBUtil.prototype.SelectRows = function(theQuery, processRows) {
 
-  this.dbConnection.connect();
   this.dbConnection.query(theQuery, function(err, rows, fields) {
     
     var dbResponse = new Response();

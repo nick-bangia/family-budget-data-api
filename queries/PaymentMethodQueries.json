@@ -1,4 +1,4 @@
 {
-  "SelectAll": "SELECT pm.PaymentMethodKey,pm.PaymentMethodName,pm.IsActive,pm.LastUpdatedDate FROM homebudget.dimpaymentmethod pm"
+  "SelectAll": "SELECT pm.PaymentMethodKey,pm.PaymentMethodName,pm.IsActive,pm.LastUpdatedDate FROM familybudget.dimpaymentmethod pm"
 }
 
