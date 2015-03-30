@@ -11,11 +11,11 @@
 
 case "$1" in
   start)
-  exec forever --sourceDir=/var/www/family-budget-api start server.js
+  sudo -u [INSERT USER NAME HERE] forever --sourceDir=/var/www/family-budget-api start server.js
   ;;
 
   stop)
-  exec forever stop --sourceDir=/var/www/family-budget-api server.js
+  sudo -u [INSERT USER NAME HERE] forever stop --sourceDir=/var/www/family-budget-api server.js
   ;;
 esac
 
