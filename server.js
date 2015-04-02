@@ -1,3 +1,7 @@
+// required node vars
+var fs = require('fs');
+var https = require('https');
+
 // required configurations
 var routesConfig = require('./config/routes');
 var serverConfig = require('./config/server');
@@ -8,8 +12,15 @@ var ApiServer = require('apiserver');
 var DBUtil = require('./framework/sql/DBUtil');
 var PaymentMethodModule = require('./modules/PaymentMethodModule');
 
-// instantiate the server
+// instantiate the https server
+var httpsOptions = {
+  key: fs.readFileSync('./config/keys/family-budget-key.pem'),
+  cert: fs.readFileSync('./config/keys/family-budget-cert.pem')
+};
+
+// instantiate the apiServer
 var server = new ApiServer({
+  server: https.createServer(httpsOptions),
   timeout: serverConfig.timeout
 });
 
@@ -30,5 +41,5 @@ server.on('requestStart', function (pathname, time) {
 // begin listening for requests
 server.listen(serverConfig.port, function() {
 
-  console.info('ApiServer listening at http://localhost:' + serverConfig.port + '\n')
+  console.info('ApiServer listening at https://localhost:' + serverConfig.port + '\n')
 });
