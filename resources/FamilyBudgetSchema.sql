@@ -11,6 +11,21 @@ SHOW WARNINGS;
 USE `FamilyBudget` ;
 
 -- -----------------------------------------------------
+-- Table `FamilyBudget`.`AuthorizedUser`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `FamilyBudget`.`AuthorizedUser` ;
+
+SHOW WARNINGS;
+CREATE TABLE IF NOT EXISTS `FamilyBudget`.`AuthorizedUser` (
+  `Username` VARCHAR(30) NOT NULL,
+  `Password` VARCHAR(32) NOT NULL,
+  `IsActive` TINYINT(1) NOT NULL,
+  PRIMARY KEY (`Username`))
+ENGINE = InnoDB;
+
+SHOW WARNINGS;
+
+-- -----------------------------------------------------
 -- Table `FamilyBudget`.`Months`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `FamilyBudget`.`Months` ;

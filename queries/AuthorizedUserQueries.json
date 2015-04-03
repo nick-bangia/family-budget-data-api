@@ -1,0 +1,3 @@
+{
+  "SelectAll": "SELECT au.username, au.password, au.isactive FROM familybudget.authorizeduser au WHERE au.isactive = 1"
+}
