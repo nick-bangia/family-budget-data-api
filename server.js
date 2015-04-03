@@ -20,8 +20,8 @@ var server = null;
 if (serverConfig.tls.enabled) {
   var httpsOptions = {
     cert: fs.readFileSync(serverConfig.tls.serverCertFile),
-	key: fs.readFileSync(serverConfig.tls.serverKeyFile),
-	requestCert: serverConfig.tls.requestClientCert
+    key: fs.readFileSync(serverConfig.tls.serverKeyFile),
+    requestCert: serverConfig.tls.requestClientCert
   };
 
   if (httpsOptions.requestCert) {
