@@ -37,7 +37,7 @@ if (serverConfig.tls.enabled) {
 } else {
   // instantiate the http apiServer
   server = new ApiServer({
-	timeout: serverConfig.timeout
+    timeout: serverConfig.timeout
   });
 }
 
@@ -50,18 +50,18 @@ var authorizedUserModule = new AuthorizedUserModule(dbUtility);
 if (serverConfig.authEnabled) {
   authorizedUserModule.GetAll(function(authorizedUsers) {
   
-	server.use(/.+/, ApiServer.httpAuth({
+    server.use(/.+/, ApiServer.httpAuth({
       realm: serverConfig.name,
       credentials: authorizedUsers,
       encode: true
     }));
 	
-	// continue configuring server
-	ConfigureServer(server);	
+    // continue configuring server
+    ConfigureServer(server);	
   });   
 } else {
-	// continue configuring server
-	ConfigureServer(server);
+  // continue configuring server
+  ConfigureServer(server);
 }
 
 function ConfigureServer(server) {
