@@ -1,6 +1,6 @@
 {
-  "SelectAll": "SELECT pm.PaymentMethodKey,pm.PaymentMethodName,pm.IsActive,pm.LastUpdatedDate FROM familybudget.dimpaymentmethod pm",
-  "UpdateRow": "UPDATE familybudget.dimpaymentmethod pm SET pm.PaymentMethodName = ?, pm.IsActive = ?, pm.LastUpdatedDate = ? WHERE pm.PaymentMethodKey = ?",
-  "InsertRow": "INSERT INTO familybudget.dimpaymentmethod (PaymentMethodKey, PaymentMethodName, IsActive, LastUpdatedDate) VALUES (?, ?, ?, ?)"
+  "SelectAll": "SELECT pm.PaymentMethodKey,pm.PaymentMethodName,pm.IsActive,pm.LastUpdatedDate FROM dimpaymentmethod pm",
+  "UpdateRow": "UPDATE dimpaymentmethod pm SET pm.PaymentMethodName = ?, pm.IsActive = ?, pm.LastUpdatedDate = ? WHERE pm.PaymentMethodKey = ?",
+  "InsertRow": "INSERT INTO dimpaymentmethod (PaymentMethodKey, PaymentMethodName, IsActive, LastUpdatedDate) VALUES (?, ?, ?, ?)"
 }
 

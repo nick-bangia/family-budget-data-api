@@ -1,0 +1,13 @@
+{
+  "name": "Family Budget API",
+  "port": 8080,
+  "timeout": 2000,
+  "tls": {
+	"enabled": false,
+    "serverCertFile": "./config/keys/family-budget-cert.pem",
+    "serverKeyFile": "./config/keys/family-budget-key.pem",
+    "requestClientCert": false,
+    "clientCertFile": "./config/keys/family-budget-ca.crt"
+  },
+  "authEnabled": true
+}

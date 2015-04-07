@@ -2,10 +2,18 @@
 var fs = require('fs');
 var https = require('https');
 
-// required configurations
+// required configurations. If this server is running in a test context, use differnt configurations
 var routesConfig = require('./config/routes');
-var serverConfig = require('./config/server');
-var dbCredentials = require('./config/dbCredentials');
+var serverConfigPath = './config/server';
+var dbCredentialsPath = './config/dbCredentials';
+
+if (process.argv[2] == 'testing') {
+  serverConfigPath = './test/config/server';
+  dbCredentialsPath = './test/config/dbCredentials';
+}
+
+var serverConfig = require(serverConfigPath);
+var dbCredentials = require(dbCredentialsPath);
 
 // required classes
 var ApiServer = require('apiserver');

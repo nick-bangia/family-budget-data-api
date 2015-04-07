@@ -21,8 +21,14 @@ DataUtil.prototype.ProcessRowsInSeries = function(callbacks, processingComplete)
       processingComplete(results);
     }
   }
-  // initial call to processRow to kickstart the process
-  processRow();
+  // initial call to processRow to kickstart the process, if callbacks has members
+  if (callbacks.length == 0) {
+    // if no callbacks (no rows), exit gracefully with empty results
+    processingComplete(results);
+  } else {
+    // otherwise, begin the serial processing
+    processRow();
+  }
 }
 
 DataUtil.prototype.ProcessRowsInParallel = function(callbacks, processingComplete) {
@@ -31,30 +37,42 @@ DataUtil.prototype.ProcessRowsInParallel = function(callbacks, processingComplet
   
   // asynchronously iterate through all callbacks and process each one into the array using the index
   // when the count of results reaches the length of the array, call on processingComplete with the results
-  callbacks.forEach( function(callback, index) {
-    callback( function() {
-      results[index] = arguments[0];
-      result_count++;
-	  
-      if (result_count == callbacks.length) {
-        processingComplete(results);  
-      }
+  if (callbacks.length == 0) {
+    // if there are no callbacks (no rows to process), exit gracefully with the empty array
+    processingComplete(results);
+  } else {
+    callbacks.forEach( function(callback, index) {
+      callback( function() {
+        results[index] = arguments[0];
+        result_count++;
+        
+        // only when the results length equals the number of callbacks (rows), should we be done
+        if (result_count == callbacks.length) {
+          processingComplete(results);  
+        }
+      });
     });
-  });
+  }
 }
 
 DataUtil.prototype.TransformRowsToCallbacks = function(rows, rowProcessor, transformComplete) {
   var callbackArray = [];
 	
   // iterate over each row, and create a row processor function with it
-  rows.forEach(function(row, index) {
-    callbackArray[index] = function(next) { rowProcessor(row, next) };
-	
-  if (rows.length == callbackArray.length) {
-    // once the array has been built, call transformComplete
+  if (rows.length == 0) {
+    // if no rows exist, return the empty array
     transformComplete(callbackArray);
+  } else {
+    rows.forEach(function(row, index) {
+      callbackArray[index] = function(next) { rowProcessor(row, next) };
+    
+      // only when the callbackArray has been fully built should we be done
+      if (rows.length == callbackArray.length) {
+        // once the array has been built, call transformComplete
+        transformComplete(callbackArray);
+      }
+    });
   }
-  });
 }
 
 DataUtil.prototype.ProcessList = function(dataArray, rowProcessor, processingComplete) {
