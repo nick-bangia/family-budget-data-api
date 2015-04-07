@@ -2,10 +2,11 @@
 RESTful API to expose family budgeting data services for consumption
 
 ## Dependencies
-This API required the following dependencies:
+This API requires the following dependencies:
 * APIServer ( npm install apiserver )
 * MySQL ( npm install mysql )
 * Forever ( npm install forever -g )
+* random-js ( npm install random-js )
 
 ## Installation
 You can install this web API by following the steps below:

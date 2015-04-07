@@ -15,6 +15,8 @@ var PaymentMethodModule = require('./modules/PaymentMethodModule');
 
 // initialize the server variable
 var server = null;
+// instantiate a class of DBUtil with the credentials from configuration
+var dbUtility = new DBUtil(dbCredentials);
 
 // instantiate an http(s) server, depending on whether tls is enabled
 if (serverConfig.tls.enabled) {
@@ -41,15 +43,13 @@ if (serverConfig.tls.enabled) {
   });
 }
 
-// instantiate a class of DBUtil with the credentials from configuration
-var dbUtility = new DBUtil(dbCredentials);
-
 // instantiate the authorizedUserModule to get a list of authorized users of this API
 var authorizedUserModule = new AuthorizedUserModule(dbUtility);
 
 if (serverConfig.authEnabled) {
   authorizedUserModule.GetAll(function(authorizedUsers) {
-  
+	
+    // set up the httpAuth middleware
     server.use(/.+/, ApiServer.httpAuth({
       realm: serverConfig.name,
       credentials: authorizedUsers,
@@ -64,7 +64,10 @@ if (serverConfig.authEnabled) {
   ConfigureServer(server);
 }
 
-function ConfigureServer(server) {
+function ConfigureServer(server) {  
+  // configure the payload parser middleware to parse the payload for any route that adds or updates a list
+  server.use(/^.+\/(update|add)$/, ApiServer.payloadParser());
+  
   // add supported modules
   server.addModule('v1', 'paymentMethods', new PaymentMethodModule(dbUtility));
 

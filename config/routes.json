@@ -1,3 +1,5 @@
 [
-  ["/paymentMethods/all", "v1/paymentMethods#GetAll"]
+  ["/paymentMethods/all", "v1/paymentMethods#GetAll"],
+  ["/paymentMethods/update", "v1/paymentMethods#UpdateList"],
+  ["/paymentMethods/add", "v1/paymentMethods#InsertList"]
 ]

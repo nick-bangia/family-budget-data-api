@@ -1,9 +1,15 @@
+var Random = require('random-js');
+
 function PaymentMethod() {
   // initialize properties
   this.paymentMethodKey = '';
   this.paymentMethodName = '';
   this.isActive = false;
   this.lastUpdated = new Date();
+}
+
+PaymentMethod.prototype.getNewKey = function() {
+  return Random.uuid4(Random.engines.mt19937().autoSeed());
 }
 
 PaymentMethod.prototype.getPaymentMethodKey = function() {
@@ -27,7 +33,7 @@ PaymentMethod.prototype.getIsActive = function() {
 }
 
 PaymentMethod.prototype.setIsActive = function(value) {
-  this.isActive = value;
+  this.isActive = value ? true : false;
 }
 
 PaymentMethod.prototype.getLastUpdated = function() {
