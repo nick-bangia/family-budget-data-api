@@ -1,5 +1,5 @@
 {
-  "name": "family-budget-data-api",
+  "name": "family-budget-api",
   "version": "0.1.15100",
   "description": "Data Access API for a Family Budgeting solution. Pairs with an excel add-in and a mobile app.",
   "main": "server.js",
