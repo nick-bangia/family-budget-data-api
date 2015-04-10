@@ -10,12 +10,13 @@ This API requires the following dependencies:
 
 ## Dev-Dependencies
 If developing and/or testing, the following dependencies are required:
-* Mocha ( 'npm install mocha' )
-* Chai ( 'npm install chai' )
-* Request ( 'npm install request' )
+* Mocha ( `npm install mocha` )
+* Chai ( `npm install chai` )
+* Request ( `npm install request` )
 
 ## Installation
 You can install this web API by following the steps below:
+
 1. Get the URL for the g-zipped tarball version that you are interested in (located at `./releases/` in the GitHub repository)
 
 2. Run `npm install [url]` for the URL above in the directory of your choice (`/var/www`) is good for production use. 
@@ -85,7 +86,7 @@ This API can also require the client to possess a certificate in order to commun
 
 *In /config/server.json, in the TLS section, identify this file for the "clientCertFile" key, and set the "requestClientCert" key to true.*
 
-#### Generate the client's certificate and private key
+#### Generate the Client's Certificate and Private Key
 
 *Create a private key*
 	
