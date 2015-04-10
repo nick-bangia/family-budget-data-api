@@ -268,6 +268,7 @@ CREATE TABLE IF NOT EXISTS `FamilyBudget`.`BudgetAllowances` (
 	`SubCategoryName` VARCHAR(100) NOT NULL,
 	`ReconciledAmount` DECIMAL(7,2) NOT NULL,
 	`PendingAmount` DECIMAL(7,2) NOT NULL,
+  `LatestTransactionDate` DATETIME NULL,
 	PRIMARY KEY (`SubCategoryName`))
 ENGINE = InnoDB;
 SHOW WARNINGS;

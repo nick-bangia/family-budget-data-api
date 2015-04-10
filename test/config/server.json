@@ -3,7 +3,7 @@
   "port": 8080,
   "timeout": 2000,
   "tls": {
-	"enabled": false,
+    "enabled": false,
     "serverCertFile": "./config/keys/family-budget-cert.pem",
     "serverKeyFile": "./config/keys/family-budget-key.pem",
     "requestClientCert": false,

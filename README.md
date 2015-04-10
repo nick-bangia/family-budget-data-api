@@ -3,30 +3,39 @@ RESTful API to expose family budgeting data services for consumption
 
 ## Dependencies
 This API requires the following dependencies:
-* APIServer ( npm install apiserver )
-* MySQL ( npm install mysql )
-* Forever ( npm install forever -g )
-* random-js ( npm install random-js )
+* APIServer ( `npm install apiserver` )
+* MySQL ( `npm install mysql` )
+* Forever ( Global Install in order to run it on a server *forever*. Install with `npm install forever -g` )
+* random-js ( `npm install random-js` )
+
+## Dev-Dependencies
+If developing and/or testing, the following dependencies are required:
+* Mocha ( 'npm install mocha' )
+* Chai ( 'npm install chai' )
+* Request ( 'npm install request' )
 
 ## Installation
 You can install this web API by following the steps below:
-1. Copy source files to /var/www/family-budget-api
+1. Get the URL for the g-zipped tarball version that you are interested in (located at `./releases/` in the GitHub repository)
 
-2. Install MySQL and run the SQL script in resources/ as root to create the database
+2. Run `npm install [url]` for the URL above in the directory of your choice (`/var/www`) is good for production use. 
+  * If interested in only production use, use the `--production` flag
 
-3. Update the Credentials SQL script in resources/ to change your username and password. Also change $host to your server's hostname
+3. Install MySQL server somewhere, and run the SQL script in `./resources/` to create the schema
 
-4. Run the Credentials SQL script to create the user & apply necessary grants
+4. Update the Credentials SQL script in `./resources/` to change your username and password. Also change $host to your server's hostname
 
-5. Log in to MySQL using new credentials and verify that you can make a SELECT statement
+5. Run the Credentials SQL script to create the user & apply necessary grants
 
-6. Update the dbCredentials.json file in /config to use the newly created user & password
+6. Log in to MySQL using new credentials and verify that you can make a SELECT statement
 
-7. Copy the family-budget-api init.d script in /resources to /etc/init.d/
+7. Update the dbCredentials.json file in `./config` to use the newly created user & password
 
-8. Reboot by executing sudo reboot
+8. Copy the family-budget-api init.d script in `./resources` to `/etc/init.d/`
 
-9. Verify that the service is up and running on the port you selected in /config/server.json
+9. Reboot by executing `sudo reboot`
+
+10. Verify that the service is up and running on the port you selected in `./config/server.json`
 
 ## HTTPS Server Configuration
 This API can be run in an encrypted state using TLS v1.2. Follow the steps below in a terminal to generate the proper private key & certificate for the server. Openssl is required.

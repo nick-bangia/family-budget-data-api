@@ -268,6 +268,7 @@ CREATE TABLE IF NOT EXISTS `FamilyBudget_Test`.`BudgetAllowances` (
 	`SubCategoryName` VARCHAR(100) NOT NULL,
 	`ReconciledAmount` DECIMAL(7,2) NOT NULL,
 	`PendingAmount` DECIMAL(7,2) NOT NULL,
+	`LatestTransactionDate` DATETIME NULL,
 	PRIMARY KEY (`SubCategoryName`))
 ENGINE = InnoDB;
 SHOW WARNINGS;
@@ -310,6 +311,34 @@ INSERT INTO Types (TypeId, TypeName) VALUES (1, 'Allocation');
 INSERT INTO Types (TypeId, TypeName) VALUES (2, 'Bucket Adjustment');
 INSERT INTO Types (TypeId, TypeName) VALUES (3, 'Goal');
 
+-- -----------------------------------------------------
+-- Test Data
+-- -----------------------------------------------------
+INSERT INTO AuthorizedUser (Username, Password, IsActive) VALUES ('TestUser', 'Testing123!', 1);
+
+INSERT INTO dimPaymentMethod (PaymentMethodKey, PaymentMethodName, IsActive, LastUpdatedDate) 
+  VALUES ('42F42C49-C3B1-47F8-9A80-9894CD4863F5', 'Test Payment Method', 1, CURDATE());
+
+INSERT INTO dimCategory (CategoryKey, CategoryName, LastUpdatedDate)
+  VALUES ('7C0A7D39-E2B5-4DAE-B24D-E3260DD7578F', 'Test Category', CURDATE());
+
+INSERT INTO dimAccount (AccountKey, AccountName, LastUpdatedDate)
+  VALUES ('F00D821B-6FDC-42B7-99D4-FCFC872F3C3A', 'Test Account', CURDATE());
+
+INSERT INTO dimSubCategory (SubCategoryKey, CategoryKey, AccountKey, SubCategoryName, SubCategoryPrefix, IsActive, IsGoal, LastUpdatedDate)
+  VALUES ('891B1158-E037-4854-B99B-7814845E0137', '7C0A7D39-E2B5-4DAE-B24D-E3260DD7578F', 'F00D821B-6FDC-42B7-99D4-FCFC872F3C3A',
+          'Test SubCategory', 'TSUB', 1, 0, CURDATE());
+
+INSERT INTO factLineItem  (UniqueKey, MonthId, DayOfMonth, DayOfWeekId, YearId, SubCategoryKey, 
+                            Description, Amount, TypeId, SubTypeId, QuarterId, PaymentMethodKey,
+                            StatusId, LastUpdatedDate)
+  VALUES ('CC44462D-4063-40B0-98B5-48BDF2791F4F', 1, 1, 0, 2015,
+          '891B1158-E037-4854-B99B-7814845E0137', 'Test Line Item', 10.95, 0, 1, 1,
+          '42F42C49-C3B1-47F8-9A80-9894CD4863F5', 0, CURDATE());
+
+INSERT INTO BudgetAllowances (CategoryName, SubCategoryName, ReconciledAmount, PendingAmount, LatestTransactionDate)
+  VALUES ('Test Category', 'Test SubCategory', 80, 34.25, CURDATE());
+                           
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

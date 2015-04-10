@@ -1,0 +1,14 @@
+{
+  "data": [
+    {
+      "paymentMethodKey": "42F42C49-C3B1-47F8-9A80-9894CD4863F5",
+      "paymentMethodName": "Updated Payment Method",
+      "isActive": false
+    },
+    {
+      "paymentMethodKey": "D7F42491-311A-467E-B6DD-82D736B817E5",
+      "paymentMethodName": "Attempt to Update Payment Method",
+      "isActive": true
+    }
+  ]
+}

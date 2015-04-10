@@ -7,7 +7,12 @@ var routesConfig = require('./config/routes');
 var serverConfigPath = './config/server';
 var dbCredentialsPath = './config/dbCredentials';
 
-if (process.argv[2] == 'testing') {
+// get the options (if any) into a variable
+var options = ((typeof process.argv[2]) === 'undefined') ? '' : process.argv[2];
+
+// if the TEST_ENV environment variable is set, then we are running in a test mode
+// so configure the server & db appropriately
+if (process.env.TEST_ENV || options.indexOf('t') > -1) {
   serverConfigPath = './test/config/server';
   dbCredentialsPath = './test/config/dbCredentials';
 }
@@ -17,14 +22,14 @@ var dbCredentials = require(dbCredentialsPath);
 
 // required classes
 var ApiServer = require('apiserver');
-var DBUtil = require('./framework/sql/DBUtil');
+var DBUtils = require('./framework/sql/DBUtils');
 var AuthorizedUserModule = require('./modules/AuthorizedUserModule');
 var PaymentMethodModule = require('./modules/PaymentMethodModule');
 
 // initialize the server variable
 var server = null;
 // instantiate a class of DBUtil with the credentials from configuration
-var dbUtility = new DBUtil(dbCredentials);
+var dbUtils = new DBUtils(dbCredentials);
 
 // instantiate an http(s) server, depending on whether tls is enabled
 if (serverConfig.tls.enabled) {
@@ -52,7 +57,7 @@ if (serverConfig.tls.enabled) {
 }
 
 // instantiate the authorizedUserModule to get a list of authorized users of this API
-var authorizedUserModule = new AuthorizedUserModule(dbUtility);
+var authorizedUserModule = new AuthorizedUserModule(dbUtils);
 
 if (serverConfig.authEnabled) {
   authorizedUserModule.GetAll(function(authorizedUsers) {
@@ -77,19 +82,24 @@ function ConfigureServer(server) {
   server.use(/^.+\/(update|add)$/, ApiServer.payloadParser());
   
   // add supported modules
-  server.addModule('v1', 'paymentMethods', new PaymentMethodModule(dbUtility));
-
+  server.addModule('v1', 'authorization', authorizedUserModule);
+  server.addModule('v1', 'paymentMethods', new PaymentMethodModule(dbUtils));
+  
   // add supported routes
   server.router.addRoutes(routesConfig);
 
-  // enable console logging on events
-  server.on('requestStart', function (pathname, time) {
-    console.info('starting %s\n', pathname)
-  });
+  // enable console logging on events if in debug mode (-d flag)
+  if (options.indexOf('d') > -1) {
+    server.on('requestStart', function (pathname, time) {
+      console.info('starting %s\n', pathname)
+    });
+  }
 
   // begin listening for requests
   server.listen(serverConfig.port, function() {
-    var protocol = serverConfig.tls.enabled ? "https" : "http";
-    console.info('ApiServer listening at ' + protocol + '://localhost:' + serverConfig.port + '\n');
+    if (options.indexOf('d') > -1) {
+      var protocol = serverConfig.tls.enabled ? "https" : "http";
+      console.info('ApiServer listening at ' + protocol + '://localhost:' + serverConfig.port + '\n');
+    }
   });
 }

@@ -1,11 +1,11 @@
 // requires
 var AuthorizedUserQueries = require('../queries/AuthorizedUserQueries');
 var Response = require('../framework/service/Response');
-var DataUtil = require('../framework/service/DataUtil');
+var DataUtils = require('../framework/service/DataUtils');
 
 // constructor
-function AuthorizedUserModule(dbUtility) {
-  this.dbUtility = dbUtility;
+function AuthorizedUserModule(dbUtils) {
+  this.dbUtils = dbUtils;
   
   this.GetAuthorizedUserCredentials = function(row, callback) {
   // convert given row into username:password formatted string
@@ -19,14 +19,14 @@ function AuthorizedUserModule(dbUtility) {
 // public methods
 AuthorizedUserModule.prototype.GetAll = function(finished) {
 
-  this.dbUtility.SelectRows(AuthorizedUserQueries.SelectAll, this.GetAuthorizedUserCredentials,
+  this.dbUtils.SelectRows(AuthorizedUserQueries.SelectAll, this.GetAuthorizedUserCredentials,
     function(dbResponse) {
       // check if the query was successful
       if (dbResponse.getStatus() == "ok") {
 
         // if successful, get an array of AuthorizedUsers
-        var dataUtility = new DataUtil();
-        dataUtility.ProcessRowsInParallel(dbResponse.getData(), function(authorizedUsers) {
+        var dataUtils = new DataUtils();
+        dataUtils.ProcessRowsInParallel(dbResponse.getData(), function(authorizedUsers) {
         
           // push authorizedUsers to the finished callback
           finished(authorizedUsers);
@@ -39,6 +39,13 @@ AuthorizedUserModule.prototype.GetAll = function(finished) {
       }
     }
   );
+}
+
+AuthorizedUserModule.prototype.CheckAuthorization = function(request, response) {
+  // simple method to allow for a "ping" check of whether user is authorized
+  // if this code gets executed, then the user is authorized, so return true
+  var authorized = { isAuthorized: true };
+  response.serveJSON(authorized);
 }
 
 // export the module

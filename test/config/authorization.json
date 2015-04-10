@@ -1,0 +1,5 @@
+{
+  "Username": "TestUser",
+  "ValidPassword": "Testing123!",
+  "InvalidPassword": "ThisIsATest123!"
+}

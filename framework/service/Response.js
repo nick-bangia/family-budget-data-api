@@ -28,5 +28,4 @@ Response.prototype.setData = function(value) {
   this.data = value;
 }
 
-
 module.exports = Response;
