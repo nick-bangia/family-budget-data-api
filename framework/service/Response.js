@@ -1,7 +1,7 @@
 function Response() {
   this.status = "ok";
   this.reason = "success";
-  this.data = null;
+  this.data = [];
 }
 
 Response.prototype.getStatus = function() {

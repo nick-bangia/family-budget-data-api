@@ -1,5 +1,5 @@
 [
-  ["/authorized", "v1/authorization#CheckAuthorization"],
+  ["/ping", "v1/authorization#Ping"],
   ["/paymentMethods/all", "v1/paymentMethods#GetAll"],
   ["/paymentMethods/update", "v1/paymentMethods#UpdateList"],
   ["/paymentMethods/add", "v1/paymentMethods#InsertList"]

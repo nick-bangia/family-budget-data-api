@@ -10,7 +10,6 @@ ResponseUtils.prototype.GenerateParseErrorResponse = function(error, callback) {
   // set the fields for this response accordingly for this parse error
   errorResponse.setStatus('failure');
   errorResponse.setReason('Request payload is incorrectly formatted - ' + parseError.message);
-  errorResponse.setData(parseError);
   
   // callback with this response
   callback(errorResponse);

@@ -41,11 +41,13 @@ AuthorizedUserModule.prototype.GetAll = function(finished) {
   );
 }
 
-AuthorizedUserModule.prototype.CheckAuthorization = function(request, response) {
+AuthorizedUserModule.prototype.Ping = function(request, response) {
   // simple method to allow for a "ping" check of whether user is authorized
-  // if this code gets executed, then the user is authorized, so return true
-  var authorized = { isAuthorized: true };
-  response.serveJSON(authorized);
+  // if this code gets executed, then respond with a success response with the
+  // isAuthorized object
+  var successResponse = new Response();
+  successResponse.data.push({ isAuthorized: true });
+  response.serveJSON(successResponse);
 }
 
 // export the module

@@ -2,7 +2,7 @@ var url, invalidCredentials, validCredentials, expectedWWWAuthenticateHeader, re
 
 describe('Authorization Testing', function() {
   before(function () {
-    url = testUtils.GetRootURL() + '/authorized';
+    url = testUtils.GetRootURL() + '/ping';
     invalidCredentials = testUtils.GetInvalidCredentials();
     validCredentials = testUtils.GetValidCredentials();
     expectedWWWAuthenticateHeader = testUtils.GetExpectedWWWAuthenticateHeader();
@@ -59,8 +59,12 @@ describe('Authorization Testing', function() {
       expect(response.headers['www-authenticate']).to.not.be.ok;
     });
     
-    it ('should have a JSON response of "isAuthorized: true"', function () {
-      expect(results.isAuthorized).to.be.true;
+    it ('should return a success object with a valid list for the data property', function () {
+      testUtils.TestStandardExpectationsForSuccessfulResult(results);
+    });
+    
+    it ('should have an entry in the data property of "isAuthorized: true"', function () {
+      expect(results.data[0].isAuthorized).to.be.true;
     });
   });
 });

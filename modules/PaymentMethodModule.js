@@ -25,7 +25,7 @@ function PaymentMethodModule(dbUtility) {
   
   this.ReadSinglePaymentMethodFromDatabase = function(paymentMethodKey, callback) {
     // read a single payment method from the database given the key
-    self.dbUtility.ReadSingleRowWithKey(PaymentMethodQueries.GetNewRowWithKey, [paymentMethodKey], function(readResult) {
+    self.dbUtility.ReadSingleRowWithKey(PaymentMethodQueries.GetRowWithKey, [paymentMethodKey], function(readResult) {
       if (readResult.status == 'ok') {
         self.ConvertRowToPaymentMethod(readResult.data, function(pm) {
           readResult.setData(pm);

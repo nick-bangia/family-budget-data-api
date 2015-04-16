@@ -2,6 +2,6 @@
   "SelectAll": "SELECT pm.PaymentMethodKey,pm.PaymentMethodName,pm.IsActive,pm.LastUpdatedDate FROM dimpaymentmethod pm",
   "UpdateRow": "UPDATE dimpaymentmethod pm SET pm.PaymentMethodName = ?, pm.IsActive = ?, pm.LastUpdatedDate = NOW() WHERE pm.PaymentMethodKey = ?",
   "InsertRow": "INSERT INTO dimpaymentmethod (PaymentMethodKey, PaymentMethodName, IsActive, LastUpdatedDate) VALUES (?, ?, ?, NOW())",
-  "GetNewRowWithKey": "SELECT pm.PaymentMethodKey, pm.PaymentMethodName, pm.IsActive, pm.LastUpdatedDate FROM dimpaymentmethod pm WHERE pm.PaymentMethodKey = ?"
+  "GetRowWithKey": "SELECT pm.PaymentMethodKey, pm.PaymentMethodName, pm.IsActive, pm.LastUpdatedDate FROM dimpaymentmethod pm WHERE pm.PaymentMethodKey = ?"
 }
 
