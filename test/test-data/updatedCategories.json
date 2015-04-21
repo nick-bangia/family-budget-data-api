@@ -1,0 +1,14 @@
+{
+  "data": [
+    {
+      "categoryKey": "7C0A7D39-E2B5-4DAE-B24D-E3260DD7578F",
+      "categoryName": "Test Category #1 - Updated",
+      "isActive": false
+    },
+    {
+      "categoryKey": "1615C5D9-3D68-4DBB-896E-C23C7F59CECE",
+      "categoryName": "Test Unknown Category Updated",
+      "isActive": true
+    }
+  ]
+}

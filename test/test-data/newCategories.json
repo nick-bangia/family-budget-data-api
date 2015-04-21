@@ -1,0 +1,12 @@
+{
+  "data": [
+    {
+      "categoryName": "Test Category 1",
+      "isActive": true
+    },
+    {
+      "categoryName": "Test Category 2",
+      "isActive": false
+    }
+  ]
+}

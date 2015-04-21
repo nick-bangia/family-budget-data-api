@@ -33,7 +33,7 @@ DROP TABLE IF EXISTS `FamilyBudget`.`Months` ;
 SHOW WARNINGS;
 CREATE TABLE IF NOT EXISTS `FamilyBudget`.`Months` (
   `MonthId` TINYINT(4) NOT NULL,
-  `MonthName` VARCHAR(50) NULL,
+  `MonthName` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`MonthId`))
 ENGINE = InnoDB;
 
@@ -47,7 +47,7 @@ DROP TABLE IF EXISTS `FamilyBudget`.`DaysOfWeek` ;
 SHOW WARNINGS;
 CREATE TABLE IF NOT EXISTS `FamilyBudget`.`DaysOfWeek` (
   `DayOfWeekId` TINYINT(4) NOT NULL,
-  `DayOfWeekName` VARCHAR(50) NULL,
+  `DayOfWeekName` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`DayOfWeekId`))
 ENGINE = InnoDB;
 
@@ -62,6 +62,7 @@ SHOW WARNINGS;
 CREATE TABLE IF NOT EXISTS `FamilyBudget`.`dimCategory` (
   `CategoryKey` CHAR(36) NOT NULL,
   `CategoryName` VARCHAR(100) NOT NULL,
+  `IsActive` TINYINT(1) NOT NULL,
   `LastUpdatedDate` DATETIME NULL,
   PRIMARY KEY (`CategoryKey`))
 ENGINE = InnoDB;
@@ -77,6 +78,7 @@ SHOW WARNINGS;
 CREATE TABLE IF NOT EXISTS `FamilyBudget`.`dimAccount` (
 	`AccountKey` CHAR(36) NOT NULL,
 	`AccountName` VARCHAR(100) NOT NULL,
+  `IsActive` TINYINT(1) NOT NULL,
 	`LastUpdatedDate` DATETIME NULL,
 	PRIMARY KEY (`AccountKey`))
 ENGINE = InnoDB;
@@ -93,10 +95,10 @@ CREATE TABLE IF NOT EXISTS `FamilyBudget`.`dimSubCategory` (
   `SubCategoryKey` CHAR(36) NOT NULL,
   `CategoryKey` CHAR(36) NOT NULL,
   `AccountKey` CHAR(36) NOT NULL,
-  `SubCategoryName` VARCHAR(100) NULL,
-  `SubCategoryPrefix` VARCHAR(10) NULL,
-  `IsActive` TINYINT(1) NULL,
-  `IsGoal` TINYINT(1) NULL,
+  `SubCategoryName` VARCHAR(100) NOT NULL,
+  `SubCategoryPrefix` VARCHAR(10) NOT NULL,
+  `IsActive` TINYINT(1) NOT NULL,
+  `IsGoal` TINYINT(1) NOT NULL,
   `LastUpdatedDate` DATETIME NULL,
   PRIMARY KEY (`SubCategoryKey`),
   CONSTRAINT `fk_dimSubCategory_dimCategory1`
@@ -124,7 +126,7 @@ DROP TABLE IF EXISTS `FamilyBudget`.`Statuses` ;
 SHOW WARNINGS;
 CREATE TABLE IF NOT EXISTS `FamilyBudget`.`Statuses` (
   `StatusId` TINYINT(4) NOT NULL,
-  `StatusName` VARCHAR(50) NULL,
+  `StatusName` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`StatusId`))
 ENGINE = InnoDB;
 
@@ -138,8 +140,8 @@ DROP TABLE IF EXISTS `FamilyBudget`.`dimPaymentMethod` ;
 SHOW WARNINGS;
 CREATE TABLE IF NOT EXISTS `FamilyBudget`.`dimPaymentMethod` (
   `PaymentMethodKey` CHAR(36) NOT NULL,
-  `PaymentMethodName` VARCHAR(100) NULL,
-  `IsActive` TINYINT(1) NULL,
+  `PaymentMethodName` VARCHAR(100) NOT NULL,
+  `IsActive` TINYINT(1) NOT NULL,
   `LastUpdatedDate` DATETIME NULL,
   PRIMARY KEY (`PaymentMethodKey`))
 ENGINE = InnoDB;
@@ -154,7 +156,7 @@ DROP TABLE IF EXISTS `FamilyBudget`.`SubTypes` ;
 SHOW WARNINGS;
 CREATE TABLE IF NOT EXISTS `FamilyBudget`.`SubTypes` (
   `SubTypeId` TINYINT(4) NOT NULL,
-  `SubTypeName` VARCHAR(50) NULL,
+  `SubTypeName` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`SubTypeId`))
 ENGINE = InnoDB;
 
@@ -168,7 +170,7 @@ DROP TABLE IF EXISTS `FamilyBudget`.`Types` ;
 SHOW WARNINGS;
 CREATE TABLE IF NOT EXISTS `FamilyBudget`.`Types` (
   `TypeId` TINYINT(4) NOT NULL,
-  `TypeName` VARCHAR(50) NULL,
+  `TypeName` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`TypeId`))
 ENGINE = InnoDB;
 

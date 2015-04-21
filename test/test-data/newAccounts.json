@@ -1,0 +1,12 @@
+{
+  "data": [
+    {
+      "accountName": "Test Account 1",
+      "isActive": true
+    },
+    {
+      "accountName": "Test Account 2",
+      "isActive": false
+    }
+  ]
+}
