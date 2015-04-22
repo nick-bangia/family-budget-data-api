@@ -60,7 +60,7 @@ describe('Authorization Testing', function() {
     });
     
     it ('should return a success object with a valid list for the data property', function () {
-      testUtils.TestStandardExpectationsForSuccessfulResult(results);
+      testUtils.TestStandardExpectationsForSuccessfulResult(results, 1);
     });
     
     it ('should have an entry in the data property of "isAuthorized: true"', function () {

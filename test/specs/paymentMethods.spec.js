@@ -33,7 +33,7 @@ describe('PaymentMethods', function() {
     
     it ('should return a success object with a valid list of paymentMethods', function() {
       // test the standard expectations for a successful result
-      testUtils.TestStandardExpectationsForSuccessfulResult(results);
+      testUtils.TestStandardExpectationsForSuccessfulResult(results, 1);
       
       // list items are payment methods
       expect(IsAPaymentMethod(results.data[0])).to.be.true;
@@ -43,7 +43,7 @@ describe('PaymentMethods', function() {
   describe('when a request is made to add payment methods (/paymentMethods/add)', function() {
     before(function(done) {
       fs.createReadStream('./test/test-data/newPaymentMethods.json').pipe(
-        authorizedRequest.post( {url: url + '/paymentMethods/add' }, function (err, resp, body) {
+        authorizedRequest.put( {url: url + '/paymentMethods/add' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);
@@ -57,10 +57,10 @@ describe('PaymentMethods', function() {
     
     it ('should return a success object with a valid list of responses per payment method added', function() {
       // test the standard expectations for a successful result
-      testUtils.TestStandardExpectationsForSuccessfulResult(results);
+      testUtils.TestStandardExpectationsForSuccessfulResult(results, 1);
       
-      // test the standard expectations for a post result
-      testUtils.TestStandardExpectationsForSuccessfulPostResult(results.data, newPaymentMethods.data.length);      
+      // test the standard expectations for a put result
+      testUtils.TestStandardExpectationsForSuccessfulPutResult(results.data, newPaymentMethods.data.length);      
     });
     
     it ('should have PaymentMethod objects in the successful result', function() {
@@ -71,7 +71,7 @@ describe('PaymentMethods', function() {
   describe('when a request is made to update payment methods (/paymentMethods/update)', function() {
     before(function(done) {
       fs.createReadStream('./test/test-data/updatedPaymentMethods.json').pipe(
-        authorizedRequest.post( {url: url + '/paymentMethods/update' }, function (err, resp, body) {
+        authorizedRequest.put( {url: url + '/paymentMethods/update' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);
@@ -85,10 +85,10 @@ describe('PaymentMethods', function() {
     
     it ('should return a success object with a valid list of responses per payment method added', function() {
       // test the standard expectations for all results
-      testUtils.TestStandardExpectationsForSuccessfulResult(results);
+      testUtils.TestStandardExpectationsForSuccessfulResult(results, 1);
       
-      // test the standard expectations for a post result
-      testUtils.TestStandardExpectationsForSuccessfulPostResult(results.data, updatedPaymentMethods.data.length);
+      // test the standard expectations for a put result
+      testUtils.TestStandardExpectationsForSuccessfulPutResult(results.data, updatedPaymentMethods.data.length);
              
       // test individual results for the update operation. We should expect 1 success and 1 failure due to no rows affected
       expect(results.data.filter( testUtils.TestSuccessfulResult ).length).to.be.above(0);
@@ -101,11 +101,11 @@ describe('PaymentMethods', function() {
     });
   });
   
-  describe('when a request is made to add payment methods but has invalid JSON post data', function() {
+  describe('when a request is made to add payment methods but has an invalid JSON body', function() {
     
     before(function(done) {
       fs.createReadStream('./test/test-data/invalidFormat.json').pipe(
-        authorizedRequest.post( {url: url + '/paymentMethods/add' }, function (err, resp, body) {
+        authorizedRequest.put( {url: url + '/paymentMethods/add' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);
@@ -123,11 +123,11 @@ describe('PaymentMethods', function() {
     });
   });
   
-  describe('when a request is made to update payment methods but has invalid JSON post data', function() {
+  describe('when a request is made to update payment methods but has an invalid JSON body', function() {
     
     before(function(done) {
       fs.createReadStream('./test/test-data/invalidFormat.json').pipe(
-        authorizedRequest.post( {url: url + '/paymentMethods/update' }, function (err, resp, body) {
+        authorizedRequest.put( {url: url + '/paymentMethods/update' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);

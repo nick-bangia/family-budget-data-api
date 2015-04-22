@@ -12,7 +12,7 @@ var IsACategory = function(data) {
          );
 }
 
-describe.skip('Categories', function() {
+describe('Categories', function() {
   
   before(function() {
     url = testUtils.GetRootURL();
@@ -33,7 +33,7 @@ describe.skip('Categories', function() {
     
     it ('should return a success object with a valid list of categories', function() {
       // test the standard expectations for a successful result
-      testUtils.TestStandardExpectationsForSuccessfulResult(results);
+      testUtils.TestStandardExpectationsForSuccessfulResult(results, 1);
       
       // list items are categories
       expect(IsACategory(results.data[0])).to.be.true;
@@ -43,7 +43,7 @@ describe.skip('Categories', function() {
   describe('when a request is made to add categories (/categories/add)', function() {
     before(function(done) {
       fs.createReadStream('./test/test-data/newCategories.json').pipe(
-        authorizedRequest.post( {url: url + '/categories/add' }, function (err, resp, body) {
+        authorizedRequest.put( {url: url + '/categories/add' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);
@@ -57,10 +57,10 @@ describe.skip('Categories', function() {
     
     it ('should return a success object with a valid list of responses per category added', function() {
       // test the standard expectations for a successful result
-      testUtils.TestStandardExpectationsForSuccessfulResult(results);
+      testUtils.TestStandardExpectationsForSuccessfulResult(results, 1);
       
-      // test the standard expectations for a post result
-      testUtils.TestStandardExpectationsForSuccessfulPostResult(results.data, newCategories.data.length);      
+      // test the standard expectations for a put result
+      testUtils.TestStandardExpectationsForSuccessfulPutResult(results.data, newCategories.data.length);      
     });
     
     it ('should have category objects in the successful result', function() {
@@ -71,7 +71,7 @@ describe.skip('Categories', function() {
   describe('when a request is made to update categories (/categories/update)', function() {
     before(function(done) {
       fs.createReadStream('./test/test-data/updatedCategories.json').pipe(
-        authorizedRequest.post( {url: url + '/categories/update' }, function (err, resp, body) {
+        authorizedRequest.put( {url: url + '/categories/update' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);
@@ -85,10 +85,10 @@ describe.skip('Categories', function() {
     
     it ('should return a success object with a valid list of responses per category updated', function() {
       // test the standard expectations for all results
-      testUtils.TestStandardExpectationsForSuccessfulResult(results);
+      testUtils.TestStandardExpectationsForSuccessfulResult(results, 1);
       
-      // test the standard expectations for a post result
-      testUtils.TestStandardExpectationsForSuccessfulPostResult(results.data, updatedCategories.data.length);
+      // test the standard expectations for a put result
+      testUtils.TestStandardExpectationsForSuccessfulPutResult(results.data, updatedCategories.data.length);
              
       // test individual results for the update operation. We should expect 1 success and 1 failure due to no rows affected
       expect(results.data.filter( testUtils.TestSuccessfulResult ).length).to.be.above(0);
@@ -101,11 +101,11 @@ describe.skip('Categories', function() {
     });
   });
   
-  describe('when a request is made to add categories but has invalid JSON post data', function() {
+  describe('when a request is made to add categories but has an invalid JSON body', function() {
     
     before(function(done) {
       fs.createReadStream('./test/test-data/invalidFormat.json').pipe(
-        authorizedRequest.post( {url: url + '/categories/add' }, function (err, resp, body) {
+        authorizedRequest.put( {url: url + '/categories/add' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);
@@ -123,11 +123,11 @@ describe.skip('Categories', function() {
     });
   });
   
-  describe('when a request is made to update categories but has invalid JSON post data', function() {
+  describe('when a request is made to update categories but has an invalid JSON body', function() {
     
     before(function(done) {
       fs.createReadStream('./test/test-data/invalidFormat.json').pipe(
-        authorizedRequest.post( {url: url + '/categories/update' }, function (err, resp, body) {
+        authorizedRequest.put( {url: url + '/categories/update' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);

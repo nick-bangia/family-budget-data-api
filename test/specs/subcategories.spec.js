@@ -16,7 +16,7 @@ var IsASubcategory = function(data) {
          );
 }
 
-describe.skip('Subcategories', function() {
+describe('Subcategories', function() {
   
   before(function() {
     url = testUtils.GetRootURL();
@@ -37,7 +37,7 @@ describe.skip('Subcategories', function() {
     
     it ('should return a success object with a valid list of subcategories', function() {
       // test the standard expectations for a successful result
-      testUtils.TestStandardExpectationsForSuccessfulResult(results);
+      testUtils.TestStandardExpectationsForSuccessfulResult(results, 1);
       
       // list items are subcategories
       expect(IsASubcategory(results.data[0])).to.be.true;
@@ -47,7 +47,7 @@ describe.skip('Subcategories', function() {
   describe('when a request is made to add subcategories (/subcategories/add)', function() {
     before(function(done) {
       fs.createReadStream('./test/test-data/newSubcategories.json').pipe(
-        authorizedRequest.post( {url: url + '/subcategories/add' }, function (err, resp, body) {
+        authorizedRequest.put( {url: url + '/subcategories/add' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);
@@ -61,10 +61,10 @@ describe.skip('Subcategories', function() {
     
     it ('should return a success object with a valid list of responses per subcategory added', function() {
       // test the standard expectations for a successful result
-      testUtils.TestStandardExpectationsForSuccessfulResult(results);
+      testUtils.TestStandardExpectationsForSuccessfulResult(results, 1);
       
-      // test the standard expectations for a post result
-      testUtils.TestStandardExpectationsForSuccessfulPostResult(results.data, newSubcategories.data.length);      
+      // test the standard expectations for a put result
+      testUtils.TestStandardExpectationsForSuccessfulPutResult(results.data, newSubcategories.data.length);      
     });
     
     it ('should have subcategory objects in the successful result', function() {
@@ -75,7 +75,7 @@ describe.skip('Subcategories', function() {
   describe('when a request is made to update subcategories (/subcategories/update)', function() {
     before(function(done) {
       fs.createReadStream('./test/test-data/updatedSubcategories.json').pipe(
-        authorizedRequest.post( {url: url + '/subcategories/update' }, function (err, resp, body) {
+        authorizedRequest.put( {url: url + '/subcategories/update' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);
@@ -89,10 +89,10 @@ describe.skip('Subcategories', function() {
     
     it ('should return a success object with a valid list of responses per subcategory updated', function() {
       // test the standard expectations for all results
-      testUtils.TestStandardExpectationsForSuccessfulResult(results);
+      testUtils.TestStandardExpectationsForSuccessfulResult(results, 1);
       
-      // test the standard expectations for a post result
-      testUtils.TestStandardExpectationsForSuccessfulPostResult(results.data, updatedSubcategories.data.length);
+      // test the standard expectations for a put result
+      testUtils.TestStandardExpectationsForSuccessfulPutResult(results.data, updatedSubcategories.data.length);
              
       // test individual results for the update operation. We should expect 1 success and 1 failure due to no rows affected
       expect(results.data.filter( testUtils.TestSuccessfulResult ).length).to.be.above(0);
@@ -105,11 +105,11 @@ describe.skip('Subcategories', function() {
     });
   });
   
-  describe('when a request is made to add subcategories but has invalid JSON post data', function() {
+  describe('when a request is made to add subcategories but has an invalid JSON body', function() {
     
     before(function(done) {
       fs.createReadStream('./test/test-data/invalidFormat.json').pipe(
-        authorizedRequest.post( {url: url + '/subcategories/add' }, function (err, resp, body) {
+        authorizedRequest.put( {url: url + '/subcategories/add' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);
@@ -127,11 +127,11 @@ describe.skip('Subcategories', function() {
     });
   });
   
-  describe('when a request is made to update subcategories but has invalid JSON post data', function() {
+  describe('when a request is made to update subcategories but has an invalid JSON body', function() {
     
     before(function(done) {
       fs.createReadStream('./test/test-data/invalidFormat.json').pipe(
-        authorizedRequest.post( {url: url + '/subcategories/update' }, function (err, resp, body) {
+        authorizedRequest.put( {url: url + '/subcategories/update' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);

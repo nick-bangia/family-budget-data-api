@@ -37,9 +37,10 @@ describe.skip('Line Items', function() {
     url = testUtils.GetRootURL();
   });
   
-  describe('when a request is made to /lineitems/all', function() {
+  describe('when a request is made to /lineItems/all', function() {
+    
     before(function(done) {
-      authorizedRequest.get( {url: url + '/lineitems/all' }, function (err, resp, body) {
+      authorizedRequest.get( {url: url + '/lineItems/all' }, function (err, resp, body) {
         response = resp;
         results = JSON.parse(body);
         done(err);
@@ -52,17 +53,18 @@ describe.skip('Line Items', function() {
     
     it ('should return a success object with a valid list of denormalized line items', function() {
       // test the standard expectations for a successful result
-      testUtils.TestStandardExpectationsForSuccessfulResult(results);
+      testUtils.TestStandardExpectationsForSuccessfulResult(results, 1);
       
       // list items are line items
       expect(IsALineItem(results.data[0])).to.be.true;
     });
   });
   
-  describe('when a request is made to /lineitems/search', function() {
+  describe('when a request is made to /lineItems/search', function() {
+    
     before(function(done) {
       fs.createReadStream('./test/test-data/searchCriteria.json').pipe(
-        authorizedRequest.get( {url: url + '/lineitems/search' }, function (err, resp, body) {
+        authorizedRequest.get( {url: url + '/lineItems/search' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);
@@ -76,7 +78,7 @@ describe.skip('Line Items', function() {
     
     it ('should return a success object with a valid list of denormalized line items', function() {
       // test the standard expectations for a successful result
-      testUtils.TestStandardExpectationsForSuccessfulResult(results);
+      testUtils.TestStandardExpectationsForSuccessfulResult(results, 1);
       
       // list items are line items
       expect(IsALineItem(results.data[0])).to.be.true;
@@ -88,10 +90,11 @@ describe.skip('Line Items', function() {
     });
   });
   
-  describe('when a request is made to add line items (/lineitems/add)', function() {
+  describe('when a request is made to add line items (/lineItems/add)', function() {
+    
     before(function(done) {
       fs.createReadStream('./test/test-data/newLineItems.json').pipe(
-        authorizedRequest.post( {url: url + '/lineitems/add' }, function (err, resp, body) {
+        authorizedRequest.post( {url: url + '/lineItems/add' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);
@@ -105,7 +108,7 @@ describe.skip('Line Items', function() {
     
     it ('should return a success object with a valid list of responses per line item added', function() {
       // test the standard expectations for a successful result
-      testUtils.TestStandardExpectationsForSuccessfulResult(results);
+      testUtils.TestStandardExpectationsForSuccessfulResult(results, 1);
       
       // test the standard expectations for a post result
       testUtils.TestStandardExpectationsForSuccessfulPostResult(results.data, newLineItems.data.length);      
@@ -116,10 +119,11 @@ describe.skip('Line Items', function() {
     });
   });
   
-  describe('when a request is made to update line items (/lineitems/update)', function() {
+  describe('when a request is made to update line items (/lineItems/update)', function() {
+    
     before(function(done) {
       fs.createReadStream('./test/test-data/updatedLineItems.json').pipe(
-        authorizedRequest.post( {url: url + '/lineitems/update' }, function (err, resp, body) {
+        authorizedRequest.post( {url: url + '/lineItems/update' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);
@@ -133,7 +137,7 @@ describe.skip('Line Items', function() {
     
     it ('should return a success object with a valid list of responses per line item updated', function() {
       // test the standard expectations for all results
-      testUtils.TestStandardExpectationsForSuccessfulResult(results);
+      testUtils.TestStandardExpectationsForSuccessfulResult(results, 1);
       
       // test the standard expectations for a post result
       testUtils.TestStandardExpectationsForSuccessfulPostResult(results.data, updatedLineItems.data.length);
@@ -149,11 +153,30 @@ describe.skip('Line Items', function() {
     });
   });
   
+  describe('when a request is made to delete a line item', function() {
+    
+    before(function(done) {
+      authorizedRequest.del( { url: url + '/lineItems/delete/47F4789B-E0F8-47EA-8CCB-983F2F06C88C' }, function(err, resp, body) {
+        response = resp;
+        results = JSON.parse(body);
+        done(err);
+      });
+    });
+    
+    it ('should be authorized & OK', function() {
+      expect(response.statusCode).to.equal(200);
+    });
+    
+    it ('should return a success object with no items in the data array', function() {
+      testUtils.TestStandardExpectationsForSuccessfulResult(results, 0);
+    });
+  });
+  
   describe('when a request is made to add line items but has invalid JSON post data', function() {
     
     before(function(done) {
       fs.createReadStream('./test/test-data/invalidFormat.json').pipe(
-        authorizedRequest.post( {url: url + '/lineitems/add' }, function (err, resp, body) {
+        authorizedRequest.post( {url: url + '/lineItems/add' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);
@@ -175,7 +198,7 @@ describe.skip('Line Items', function() {
     
     before(function(done) {
       fs.createReadStream('./test/test-data/invalidFormat.json').pipe(
-        authorizedRequest.post( {url: url + '/lineitems/update' }, function (err, resp, body) {
+        authorizedRequest.post( {url: url + '/lineItems/update' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);

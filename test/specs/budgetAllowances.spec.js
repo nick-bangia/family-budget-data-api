@@ -32,7 +32,7 @@ describe.skip('Budget Allowances', function() {
     
     it ('should return a success object with a valid list of budget allowances', function() {
       // test the standard expectations for a successful result
-      testUtils.TestStandardExpectationsForSuccessfulResult(results);
+      testUtils.TestStandardExpectationsForSuccessfulResult(results, 1);
       
       // list items are budget allowances
       expect(IsABudgetAllowance(results.data[0])).to.be.true;

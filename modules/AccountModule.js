@@ -1,34 +1,34 @@
 // requires
-var PaymentMethod = require('../model/PaymentMethod');
-var PaymentMethodQueries = require('../queries/PaymentMethodQueries');
+var Account = require('../model/Account');
+var AccountQueries = require('../queries/AccountQueries');
 var Response = require('../framework/service/Response');
 var DataUtils = require('../framework/service/DataUtils');
 var ResponseUtils = require('../framework/service/ResponseUtils');
 
 // constructor
-function PaymentMethodModule(dbUtility) {
+function AccountModule(dbUtility) {
   this.dbUtility = dbUtility;
   var self = this;
   
-  this.ConvertRowToPaymentMethod = function(row, callback) {
-    // convert the given row into a PaymentMethod and push it to callback
-    var pm = new PaymentMethod();
+  this.ConvertRowToAccount = function(row, callback) {
+    // convert the given row into a Account and push it to callback
+    var acc = new Account();
 
-    pm.setPaymentMethodKey(row.PaymentMethodKey);
-    pm.setPaymentMethodName(row.PaymentMethodName);
-    pm.setIsActive(row.IsActive);
-    pm.setLastUpdated(row.LastUpdatedDate);
+    acc.setAccountKey(row.AccountKey);
+    acc.setAccountName(row.AccountName);
+    acc.setIsActive(row.IsActive);
+    acc.setLastUpdated(row.LastUpdatedDate);
 
-    // push the PaymentMethod to callback
-    callback(pm);
+    // push the Account to callback
+    callback(acc);
   }
   
-  this.ReadSinglePaymentMethodFromDatabase = function(paymentMethodKey, callback) {
-    // read a single payment method from the database given the key
-    self.dbUtility.ReadSingleRowWithKey(PaymentMethodQueries.GetRowWithKey, [paymentMethodKey], function(readResult) {
+  this.ReadSingleAccountFromDatabase = function(accountKey, callback) {
+    // read a single account from the database given the key
+    self.dbUtility.ReadSingleRowWithKey(AccountQueries.GetRowWithKey, [accountKey], function(readResult) {
       if (readResult.status == 'ok') {
-        self.ConvertRowToPaymentMethod(readResult.data, function(pm) {
-          readResult.setData(pm);
+        self.ConvertRowToAccount(readResult.data, function(acc) {
+          readResult.setData(acc);
           callback(readResult);
         });
       } else {
@@ -37,16 +37,16 @@ function PaymentMethodModule(dbUtility) {
     });
   }
   
-  this.UpdatePaymentMethodInDatabase = function(paymentMethodObject, callback) {
-    // convert the given object to a PaymentMethod and update it in the DB
-    paymentMethodObject.__proto__ = PaymentMethod.prototype;
-    var params = [paymentMethodObject.getPaymentMethodName(), paymentMethodObject.getIsActive(), paymentMethodObject.getPaymentMethodKey()];    
+  this.UpdateAccountInDatabase = function(accountObject, callback) {
+    // convert the given object to a Account and update it in the DB
+    accountObject.__proto__ = Account.prototype;
+    var params = [accountObject.getAccountName(), accountObject.getIsActive(), accountObject.getAccountKey()];    
     
-    self.dbUtility.SingleRowCUQueryWithParams(PaymentMethodQueries.UpdateRow, params, function(updateResult) {
+    self.dbUtility.SingleRowCUQueryWithParams(AccountQueries.UpdateRow, params, function(updateResult) {
       // once the update query is complete, get the updated row, and return to callback
       if (updateResult.status == 'ok') {
         // get the updated row
-        self.ReadSinglePaymentMethodFromDatabase(paymentMethodObject.getPaymentMethodKey(), function(readResult) {
+        self.ReadSingleAccountFromDatabase(accountObject.getAccountKey(), function(readResult) {
           callback(readResult);
         });
       } else {
@@ -55,17 +55,17 @@ function PaymentMethodModule(dbUtility) {
     });
   }
   
-  this.InsertPaymentMethodInDatabase = function(paymentMethodObject, callback) {
-    // convert the given object to a PaymentMethod and update it in the DB
-    paymentMethodObject.__proto__ = PaymentMethod.prototype;
-    var newKey = paymentMethodObject.getNewKey();
-    var params = [newKey, paymentMethodObject.getPaymentMethodName(), paymentMethodObject.getIsActive()];
+  this.InsertAccountInDatabase = function(accountObject, callback) {
+    // convert the given object to a Account and update it in the DB
+    accountObject.__proto__ = Account.prototype;
+    var newKey = accountObject.getNewKey();
+    var params = [newKey, accountObject.getAccountName(), accountObject.getIsActive()];
     
-    self.dbUtility.SingleRowCUQueryWithParams(PaymentMethodQueries.InsertRow, params, function(insertResult) {
+    self.dbUtility.SingleRowCUQueryWithParams(AccountQueries.InsertRow, params, function(insertResult) {
       // once the insert query is successful, get the newly inserted row, and return to callback
       if (insertResult.status == 'ok') {
         // get the new row
-        self.ReadSinglePaymentMethodFromDatabase(newKey, function(readResult) {
+        self.ReadSingleAccountFromDatabase(newKey, function(readResult) {
           callback(readResult);
         });
       } else {
@@ -76,24 +76,24 @@ function PaymentMethodModule(dbUtility) {
 }
 
 // public methods
-PaymentMethodModule.prototype.GetAll = {
+AccountModule.prototype.GetAll = {
   get: function(request, response) {
     var self = this;
     
-    this.dbUtility.SelectRows(PaymentMethodQueries.SelectAll, self.ConvertRowToPaymentMethod, 
+    this.dbUtility.SelectRows(AccountQueries.SelectAll, self.ConvertRowToAccount, 
       function(dbResponse) {
         // check if the query was successful
         if (dbResponse.getStatus() == "ok") {
 
-          // if successful, get an array of PaymentMethods
+          // if successful, get an array of Accounts
           var dataUtils = new DataUtils();
-          dataUtils.ProcessRowsInParallel(dbResponse.getData(), function(paymentMethods) {
+          dataUtils.ProcessRowsInParallel(dbResponse.getData(), function(accounts) {
 
             //  wrap it in a response object
             var getAllResponse = new Response();
-            getAllResponse.setData(paymentMethods);
+            getAllResponse.setData(accounts);
                   
-            // serve the paymentMethods as JSON
+            // serve the accounts as JSON
             response.serveJSON(getAllResponse);
           });
 
@@ -106,7 +106,7 @@ PaymentMethodModule.prototype.GetAll = {
   }
 }
 
-PaymentMethodModule.prototype.UpdateList = {
+AccountModule.prototype.UpdateList = {
   
   put: function(request, response) {
     var self = this;
@@ -123,7 +123,7 @@ PaymentMethodModule.prototype.UpdateList = {
       } else {
         // process data and serve response
         var dataUtils = new DataUtils();
-        dataUtils.ProcessList(request.body.data, self.UpdatePaymentMethodInDatabase, 
+        dataUtils.ProcessList(request.body.data, self.UpdateAccountInDatabase, 
           function(updateResponse) {
             // serve the response back to caller
             response.serveJSON(updateResponse);
@@ -136,7 +136,7 @@ PaymentMethodModule.prototype.UpdateList = {
   }
 }
 
-PaymentMethodModule.prototype.InsertList = {
+AccountModule.prototype.InsertList = {
 
   put: function(request, response) {
     var self = this;
@@ -153,7 +153,7 @@ PaymentMethodModule.prototype.InsertList = {
       } else {
         // process data and serve response
         var dataUtils = new DataUtils();
-        dataUtils.ProcessList(request.body.data, self.InsertPaymentMethodInDatabase,
+        dataUtils.ProcessList(request.body.data, self.InsertAccountInDatabase,
           function(insertResponse) {
             // serve the response back to the caller
             response.serveJSON(insertResponse);
@@ -167,4 +167,4 @@ PaymentMethodModule.prototype.InsertList = {
 }
 
 // export the module
-module.exports = PaymentMethodModule;
+module.exports = AccountModule;

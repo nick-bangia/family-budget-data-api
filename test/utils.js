@@ -40,7 +40,7 @@ TestUtils.prototype.GetAuthorizedRequest = function() {
   return authorizedRequest;
 }
 
-TestUtils.prototype.TestStandardExpectationsForSuccessfulResult = function(results) {
+TestUtils.prototype.TestStandardExpectationsForSuccessfulResult = function(results, expectedListLength) {
   // success object
   expect(results).to.be.an('object');
   expect(results.status).to.equal('ok');
@@ -48,10 +48,10 @@ TestUtils.prototype.TestStandardExpectationsForSuccessfulResult = function(resul
   
   // data property is a list
   expect(this.TypeOf( results.data )).to.equal(this.TypeOf([]));
-  expect(results.data.length).to.be.at.least(1);
+  expect(results.data.length).to.be.at.least(expectedListLength);
 }
 
-TestUtils.prototype.TestStandardExpectationsForSuccessfulPostResult = function(resultData, expectedListLength) {
+TestUtils.prototype.TestStandardExpectationsForSuccessfulPutResult = function(resultData, expectedListLength) {
   // list item is a response object with a data array
   expect(resultData[0]).to.have.property('status');
   expect(resultData[0]).to.have.property('reason');

@@ -12,7 +12,7 @@ var IsAnAccount = function(data) {
          );
 }
 
-describe.skip('Accounts', function() {
+describe('Accounts', function() {
   
   before(function() {
     url = testUtils.GetRootURL();
@@ -33,7 +33,7 @@ describe.skip('Accounts', function() {
     
     it ('should return a success object with a valid list of accounts', function() {
       // test the standard expectations for a successful result
-      testUtils.TestStandardExpectationsForSuccessfulResult(results);
+      testUtils.TestStandardExpectationsForSuccessfulResult(results, 1);
       
       // list items are accounts
       expect(IsAnAccount(results.data[0])).to.be.true;
@@ -43,7 +43,7 @@ describe.skip('Accounts', function() {
   describe('when a request is made to add accounts (/accounts/add)', function() {
     before(function(done) {
       fs.createReadStream('./test/test-data/newAccounts.json').pipe(
-        authorizedRequest.post( {url: url + '/accounts/add' }, function (err, resp, body) {
+        authorizedRequest.put( {url: url + '/accounts/add' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);
@@ -57,10 +57,10 @@ describe.skip('Accounts', function() {
     
     it ('should return a success object with a valid list of responses per account added', function() {
       // test the standard expectations for a successful result
-      testUtils.TestStandardExpectationsForSuccessfulResult(results);
+      testUtils.TestStandardExpectationsForSuccessfulResult(results, 1);
       
-      // test the standard expectations for a post result
-      testUtils.TestStandardExpectationsForSuccessfulPostResult(results.data, newAccounts.data.length);      
+      // test the standard expectations for a put result
+      testUtils.TestStandardExpectationsForSuccessfulPutResult(results.data, newAccounts.data.length);      
     });
     
     it ('should have account objects in the successful result', function() {
@@ -71,7 +71,7 @@ describe.skip('Accounts', function() {
   describe('when a request is made to update accounts (/accounts/update)', function() {
     before(function(done) {
       fs.createReadStream('./test/test-data/updatedAccounts.json').pipe(
-        authorizedRequest.post( {url: url + '/accounts/update' }, function (err, resp, body) {
+        authorizedRequest.put( {url: url + '/accounts/update' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);
@@ -85,10 +85,10 @@ describe.skip('Accounts', function() {
     
     it ('should return a success object with a valid list of responses per account updated', function() {
       // test the standard expectations for all results
-      testUtils.TestStandardExpectationsForSuccessfulResult(results);
+      testUtils.TestStandardExpectationsForSuccessfulResult(results, 1);
       
-      // test the standard expectations for a post result
-      testUtils.TestStandardExpectationsForSuccessfulPostResult(results.data, updatedAccounts.data.length);
+      // test the standard expectations for a put result
+      testUtils.TestStandardExpectationsForSuccessfulPutResult(results.data, updatedAccounts.data.length);
              
       // test individual results for the update operation. We should expect 1 success and 1 failure due to no rows affected
       expect(results.data.filter( testUtils.TestSuccessfulResult ).length).to.be.above(0);
@@ -101,11 +101,11 @@ describe.skip('Accounts', function() {
     });
   });
   
-  describe('when a request is made to add accounts but has invalid JSON post data', function() {
+  describe('when a request is made to add accounts but has an invalid JSON body', function() {
     
     before(function(done) {
       fs.createReadStream('./test/test-data/invalidFormat.json').pipe(
-        authorizedRequest.post( {url: url + '/accounts/add' }, function (err, resp, body) {
+        authorizedRequest.put( {url: url + '/accounts/add' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);
@@ -123,11 +123,11 @@ describe.skip('Accounts', function() {
     });
   });
   
-  describe('when a request is made to update accounts but has invalid JSON post data', function() {
+  describe('when a request is made to update accounts but has an invalid JSON body', function() {
     
     before(function(done) {
       fs.createReadStream('./test/test-data/invalidFormat.json').pipe(
-        authorizedRequest.post( {url: url + '/accounts/update' }, function (err, resp, body) {
+        authorizedRequest.put( {url: url + '/accounts/update' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);

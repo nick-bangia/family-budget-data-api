@@ -25,6 +25,9 @@ var ApiServer = require('apiserver');
 var DBUtils = require('./framework/sql/DBUtils');
 var AuthorizedUserModule = require('./modules/AuthorizedUserModule');
 var PaymentMethodModule = require('./modules/PaymentMethodModule');
+var AccountModule = require('./modules/AccountModule');
+var CategoryModule = require('./modules/CategoryModule');
+var SubcategoryModule = require('./modules/SubcategoryModule');
 
 // initialize the server variable
 var server = null;
@@ -84,6 +87,9 @@ function ConfigureServer(server) {
   // add supported modules
   server.addModule('v1', 'authorization', authorizedUserModule);
   server.addModule('v1', 'paymentMethods', new PaymentMethodModule(dbUtils));
+  server.addModule('v1', 'accounts', new AccountModule(dbUtils));
+  server.addModule('v1', 'categories', new CategoryModule(dbUtils));
+  server.addModule('v1', 'subcategories', new SubcategoryModule(dbUtils));
   
   // add supported routes
   server.router.addRoutes(routesConfig);

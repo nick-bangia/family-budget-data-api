@@ -19,7 +19,8 @@
       "type": 0,
       "subtype": 0,
       "paymentMethodKey": "66798E19-15F0-4AD8-800B-2CC5255F8C6F",
-      "status": 0 
+      "status": 0,
+      "updatedAfter": ""
     }
   ]
 }

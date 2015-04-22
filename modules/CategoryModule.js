@@ -1,34 +1,34 @@
 // requires
-var PaymentMethod = require('../model/PaymentMethod');
-var PaymentMethodQueries = require('../queries/PaymentMethodQueries');
+var Category = require('../model/Category');
+var CategoryQueries = require('../queries/CategoryQueries');
 var Response = require('../framework/service/Response');
 var DataUtils = require('../framework/service/DataUtils');
 var ResponseUtils = require('../framework/service/ResponseUtils');
 
 // constructor
-function PaymentMethodModule(dbUtility) {
+function CategoryModule(dbUtility) {
   this.dbUtility = dbUtility;
   var self = this;
   
-  this.ConvertRowToPaymentMethod = function(row, callback) {
-    // convert the given row into a PaymentMethod and push it to callback
-    var pm = new PaymentMethod();
+  this.ConvertRowToCategory = function(row, callback) {
+    // convert the given row into a Category and push it to callback
+    var cat = new Category();
 
-    pm.setPaymentMethodKey(row.PaymentMethodKey);
-    pm.setPaymentMethodName(row.PaymentMethodName);
-    pm.setIsActive(row.IsActive);
-    pm.setLastUpdated(row.LastUpdatedDate);
+    cat.setCategoryKey(row.CategoryKey);
+    cat.setCategoryName(row.CategoryName);
+    cat.setIsActive(row.IsActive);
+    cat.setLastUpdated(row.LastUpdatedDate);
 
-    // push the PaymentMethod to callback
-    callback(pm);
+    // push the Category to callback
+    callback(cat);
   }
   
-  this.ReadSinglePaymentMethodFromDatabase = function(paymentMethodKey, callback) {
-    // read a single payment method from the database given the key
-    self.dbUtility.ReadSingleRowWithKey(PaymentMethodQueries.GetRowWithKey, [paymentMethodKey], function(readResult) {
+  this.ReadSingleCategoryFromDatabase = function(categoryKey, callback) {
+    // read a single category from the database given the key
+    self.dbUtility.ReadSingleRowWithKey(CategoryQueries.GetRowWithKey, [categoryKey], function(readResult) {
       if (readResult.status == 'ok') {
-        self.ConvertRowToPaymentMethod(readResult.data, function(pm) {
-          readResult.setData(pm);
+        self.ConvertRowToCategory(readResult.data, function(cat) {
+          readResult.setData(cat);
           callback(readResult);
         });
       } else {
@@ -37,16 +37,16 @@ function PaymentMethodModule(dbUtility) {
     });
   }
   
-  this.UpdatePaymentMethodInDatabase = function(paymentMethodObject, callback) {
-    // convert the given object to a PaymentMethod and update it in the DB
-    paymentMethodObject.__proto__ = PaymentMethod.prototype;
-    var params = [paymentMethodObject.getPaymentMethodName(), paymentMethodObject.getIsActive(), paymentMethodObject.getPaymentMethodKey()];    
+  this.UpdateCategoryInDatabase = function(categoryObject, callback) {
+    // convert the given object to a Category and update it in the DB
+    categoryObject.__proto__ = Category.prototype;
+    var params = [categoryObject.getCategoryName(), categoryObject.getIsActive(), categoryObject.getCategoryKey()];    
     
-    self.dbUtility.SingleRowCUQueryWithParams(PaymentMethodQueries.UpdateRow, params, function(updateResult) {
+    self.dbUtility.SingleRowCUQueryWithParams(CategoryQueries.UpdateRow, params, function(updateResult) {
       // once the update query is complete, get the updated row, and return to callback
       if (updateResult.status == 'ok') {
         // get the updated row
-        self.ReadSinglePaymentMethodFromDatabase(paymentMethodObject.getPaymentMethodKey(), function(readResult) {
+        self.ReadSingleCategoryFromDatabase(categoryObject.getCategoryKey(), function(readResult) {
           callback(readResult);
         });
       } else {
@@ -55,17 +55,17 @@ function PaymentMethodModule(dbUtility) {
     });
   }
   
-  this.InsertPaymentMethodInDatabase = function(paymentMethodObject, callback) {
-    // convert the given object to a PaymentMethod and update it in the DB
-    paymentMethodObject.__proto__ = PaymentMethod.prototype;
-    var newKey = paymentMethodObject.getNewKey();
-    var params = [newKey, paymentMethodObject.getPaymentMethodName(), paymentMethodObject.getIsActive()];
+  this.InsertCategoryInDatabase = function(categoryObject, callback) {
+    // convert the given object to a Category and update it in the DB
+    categoryObject.__proto__ = Category.prototype;
+    var newKey = categoryObject.getNewKey();
+    var params = [newKey, categoryObject.getCategoryName(), categoryObject.getIsActive()];
     
-    self.dbUtility.SingleRowCUQueryWithParams(PaymentMethodQueries.InsertRow, params, function(insertResult) {
+    self.dbUtility.SingleRowCUQueryWithParams(CategoryQueries.InsertRow, params, function(insertResult) {
       // once the insert query is successful, get the newly inserted row, and return to callback
       if (insertResult.status == 'ok') {
         // get the new row
-        self.ReadSinglePaymentMethodFromDatabase(newKey, function(readResult) {
+        self.ReadSingleCategoryFromDatabase(newKey, function(readResult) {
           callback(readResult);
         });
       } else {
@@ -76,24 +76,24 @@ function PaymentMethodModule(dbUtility) {
 }
 
 // public methods
-PaymentMethodModule.prototype.GetAll = {
+CategoryModule.prototype.GetAll = {
   get: function(request, response) {
     var self = this;
     
-    this.dbUtility.SelectRows(PaymentMethodQueries.SelectAll, self.ConvertRowToPaymentMethod, 
+    this.dbUtility.SelectRows(CategoryQueries.SelectAll, self.ConvertRowToCategory, 
       function(dbResponse) {
         // check if the query was successful
         if (dbResponse.getStatus() == "ok") {
 
-          // if successful, get an array of PaymentMethods
+          // if successful, get an array of Categoriess
           var dataUtils = new DataUtils();
-          dataUtils.ProcessRowsInParallel(dbResponse.getData(), function(paymentMethods) {
+          dataUtils.ProcessRowsInParallel(dbResponse.getData(), function(categories) {
 
             //  wrap it in a response object
             var getAllResponse = new Response();
-            getAllResponse.setData(paymentMethods);
+            getAllResponse.setData(categories);
                   
-            // serve the paymentMethods as JSON
+            // serve the categories as JSON
             response.serveJSON(getAllResponse);
           });
 
@@ -106,7 +106,7 @@ PaymentMethodModule.prototype.GetAll = {
   }
 }
 
-PaymentMethodModule.prototype.UpdateList = {
+CategoryModule.prototype.UpdateList = {
   
   put: function(request, response) {
     var self = this;
@@ -123,7 +123,7 @@ PaymentMethodModule.prototype.UpdateList = {
       } else {
         // process data and serve response
         var dataUtils = new DataUtils();
-        dataUtils.ProcessList(request.body.data, self.UpdatePaymentMethodInDatabase, 
+        dataUtils.ProcessList(request.body.data, self.UpdateCategoryInDatabase, 
           function(updateResponse) {
             // serve the response back to caller
             response.serveJSON(updateResponse);
@@ -136,7 +136,7 @@ PaymentMethodModule.prototype.UpdateList = {
   }
 }
 
-PaymentMethodModule.prototype.InsertList = {
+CategoryModule.prototype.InsertList = {
 
   put: function(request, response) {
     var self = this;
@@ -153,7 +153,7 @@ PaymentMethodModule.prototype.InsertList = {
       } else {
         // process data and serve response
         var dataUtils = new DataUtils();
-        dataUtils.ProcessList(request.body.data, self.InsertPaymentMethodInDatabase,
+        dataUtils.ProcessList(request.body.data, self.InsertCategoryInDatabase,
           function(insertResponse) {
             // serve the response back to the caller
             response.serveJSON(insertResponse);
@@ -167,4 +167,4 @@ PaymentMethodModule.prototype.InsertList = {
 }
 
 // export the module
-module.exports = PaymentMethodModule;
+module.exports = CategoryModule;

@@ -2,5 +2,14 @@
   ["/ping", "v1/authorization#Ping"],
   ["/paymentMethods/all", "v1/paymentMethods#GetAll"],
   ["/paymentMethods/update", "v1/paymentMethods#UpdateList"],
-  ["/paymentMethods/add", "v1/paymentMethods#InsertList"]
+  ["/paymentMethods/add", "v1/paymentMethods#InsertList"],
+  ["/accounts/all", "v1/accounts#GetAll"],
+  ["/accounts/update", "v1/accounts#UpdateList"],
+  ["/accounts/add", "v1/accounts#InsertList"],
+  ["/categories/all", "v1/categories#GetAll"],
+  ["/categories/update", "v1/categories#UpdateList"],
+  ["/categories/add", "v1/categories#InsertList"],
+  ["/subcategories/all", "v1/subcategories#GetAll"],
+  ["/subcategories/update", "v1/subcategories#UpdateList"],
+  ["/subcategories/add", "v1/subcategories#InsertList"]
 ]
