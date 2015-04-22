@@ -1,6 +1,6 @@
 var fs = require('fs');
 var newCategories = require('../test-data/newCategories');
-var updatedCateogories = require('../test-data/updatedCategories');
+var updatedCategories = require('../test-data/updatedCategories');
 var url, response, results;
 var authorizedRequest = testUtils.GetAuthorizedRequest();
 
@@ -12,7 +12,7 @@ var IsACategory = function(data) {
          );
 }
 
-describe('Categories', function() {
+describe.skip('Categories', function() {
   
   before(function() {
     url = testUtils.GetRootURL();

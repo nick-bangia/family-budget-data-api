@@ -1,0 +1,30 @@
+{
+  "data": [
+    {
+      "uniqueKey": "D5C0BD73-DA78-46D1-9D7D-63C6D1204C1E",
+      "monthId": 2,
+      "day": 11,
+      "dayOfWeekId": 5,
+      "year": 2015,
+      "subcategoryKey": "4CC232A5-D705-48A0-A495-C0DCCC68FC59",
+      "description": "Test Line Item - Updated",
+      "amount": 15.00,
+      "typeId": 0,
+      "paymentMethodKey": "2F7552F5-E69E-48B2-9FE6-B125BDE851E4",
+      "statusId": 0
+    },
+    {
+      "uniqueKey": "05731617-F8DB-479C-9C39-3973B7268191",
+      "monthId": 2,
+      "day": 14,
+      "dayOfWeekId": 0,
+      "year": 2015,
+      "subcategoryKey": "0EAB9B99-4BC4-4B54-8E08-024A8A4BCAD6",
+      "description": "Test Line Item - Attempted Update",
+      "amount": -20.00,
+      "typeId": 0,
+      "paymentMethodKey": "0E021ACA-D3EB-40EC-8254-AA14185F4428",
+      "statusId": 0
+    }
+  ]
+}

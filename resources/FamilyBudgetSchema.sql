@@ -86,22 +86,22 @@ ENGINE = InnoDB;
 SHOW WARNINGS;
 
 -- -----------------------------------------------------
--- Table `FamilyBudget`.`dimSubCategory`
+-- Table `FamilyBudget`.`dimSubcategory`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `FamilyBudget`.`dimSubCategory` ;
+DROP TABLE IF EXISTS `FamilyBudget`.`dimSubcategory` ;
 
 SHOW WARNINGS;
-CREATE TABLE IF NOT EXISTS `FamilyBudget`.`dimSubCategory` (
-  `SubCategoryKey` CHAR(36) NOT NULL,
+CREATE TABLE IF NOT EXISTS `FamilyBudget`.`dimSubcategory` (
+  `SubcategoryKey` CHAR(36) NOT NULL,
   `CategoryKey` CHAR(36) NOT NULL,
   `AccountKey` CHAR(36) NOT NULL,
-  `SubCategoryName` VARCHAR(100) NOT NULL,
-  `SubCategoryPrefix` VARCHAR(10) NOT NULL,
+  `SubcategoryName` VARCHAR(100) NOT NULL,
+  `SubcategoryPrefix` VARCHAR(10) NOT NULL,
   `IsActive` TINYINT(1) NOT NULL,
   `IsGoal` TINYINT(1) NOT NULL,
   `LastUpdatedDate` DATETIME NULL,
-  PRIMARY KEY (`SubCategoryKey`),
-  CONSTRAINT `fk_dimSubCategory_dimCategory1`
+  PRIMARY KEY (`SubcategoryKey`),
+  CONSTRAINT `fk_dimSubcategory_dimCategory1`
     FOREIGN KEY (`CategoryKey`)
     REFERENCES `FamilyBudget`.`dimCategory` (`CategoryKey`)
     ON DELETE NO ACTION
@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS `FamilyBudget`.`dimSubCategory` (
 ENGINE = InnoDB;
 
 SHOW WARNINGS;
-CREATE INDEX `fk_dimSubCategory_dimCategory1_idx` ON `FamilyBudget`.`dimSubCategory` (`CategoryKey` ASC);
+CREATE INDEX `fk_dimSubcategory_dimCategory1_idx` ON `FamilyBudget`.`dimSubcategory` (`CategoryKey` ASC);
 
 SHOW WARNINGS;
 
@@ -151,13 +151,13 @@ SHOW WARNINGS;
 -- -----------------------------------------------------
 -- Table `FamilyBudget`.`SubTypes`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `FamilyBudget`.`SubTypes` ;
+DROP TABLE IF EXISTS `FamilyBudget`.`Subtypes` ;
 
 SHOW WARNINGS;
-CREATE TABLE IF NOT EXISTS `FamilyBudget`.`SubTypes` (
-  `SubTypeId` TINYINT(4) NOT NULL,
-  `SubTypeName` VARCHAR(50) NOT NULL,
-  PRIMARY KEY (`SubTypeId`))
+CREATE TABLE IF NOT EXISTS `FamilyBudget`.`Subtypes` (
+  `SubtypeId` TINYINT(4) NOT NULL,
+  `SubtypeName` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`SubtypeId`))
 ENGINE = InnoDB;
 
 SHOW WARNINGS;
@@ -187,12 +187,12 @@ CREATE TABLE IF NOT EXISTS `FamilyBudget`.`factLineItem` (
   `MonthId` TINYINT(4) NOT NULL,
   `DayOfMonth` TINYINT(4) NOT NULL,
   `DayOfWeekId` TINYINT(4) NOT NULL,
-  `YearId` SMALLINT(6) NOT NULL,
-  `SubCategoryKey` CHAR(36) NOT NULL,
+  `Year` SMALLINT(6) NOT NULL,
+  `SubcategoryKey` CHAR(36) NOT NULL,
   `Description` VARCHAR(500) NOT NULL,
   `Amount` DECIMAL(7,2) NOT NULL,
   `TypeId` TINYINT(4) NOT NULL,
-  `SubTypeId` TINYINT(4) NOT NULL,
+  `SubtypeId` TINYINT(4) NOT NULL,
   `QuarterId` TINYINT(4) NOT NULL,
   `PaymentMethodKey` CHAR(36) NOT NULL,
   `StatusId` TINYINT(4) NOT NULL,
@@ -208,9 +208,9 @@ CREATE TABLE IF NOT EXISTS `FamilyBudget`.`factLineItem` (
     REFERENCES `FamilyBudget`.`DaysOfWeek` (`DayOfWeekId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_factLineItem_dimSubCategory1`
-    FOREIGN KEY (`SubCategoryKey`)
-    REFERENCES `FamilyBudget`.`dimSubCategory` (`SubCategoryKey`)
+  CONSTRAINT `fk_factLineItem_dimSubcategory1`
+    FOREIGN KEY (`SubcategoryKey`)
+    REFERENCES `FamilyBudget`.`dimSubcategory` (`SubcategoryKey`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_factLineItem_Statuses1`
@@ -243,7 +243,7 @@ SHOW WARNINGS;
 CREATE INDEX `fk_factLineItem_DaysOfWeek1_idx` ON `FamilyBudget`.`factLineItem` (`DayOfWeekId` ASC);
 
 SHOW WARNINGS;
-CREATE INDEX `fk_factLineItem_dimSubCategory1_idx` ON `FamilyBudget`.`factLineItem` (`SubCategoryKey` ASC);
+CREATE INDEX `fk_factLineItem_dimSubcategory1_idx` ON `FamilyBudget`.`factLineItem` (`SubcategoryKey` ASC);
 
 SHOW WARNINGS;
 CREATE INDEX `fk_factLineItem_Statuses1_idx` ON `FamilyBudget`.`factLineItem` (`StatusId` ASC);
@@ -252,7 +252,7 @@ SHOW WARNINGS;
 CREATE INDEX `fk_factLineItem_dimPaymentMethod1_idx` ON `FamilyBudget`.`factLineItem` (`PaymentMethodKey` ASC);
 
 SHOW WARNINGS;
-CREATE INDEX `fk_factLineItem_SubTypes1_idx` ON `FamilyBudget`.`factLineItem` (`SubTypeId` ASC);
+CREATE INDEX `fk_factLineItem_Subtypes1_idx` ON `FamilyBudget`.`factLineItem` (`SubtypeId` ASC);
 
 SHOW WARNINGS;
 CREATE INDEX `fk_factLineItem_Types1_idx` ON `FamilyBudget`.`factLineItem` (`TypeId` ASC);
@@ -267,11 +267,11 @@ SHOW WARNINGS;
 
 CREATE TABLE IF NOT EXISTS `FamilyBudget`.`BudgetAllowances` (
 	`CategoryName` VARCHAR(100) NOT NULL,
-	`SubCategoryName` VARCHAR(100) NOT NULL,
+	`SubcategoryName` VARCHAR(100) NOT NULL,
 	`ReconciledAmount` DECIMAL(7,2) NOT NULL,
 	`PendingAmount` DECIMAL(7,2) NOT NULL,
-  `LatestTransactionDate` DATETIME NULL,
-	PRIMARY KEY (`SubCategoryName`))
+	`LatestTransactionDate` DATETIME NULL,
+	PRIMARY KEY (`SubcategoryName`))
 ENGINE = InnoDB;
 SHOW WARNINGS;
 
@@ -304,9 +304,9 @@ INSERT INTO Statuses (StatusId, StatusName) VALUES (1, 'Pending');
 INSERT INTO Statuses (StatusId, StatusName) VALUES (2, 'Future');
 INSERT INTO Statuses (StatusId, StatusName) VALUES (3, 'Goal');
 
-INSERT INTO SubTypes (SubTypeId, SubTypeName) VALUES (0, 'Debit');
-INSERT INTO SubTypes (SubTypeId, SubTypeName) VALUES (1, 'Credit');
-INSERT INTO SubTypes (SubTypeId, SubTypeName) VALUES (2, 'Goal');
+INSERT INTO Subtypes (SubtypeId, SubtypeName) VALUES (0, 'Debit');
+INSERT INTO Subtypes (SubtypeId, SubtypeName) VALUES (1, 'Credit');
+INSERT INTO Subtypes (SubtypeId, SubtypeName) VALUES (2, 'Goal');
 
 INSERT INTO Types (TypeId, TypeName) VALUES (0, 'Expense');
 INSERT INTO Types (TypeId, TypeName) VALUES (1, 'Allocation');

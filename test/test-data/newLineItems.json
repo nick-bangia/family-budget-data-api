@@ -1,0 +1,28 @@
+{
+  "data": [
+    {
+      "monthId": 4,
+      "day": 1,
+      "dayOfWeekId": 3,
+      "year": 2015,
+      "subcategoryKey": "891B1158-E037-4854-B99B-7814845E0137",
+      "description": "Test Line Item 1",
+      "amount": -141.89,
+      "typeId": 0,
+      "paymentMethodKey": "42F42C49-C3B1-47F8-9A80-9894CD4863F5",
+      "statusId": 0
+    },
+    {
+      "monthId": 4,
+      "day": 7,
+      "dayOfWeekId": 6,
+      "year": 2015,
+      "subcategoryKey": "891B1158-E037-4854-B99B-7814845E0137",
+      "description": "Test Line Item 2",
+      "amount": 24.95,
+      "typeId": 0,
+      "paymentMethodKey": "42F42C49-C3B1-47F8-9A80-9894CD4863F5",
+      "statusId": 0
+    }
+  ]
+}

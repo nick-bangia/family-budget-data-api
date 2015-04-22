@@ -1,0 +1,20 @@
+{
+  "data": [
+    {
+      "categoryKey": "7C0A7D39-E2B5-4DAE-B24D-E3260DD7578F",
+      "accountKey": "F00D821B-6FDC-42B7-99D4-FCFC872F3C3A",
+      "subcategoryName": "Subcategory Test 1",
+      "subcategoryPrefix": "SC1",
+      "isActive": true,
+      "isGoal": false
+    },
+    {
+      "categoryKey": "7C0A7D39-E2B5-4DAE-B24D-E3260DD7578F",
+      "accountKey": "F00D821B-6FDC-42B7-99D4-FCFC872F3C3A",
+      "subcategoryName": "Subcategory Test 2",
+      "subcategoryPrefix": "SC2",
+      "isActive": true,
+      "isGoal": true
+    }
+  ]
+}
