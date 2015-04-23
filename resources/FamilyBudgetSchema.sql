@@ -223,9 +223,9 @@ CREATE TABLE IF NOT EXISTS `FamilyBudget`.`factLineItem` (
     REFERENCES `FamilyBudget`.`dimPaymentMethod` (`PaymentMethodKey`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_factLineItem_SubTypes1`
+  CONSTRAINT `fk_factLineItem_Subtypes1`
     FOREIGN KEY (`SubTypeId`)
-    REFERENCES `FamilyBudget`.`SubTypes` (`SubTypeId`)
+    REFERENCES `FamilyBudget`.`Subtypes` (`SubtypeId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_factLineItem_Types1`
