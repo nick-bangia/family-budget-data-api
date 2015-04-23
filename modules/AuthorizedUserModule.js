@@ -9,7 +9,7 @@ function AuthorizedUserModule(dbUtils) {
   
   this.GetAuthorizedUserCredentials = function(row, callback) {
   // convert given row into username:password formatted string
-    var credentials = row.username + ':' + row.password;
+    var credentials = row.Username + ':' + row.Password;
     
     // push the credentials string to the callback
     callback(credentials);
