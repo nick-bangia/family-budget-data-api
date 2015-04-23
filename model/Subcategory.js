@@ -4,7 +4,9 @@ function Subcategory() {
   // initialize properties
   this.subcategoryKey = '';
   this.categoryKey = '';
+  this.categoryName = '';
   this.accountKey = '';
+  this.accountName = '';
   this.subcategoryName = '';
   this.subcategoryPrefix = '';
   this.isActive = true;
@@ -32,12 +34,28 @@ Subcategory.prototype.setCategoryKey = function(value) {
   this.categoryKey = value;
 }
 
+Subcategory.prototype.getCategoryName = function() {
+  return this.categoryName;
+}
+
+Subcategory.prototype.setCategoryName = function(value) {
+  this.categoryName = value;
+}
+
 Subcategory.prototype.getAccountKey = function() {
   return this.accountKey;
 }
 
 Subcategory.prototype.setAccountKey = function(value) {
   this.accountKey = value;
+}
+
+Subcategory.prototype.getAccountName = function() {
+  return this.accountName;
+}
+
+Subcategory.prototype.setAccountName = function(value) {
+  this.accountName = value;
 }
 
 Subcategory.prototype.getSubcategoryName = function() {

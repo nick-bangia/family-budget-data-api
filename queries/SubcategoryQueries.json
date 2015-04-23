@@ -1,7 +1,7 @@
 {
-  "SelectAll": "SELECT sc.SubcategoryKey,sc.CategoryKey,sc.AccountKey,sc.SubcategoryName,sc.SubcategoryPrefix,sc.IsActive,sc.IsGoal,sc.LastUpdatedDate FROM dimSubcategory sc",
+  "SelectAll": "SELECT sc.SubcategoryKey,sc.CategoryKey,c.CategoryName,sc.AccountKey,a.AccountName,sc.SubcategoryName,sc.SubcategoryPrefix,sc.IsActive,sc.IsGoal,sc.LastUpdatedDate FROM dimSubcategory sc INNER JOIN dimCategory c ON sc.CategoryKey = c.CategoryKey INNER JOIN dimAccount a ON sc.AccountKey = a.AccountKey",
   "UpdateRow": "UPDATE dimSubcategory sc SET sc.CategoryKey = ?, sc.AccountKey = ?, sc.SubcategoryName = ?, sc.SubcategoryPrefix = ?, sc.IsActive = ?, sc.IsGoal = ?, sc.LastUpdatedDate = NOW() WHERE sc.SubcategoryKey = ?",
   "InsertRow": "INSERT INTO dimSubcategory (SubcategoryKey, CategoryKey, AccountKey, SubcategoryName, SubcategoryPrefix, IsActive, IsGoal, LastUpdatedDate) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())",
-  "GetRowWithKey": "SELECT sc.SubcategoryKey, sc.CategoryKey, sc.AccountKey, sc.SubcategoryName, sc.SubcategoryPrefix, sc.IsActive, sc.IsGoal, sc.LastUpdatedDate FROM dimSubcategory sc WHERE sc.SubcategoryKey = ?"
+  "GetRowWithKey": "SELECT sc.SubcategoryKey, sc.CategoryKey, c.CategoryName, sc.AccountKey, a.AccountName, sc.SubcategoryName, sc.SubcategoryPrefix, sc.IsActive, sc.IsGoal, sc.LastUpdatedDate FROM dimSubcategory sc INNER JOIN dimCategory c ON sc.CategoryKey = c.CategoryKey INNER JOIN dimAccount a ON sc.AccountKey = a.AccountKey WHERE sc.SubcategoryKey = ?"
 }
 

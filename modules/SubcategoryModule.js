@@ -16,7 +16,9 @@ function SubcategoryModule(dbUtility) {
 
     sc.setSubcategoryKey(row.SubcategoryKey);
     sc.setCategoryKey(row.CategoryKey);
+    sc.setCategoryName(row.CategoryName);
     sc.setAccountKey(row.AccountKey);
+    sc.setAccountName(row.AccountName);
     sc.setSubcategoryName(row.SubcategoryName);
     sc.setSubcategoryPrefix(row.SubcategoryPrefix);
     sc.setIsActive(row.IsActive);
