@@ -1,3 +1,3 @@
 {
-  "SelectAll": "SELECT au.username, au.password, au.isactive FROM authorizeduser au WHERE au.isactive = 1"
+  "SelectAll": "SELECT au.Username, au.Password, au.IsActive FROM AuthorizedUser au WHERE au.IsActive = 1"
 }

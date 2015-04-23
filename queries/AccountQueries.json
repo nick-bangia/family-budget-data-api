@@ -1,7 +1,7 @@
 {
-  "SelectAll": "SELECT acc.AccountKey,acc.AccountName,acc.IsActive,acc.LastUpdatedDate FROM dimaccount acc",
-  "UpdateRow": "UPDATE dimaccount acc SET acc.AccountName = ?, acc.IsActive = ?, acc.LastUpdatedDate = NOW() WHERE acc.AccountKey = ?",
-  "InsertRow": "INSERT INTO dimaccount (AccountKey, AccountName, IsActive, LastUpdatedDate) VALUES (?, ?, ?, NOW())",
-  "GetRowWithKey": "SELECT acc.AccountKey, acc.AccountName, acc.IsActive, acc.LastUpdatedDate FROM dimaccount acc WHERE acc.AccountKey = ?"
+  "SelectAll": "SELECT acc.AccountKey,acc.AccountName,acc.IsActive,acc.LastUpdatedDate FROM dimAccount acc",
+  "UpdateRow": "UPDATE dimAccount acc SET acc.AccountName = ?, acc.IsActive = ?, acc.LastUpdatedDate = NOW() WHERE acc.AccountKey = ?",
+  "InsertRow": "INSERT INTO dimAccount (AccountKey, AccountName, IsActive, LastUpdatedDate) VALUES (?, ?, ?, NOW())",
+  "GetRowWithKey": "SELECT acc.AccountKey, acc.AccountName, acc.IsActive, acc.LastUpdatedDate FROM dimAccount acc WHERE acc.AccountKey = ?"
 }
 

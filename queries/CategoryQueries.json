@@ -1,7 +1,7 @@
 {
-  "SelectAll": "SELECT cat.CategoryKey,cat.CategoryName,cat.IsActive,cat.LastUpdatedDate FROM dimcategory cat",
-  "UpdateRow": "UPDATE dimcategory cat SET cat.CategoryName = ?, cat.IsActive = ?, cat.LastUpdatedDate = NOW() WHERE cat.CategoryKey = ?",
-  "InsertRow": "INSERT INTO dimcategory (CategoryKey, CategoryName, IsActive, LastUpdatedDate) VALUES (?, ?, ?, NOW())",
-  "GetRowWithKey": "SELECT cat.CategoryKey, cat.CategoryName, cat.IsActive, cat.LastUpdatedDate FROM dimcategory cat WHERE cat.CategoryKey = ?"
+  "SelectAll": "SELECT cat.CategoryKey,cat.CategoryName,cat.IsActive,cat.LastUpdatedDate FROM dimCategory cat",
+  "UpdateRow": "UPDATE dimCategory cat SET cat.CategoryName = ?, cat.IsActive = ?, cat.LastUpdatedDate = NOW() WHERE cat.CategoryKey = ?",
+  "InsertRow": "INSERT INTO dimCategory (CategoryKey, CategoryName, IsActive, LastUpdatedDate) VALUES (?, ?, ?, NOW())",
+  "GetRowWithKey": "SELECT cat.CategoryKey, cat.CategoryName, cat.IsActive, cat.LastUpdatedDate FROM dimCategory cat WHERE cat.CategoryKey = ?"
 }
 

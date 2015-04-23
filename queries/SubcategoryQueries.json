@@ -1,7 +1,7 @@
 {
-  "SelectAll": "SELECT sc.SubcategoryKey,sc.CategoryKey,sc.AccountKey,sc.SubcategoryName,sc.SubcategoryPrefix,sc.IsActive,sc.IsGoal,sc.LastUpdatedDate FROM dimsubcategory sc",
-  "UpdateRow": "UPDATE dimsubcategory sc SET sc.CategoryKey = ?, sc.AccountKey = ?, sc.SubcategoryName = ?, sc.SubcategoryPrefix = ?, sc.IsActive = ?, sc.IsGoal = ?, sc.LastUpdatedDate = NOW() WHERE sc.SubcategoryKey = ?",
-  "InsertRow": "INSERT INTO dimsubcategory (SubcategoryKey, CategoryKey, AccountKey, SubcategoryName, SubcategoryPrefix, IsActive, IsGoal, LastUpdatedDate) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())",
-  "GetRowWithKey": "SELECT sc.SubcategoryKey, sc.CategoryKey, sc.AccountKey, sc.SubcategoryName, sc.SubcategoryPrefix, sc.IsActive, sc.IsGoal, sc.LastUpdatedDate FROM dimsubcategory sc WHERE sc.SubcategoryKey = ?"
+  "SelectAll": "SELECT sc.SubcategoryKey,sc.CategoryKey,sc.AccountKey,sc.SubcategoryName,sc.SubcategoryPrefix,sc.IsActive,sc.IsGoal,sc.LastUpdatedDate FROM dimSubcategory sc",
+  "UpdateRow": "UPDATE dimSubcategory sc SET sc.CategoryKey = ?, sc.AccountKey = ?, sc.SubcategoryName = ?, sc.SubcategoryPrefix = ?, sc.IsActive = ?, sc.IsGoal = ?, sc.LastUpdatedDate = NOW() WHERE sc.SubcategoryKey = ?",
+  "InsertRow": "INSERT INTO dimSubcategory (SubcategoryKey, CategoryKey, AccountKey, SubcategoryName, SubcategoryPrefix, IsActive, IsGoal, LastUpdatedDate) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())",
+  "GetRowWithKey": "SELECT sc.SubcategoryKey, sc.CategoryKey, sc.AccountKey, sc.SubcategoryName, sc.SubcategoryPrefix, sc.IsActive, sc.IsGoal, sc.LastUpdatedDate FROM dimSubcategory sc WHERE sc.SubcategoryKey = ?"
 }
 
