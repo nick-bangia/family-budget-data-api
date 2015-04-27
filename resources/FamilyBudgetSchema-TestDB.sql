@@ -3,7 +3,7 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
--- Schema FamilyBudget
+-- Schema FamilyBudget_Test
 -- -----------------------------------------------------
 DROP SCHEMA IF EXISTS `FamilyBudget_Test` ;
 CREATE SCHEMA IF NOT EXISTS `FamilyBudget_Test` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ;
@@ -276,6 +276,117 @@ ENGINE = InnoDB;
 SHOW WARNINGS;
 
 -- -----------------------------------------------------
+-- View  `FamilyBudget_Test`.`ActiveLineItems_PendingFutureGoal`
+-- -----------------------------------------------------
+DROP VIEW IF EXISTS `FamilyBudget_Test`.`ActiveLineItems_PendingFutureGoal`;
+SHOW WARNINGS;
+
+CREATE VIEW `FamilyBudget_Test`.`ActiveLineItems_PendingFutureGoal` AS
+    select 
+        `fli`.`UniqueKey` AS `UniqueKey`,
+        `fli`.`MonthId` AS `MonthId`,
+        `fli`.`DayOfMonth` AS `DayOfMonth`,
+        `fli`.`DayOfWeekId` AS `DayOfWeekId`,
+        `fli`.`Year` AS `Year`,
+        `fli`.`SubcategoryKey` AS `SubcategoryKey`,
+        `fli`.`Description` AS `Description`,
+        `fli`.`Amount` AS `Amount`,
+        `fli`.`TypeId` AS `TypeId`,
+        `fli`.`SubtypeId` AS `SubtypeId`,
+        `fli`.`QuarterId` AS `QuarterId`,
+        `fli`.`PaymentMethodKey` AS `PaymentMethodKey`,
+        `fli`.`StatusId` AS `StatusId`,
+        `fli`.`LastUpdatedDate` AS `LastUpdatedDate`
+    from
+        (`factLineItem` `fli`
+        join `dimSubcategory` `sc` ON ((`fli`.`SubcategoryKey` = `sc`.`SubcategoryKey`)))
+    where
+        ((`fli`.`StatusId` in (1 , 2, 3))
+        and (`sc`.`IsActive` = 1));
+SHOW WARNINGS;
+
+-- -----------------------------------------------------
+-- View  `FamilyBudget_Test`.`ActiveLineItems_ReconciledPriorQuarters_Condensed`
+-- -----------------------------------------------------
+DROP VIEW IF EXISTS `FamilyBudget_Test`.`ActiveLineItems_PendingFutureGoal`;
+SHOW WARNINGS;
+
+CREATE VIEW `FamilyBudget_Test`.`ActiveLineItems_ReconciledPriorQuarters_Condensed` AS
+    select 
+        'CONDENSED_ENTRY' AS `UniqueKey`,
+        (case `fli`.`QuarterId`
+            when 1 then 3
+            when 2 then 6
+            when 3 then 9
+            when 4 then 12
+        end) AS `MonthId`,
+        (case `fli`.`QuarterId`
+            when 1 then 31
+            when 2 then 30
+            when 3 then 31
+            when 4 then 31
+        end) AS `DayOfMonth`,
+        (case `fli`.`QuarterId`
+            when 1 then dayofweek(str_to_date(concat('3-31-', `fli`.`Year`), '%m-%d-%Y'))
+            when 2 then dayofweek(str_to_date(concat('6-30-', `fli`.`Year`), '%m-%d-%Y'))
+            when 3 then dayofweek(str_to_date(concat('9-31-', `fli`.`Year`), '%m-%d-%Y'))
+            when 4 then dayofweek(str_to_date(concat('12-31-', `fli`.`Year`),'%m-%d-%Y'))
+        end) AS `DayOfWeek`,
+        `fli`.`Year` AS `Year`,
+        `fli`.`SubcategoryKey` AS `SubcategoryKey`,
+        'CONDENSED ENTRIES' AS `Description`,
+        sum(`fli`.`Amount`) AS `Amount`,
+        4 AS `TypeId`,
+        3 AS `SubtypeId`,
+        `fli`.`QuarterId` AS `QuarterId`,
+        'CONDENSED_ENTRY' AS `PaymentMethodKey`,
+        0 AS `StatusId`,
+        max(`fli`.`LastUpdatedDate`) AS `LastUpdatedDate`
+    from
+        (`factLineItem` `fli`
+        join `dimSubcategory` `sc` ON ((`fli`.`SubcategoryKey` = `sc`.`SubcategoryKey`)))
+    where
+        ((`fli`.`TypeId` <> 3)
+        and (`fli`.`StatusId` = 0)
+        and (concat(`fli`.`QuarterId`, `fli`.`Year`) <> concat(quarter(NOW()), year(NOW())))
+        and (`sc`.`IsActive` = 1))
+    group by 
+      `fli`.`SubcategoryKey`,
+      `fli`.`Year`,
+      `fli`.`QuarterId`;
+
+-- -----------------------------------------------------
+-- View  `FamilyBudget_Test`.`ActiveLineItems_ReconciledCurrentQuarter`
+-- -----------------------------------------------------
+DROP VIEW IF EXISTS `FamilyBudget_Test`.`ActiveLineItems_ReconciledCurrentQuarter`;
+SHOW WARNINGS;
+
+CREATE VIEW `FamilyBudget_Test`.`ActiveLineItems_ReconciledCurrentQuarter` AS
+    select 
+        `fli`.`UniqueKey` AS `UniqueKey`,
+        `fli`.`MonthId` AS `MonthId`,
+        `fli`.`DayOfMonth` AS `DayOfMonth`,
+        `fli`.`DayOfWeekId` AS `DayOfWeekId`,
+        `fli`.`Year` AS `Year`,
+        `fli`.`SubcategoryKey` AS `SubcategoryKey`,
+        `fli`.`Description` AS `Description`,
+        `fli`.`Amount` AS `Amount`,
+        `fli`.`TypeId` AS `TypeId`,
+        `fli`.`SubtypeId` AS `SubtypeId`,
+        `fli`.`QuarterId` AS `QuarterId`,
+        `fli`.`PaymentMethodKey` AS `PaymentMethodKey`,
+        `fli`.`StatusId` AS `StatusId`,
+        `fli`.`LastUpdatedDate` AS `LastUpdatedDate`
+    from
+        (`factLineItem` `fli`
+        join `dimSubcategory` `sc` ON ((`fli`.`SubcategoryKey` = `sc`.`SubcategoryKey`)))
+    where
+        ((`fli`.`TypeId` <> 3)
+        and (`fli`.`StatusId` = 0)
+        and (concat(`fli`.`QuarterId`, `fli`.`Year`) = concat(quarter(now ()), year(now ())))
+        and (`sc`.`IsActive` = 1));
+
+-- -----------------------------------------------------
 -- Initial data for months, days of weeks, status, subtype, and type
 -- -----------------------------------------------------
 INSERT INTO Months (MonthId, MonthName) VALUES (1, 'January');
@@ -291,13 +402,13 @@ INSERT INTO Months (MonthId, MonthName) VALUES (10, 'October');
 INSERT INTO Months (MonthId, MonthName) VALUES (11, 'November');
 INSERT INTO Months (MonthId, MonthName) VALUES (12, 'December');
 
-INSERT INTO DaysOfWeek (DayOfWeekId, DayOfWeekName) VALUES (0, 'Sunday');
-INSERT INTO DaysOfWeek (DayOfWeekId, DayOfWeekName) VALUES (1, 'Monday');
-INSERT INTO DaysOfWeek (DayOfWeekId, DayOfWeekName) VALUES (2, 'Tuesday');
-INSERT INTO DaysOfWeek (DayOfWeekId, DayOfWeekName) VALUES (3, 'Wednesday');
-INSERT INTO DaysOfWeek (DayOfWeekId, DayOfWeekName) VALUES (4, 'Thursday');
-INSERT INTO DaysOfWeek (DayOfWeekId, DayOfWeekName) VALUES (5, 'Friday');
-INSERT INTO DaysOfWeek (DayOfWeekId, DayOfWeekName) VALUES (6, 'Saturday');
+INSERT INTO DaysOfWeek (DayOfWeekId, DayOfWeekName) VALUES (1, 'Sunday');
+INSERT INTO DaysOfWeek (DayOfWeekId, DayOfWeekName) VALUES (2, 'Monday');
+INSERT INTO DaysOfWeek (DayOfWeekId, DayOfWeekName) VALUES (3, 'Tuesday');
+INSERT INTO DaysOfWeek (DayOfWeekId, DayOfWeekName) VALUES (4, 'Wednesday');
+INSERT INTO DaysOfWeek (DayOfWeekId, DayOfWeekName) VALUES (5, 'Thursday');
+INSERT INTO DaysOfWeek (DayOfWeekId, DayOfWeekName) VALUES (6, 'Friday');
+INSERT INTO DaysOfWeek (DayOfWeekId, DayOfWeekName) VALUES (7, 'Saturday');
 
 INSERT INTO Statuses (StatusId, StatusName) VALUES (0, 'Reconciled');
 INSERT INTO Statuses (StatusId, StatusName) VALUES (1, 'Pending');
@@ -307,11 +418,13 @@ INSERT INTO Statuses (StatusId, StatusName) VALUES (3, 'Goal');
 INSERT INTO Subtypes (SubtypeId, SubtypeName) VALUES (0, 'Debit');
 INSERT INTO Subtypes (SubtypeId, SubtypeName) VALUES (1, 'Credit');
 INSERT INTO Subtypes (SubtypeId, SubtypeName) VALUES (2, 'Goal');
+INSERT INTO Subtypes (SubtypeId, SubtypeName) VALUES (3, 'Mixed');
 
 INSERT INTO Types (TypeId, TypeName) VALUES (0, 'Expense');
 INSERT INTO Types (TypeId, TypeName) VALUES (1, 'Allocation');
 INSERT INTO Types (TypeId, TypeName) VALUES (2, 'Bucket Adjustment');
 INSERT INTO Types (TypeId, TypeName) VALUES (3, 'Goal');
+INSERT INTO Types (TypeId, TypeName) VALUES (4, 'Mixed');
 
 -- -----------------------------------------------------
 -- Test Data
