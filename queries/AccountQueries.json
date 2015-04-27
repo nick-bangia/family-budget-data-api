@@ -1,5 +1,5 @@
 {
-  "SelectAll": "SELECT acc.AccountKey,acc.AccountName,acc.IsActive,acc.LastUpdatedDate FROM dimAccount acc",
+  "SelectAll": "SELECT acc.AccountKey,acc.AccountName,acc.IsActive,acc.LastUpdatedDate FROM dimAccount acc ORDER BY acc.AccountName",
   "UpdateRow": "UPDATE dimAccount acc SET acc.AccountName = ?, acc.IsActive = ?, acc.LastUpdatedDate = NOW() WHERE acc.AccountKey = ?",
   "InsertRow": "INSERT INTO dimAccount (AccountKey, AccountName, IsActive, LastUpdatedDate) VALUES (?, ?, ?, NOW())",
   "GetRowWithKey": "SELECT acc.AccountKey, acc.AccountName, acc.IsActive, acc.LastUpdatedDate FROM dimAccount acc WHERE acc.AccountKey = ?"

@@ -1,0 +1,3 @@
+{
+  "GetAllCondensed": "SELECT * FROM	ActiveLineItems_ReconciledPriorQuarters_Condensed UNION ALL SELECT * FROM	ActiveLineItems_ReconciledCurrentQuarter UNION ALL SELECT	* FROM ActiveLineItems_PendingFutureGoal ORDER BY Year, MonthId, DayOfMonth"
+}  

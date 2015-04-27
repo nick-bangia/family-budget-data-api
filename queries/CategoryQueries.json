@@ -1,5 +1,5 @@
 {
-  "SelectAll": "SELECT cat.CategoryKey,cat.CategoryName,cat.IsActive,cat.LastUpdatedDate FROM dimCategory cat",
+  "SelectAll": "SELECT cat.CategoryKey,cat.CategoryName,cat.IsActive,cat.LastUpdatedDate FROM dimCategory cat ORDER BY cat.CategoryName",
   "UpdateRow": "UPDATE dimCategory cat SET cat.CategoryName = ?, cat.IsActive = ?, cat.LastUpdatedDate = NOW() WHERE cat.CategoryKey = ?",
   "InsertRow": "INSERT INTO dimCategory (CategoryKey, CategoryName, IsActive, LastUpdatedDate) VALUES (?, ?, ?, NOW())",
   "GetRowWithKey": "SELECT cat.CategoryKey, cat.CategoryName, cat.IsActive, cat.LastUpdatedDate FROM dimCategory cat WHERE cat.CategoryKey = ?"

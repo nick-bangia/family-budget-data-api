@@ -1,5 +1,5 @@
 {
-  "SelectAll": "SELECT pm.PaymentMethodKey,pm.PaymentMethodName,pm.IsActive,pm.LastUpdatedDate FROM dimPaymentMethod pm",
+  "SelectAll": "SELECT pm.PaymentMethodKey,pm.PaymentMethodName,pm.IsActive,pm.LastUpdatedDate FROM dimPaymentMethod pm ORDER BY pm.PaymentMethodName",
   "UpdateRow": "UPDATE dimPaymentMethod pm SET pm.PaymentMethodName = ?, pm.IsActive = ?, pm.LastUpdatedDate = NOW() WHERE pm.PaymentMethodKey = ?",
   "InsertRow": "INSERT INTO dimPaymentMethod (PaymentMethodKey, PaymentMethodName, IsActive, LastUpdatedDate) VALUES (?, ?, ?, NOW())",
   "GetRowWithKey": "SELECT pm.PaymentMethodKey, pm.PaymentMethodName, pm.IsActive, pm.LastUpdatedDate FROM dimPaymentMethod pm WHERE pm.PaymentMethodKey = ?"
