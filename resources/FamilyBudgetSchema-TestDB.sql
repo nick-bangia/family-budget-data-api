@@ -288,7 +288,7 @@ CREATE VIEW `FamilyBudget_Test`.`ActiveLineItems_PendingFutureGoal` AS
 		`m`.`MonthName` AS `Month`,
         `fli`.`DayOfMonth` AS `DayOfMonth`,
         `fli`.`DayOfWeekId` AS `DayOfWeekId`,
-		`dow`.`DayOfWeek` AS `DayOfWeek`,
+		`dow`.`DayOfWeekName` AS `DayOfWeek`,
         `fli`.`Year` AS `Year`,
 		`c`.`CategoryKey`,
 		`c`.`CategoryName`,
@@ -322,7 +322,7 @@ SHOW WARNINGS;
 -- -----------------------------------------------------
 -- View  `FamilyBudget_Test`.`ActiveLineItems_ReconciledPriorQuarters_Condensed`
 -- -----------------------------------------------------
-DROP VIEW IF EXISTS `FamilyBudget_Test`.`ActiveLineItems_PendingFutureGoal`;
+DROP VIEW IF EXISTS `FamilyBudget_Test`.`ActiveLineItems_ReconciledPriorQuarters_Condensed`;
 SHOW WARNINGS;
 
 CREATE VIEW `FamilyBudget_Test`.`ActiveLineItems_ReconciledPriorQuarters_Condensed` AS
@@ -407,7 +407,7 @@ CREATE VIEW `FamilyBudget_Test`.`ActiveLineItems_ReconciledCurrentQuarter` AS
 		`m`.`MonthName` AS `Month`,
         `fli`.`DayOfMonth` AS `DayOfMonth`,
         `fli`.`DayOfWeekId` AS `DayOfWeekId`,
-		`dow`.`DayOfWeek` AS `DayOfWeek`,
+		`dow`.`DayOfWeekName` AS `DayOfWeek`,
         `fli`.`Year` AS `Year`,
 		`c`.`CategoryKey`,
 		`c`.`CategoryName`,

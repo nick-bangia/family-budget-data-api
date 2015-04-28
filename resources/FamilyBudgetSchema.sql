@@ -288,7 +288,7 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_PendingFutureGoal` AS
 		`m`.`MonthName` AS `Month`,
         `fli`.`DayOfMonth` AS `DayOfMonth`,
         `fli`.`DayOfWeekId` AS `DayOfWeekId`,
-		`dow`.`DayOfWeek` AS `DayOfWeek`,
+		`dow`.`DayOfWeekName` AS `DayOfWeek`,
         `fli`.`Year` AS `Year`,
 		`c`.`CategoryKey`,
 		`c`.`CategoryName`,
@@ -322,7 +322,7 @@ SHOW WARNINGS;
 -- -----------------------------------------------------
 -- View  `FamilyBudget`.`ActiveLineItems_ReconciledPriorQuarters_Condensed`
 -- -----------------------------------------------------
-DROP VIEW IF EXISTS `FamilyBudget`.`ActiveLineItems_PendingFutureGoal`;
+DROP VIEW IF EXISTS `FamilyBudget`.`ActiveLineItems_ReconciledPriorQuarters_Condensed`;
 SHOW WARNINGS;
 
 CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledPriorQuarters_Condensed` AS
@@ -407,7 +407,7 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledCurrentQuarter` AS
 		`m`.`MonthName` AS `Month`,
         `fli`.`DayOfMonth` AS `DayOfMonth`,
         `fli`.`DayOfWeekId` AS `DayOfWeekId`,
-		`dow`.`DayOfWeek` AS `DayOfWeek`,
+		`dow`.`DayOfWeekName` AS `DayOfWeek`,
         `fli`.`Year` AS `Year`,
 		`c`.`CategoryKey`,
 		`c`.`CategoryName`,
@@ -436,7 +436,7 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledCurrentQuarter` AS
     where
         ((`fli`.`TypeId` <> 3)
         and (`fli`.`StatusId` = 0)
-        and (concat(`fli`.`QuarterId`, `fli`.`Year`) = concat(quarter(now ()), year(now ())))
+        and (concat(`fli`.`QuarterId`, `fli`.`Year`) = concat(quarter(NOW()), year(NOW())))
         and (`sc`.`IsActive` = 1));
 
 -- -----------------------------------------------------
