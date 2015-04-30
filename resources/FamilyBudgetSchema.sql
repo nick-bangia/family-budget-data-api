@@ -193,7 +193,7 @@ CREATE TABLE IF NOT EXISTS `FamilyBudget`.`factLineItem` (
   `Amount` DECIMAL(7,2) NOT NULL,
   `TypeId` TINYINT(4) NOT NULL,
   `SubtypeId` TINYINT(4) NOT NULL,
-  `QuarterId` TINYINT(4) NOT NULL,
+  `Quarter` TINYINT(4) NOT NULL,
   `PaymentMethodKey` CHAR(36) NOT NULL,
   `StatusId` TINYINT(4) NOT NULL,
   `LastUpdatedDate` DATETIME NULL,
@@ -299,7 +299,7 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_PendingFutureGoal` AS
         `fli`.`Amount` AS `Amount`,
         `fli`.`TypeId` AS `TypeId`,
         `fli`.`SubtypeId` AS `SubtypeId`,
-        `fli`.`QuarterId` AS `QuarterId`,
+        `fli`.`Quarter` AS `Quarter`,
         `fli`.`PaymentMethodKey` AS `PaymentMethodKey`,
 		`pm`.`PaymentMethodName` AS `PaymentMethodName`,
 		`a`.`AccountName` AS `AccountName`,
@@ -328,31 +328,31 @@ SHOW WARNINGS;
 CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledPriorQuarters_Condensed` AS
     select 
         'CONDENSED_KEYS' AS `UniqueKey`,
-        (case `fli`.`QuarterId`
+        (case `fli`.`Quarter`
             when 1 then 3
             when 2 then 6
             when 3 then 9
             when 4 then 12
         end) AS `MonthId`,
-		(case `fli`.`QuarterId`
+		(case `fli`.`Quarter`
             when 1 then 'March'
             when 2 then 'June'
             when 3 then 'September'
             when 4 then 'December'
         end) AS `MonthName`,
-        (case `fli`.`QuarterId`
+        (case `fli`.`Quarter`
             when 1 then 31
             when 2 then 30
             when 3 then 31
             when 4 then 31
         end) AS `DayOfMonth`,
-        (case `fli`.`QuarterId`
+        (case `fli`.`Quarter`
             when 1 then dayofweek(str_to_date(concat('3-31-', `fli`.`Year`), '%m-%d-%Y'))
             when 2 then dayofweek(str_to_date(concat('6-30-', `fli`.`Year`), '%m-%d-%Y'))
             when 3 then dayofweek(str_to_date(concat('9-31-', `fli`.`Year`), '%m-%d-%Y'))
             when 4 then dayofweek(str_to_date(concat('12-31-', `fli`.`Year`),'%m-%d-%Y'))
         end) AS `DayOfWeekId`,
-		(case `fli`.`QuarterId`
+		(case `fli`.`Quarter`
             when 1 then dayname(str_to_date(concat('3-31-', `fli`.`Year`), '%m-%d-%Y'))
             when 2 then dayname(str_to_date(concat('6-30-', `fli`.`Year`), '%m-%d-%Y'))
             when 3 then dayname(str_to_date(concat('9-31-', `fli`.`Year`), '%m-%d-%Y'))
@@ -368,7 +368,7 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledPriorQuarters_Condensed` A
         sum(`fli`.`Amount`) AS `Amount`,
         4 AS `TypeId`,
         3 AS `SubtypeId`,
-        `fli`.`QuarterId` AS `QuarterId`,
+        `fli`.`Quarter` AS `Quarter`,
         'CONDENSED_KEYS' AS `PaymentMethodKey`,
 		'CONDENSED ENTRIES' AS `PaymentMethodName`,
 		`a`.`AccountName` AS `AccountName`,
@@ -383,7 +383,7 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledPriorQuarters_Condensed` A
     where
         ((`fli`.`TypeId` <> 3)
         and (`fli`.`StatusId` = 0)
-        and (concat(`fli`.`QuarterId`, `fli`.`Year`) <> concat(quarter(NOW()), year(NOW())))
+        and (concat(`fli`.`Quarter`, `fli`.`Year`) <> concat(quarter(NOW()), year(NOW())))
         and (`sc`.`IsActive` = 1))
     group by 
       `fli`.`SubcategoryKey`,
@@ -392,7 +392,7 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledPriorQuarters_Condensed` A
 	  `c`.`CategoryKey`,
 	  `c`.`CategoryName`,
       `fli`.`Year`,
-      `fli`.`QuarterId`;
+      `fli`.`Quarter`;
 
 -- -----------------------------------------------------
 -- View  `FamilyBudget`.`ActiveLineItems_ReconciledCurrentQuarter`
@@ -418,7 +418,7 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledCurrentQuarter` AS
         `fli`.`Amount` AS `Amount`,
         `fli`.`TypeId` AS `TypeId`,
         `fli`.`SubtypeId` AS `SubtypeId`,
-        `fli`.`QuarterId` AS `QuarterId`,
+        `fli`.`Quarter` AS `Quarter`,
         `fli`.`PaymentMethodKey` AS `PaymentMethodKey`,
 		`pm`.`PaymentMethodName` AS `PaymentMethodName`,
 		`a`.`AccountName` AS `AccountName`,
@@ -436,7 +436,7 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledCurrentQuarter` AS
     where
         ((`fli`.`TypeId` <> 3)
         and (`fli`.`StatusId` = 0)
-        and (concat(`fli`.`QuarterId`, `fli`.`Year`) = concat(quarter(NOW()), year(NOW())))
+        and (concat(`fli`.`Quarter`, `fli`.`Year`) = concat(quarter(NOW()), year(NOW())))
         and (`sc`.`IsActive` = 1));
 
 -- -----------------------------------------------------

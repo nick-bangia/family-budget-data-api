@@ -1,8 +1,8 @@
 {
   "GetAllCondensed": "SELECT * FROM	ActiveLineItems_ReconciledPriorQuarters_Condensed UNION ALL SELECT * FROM	ActiveLineItems_ReconciledCurrentQuarter UNION ALL SELECT	* FROM ActiveLineItems_PendingFutureGoal ORDER BY Year, MonthId, DayOfMonth",
   "Search": "",
-  "UpdateRow": "",
-  "InsertRow": "",
-  "DeleteRow": "",
-  "GetRowWithKey": ""
+  "UpdateRow": "UPDATE factLineItem SET MonthId = ?, DayOfMonth = ?, DayOfWeekId = ?, Year = ?, SubcategoryKey = ?, Description = ?, Amount = ?, TypeId = ?, SubtypeId = ?, Quarter = ?, PaymentMethodKey = ?, StatusId = ?, LastUpdatedDate = ? WHERE UniqueKey = ?",
+  "InsertRow": "INSERT INTO factLineItem (MonthId, DayOfMonth, DayOfWeekId, Year, SubcategoryKey, Description, Amount, TypeId, SubtypeId, Quarter, PaymentMethodKey, StatusId, LastUpdatedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+  "DeleteRow": "DELETE FROM factLineItem WHERE UniqueKey = ?",
+  "GetRowWithKey": "SELECT fli.MonthId, fli.DayOfMonth, fli.DayOfWeekId, fli.Year, fli.SubcategoryKey, fli.Description, fli.Amount, fli.TypeId, fli.SubtypeId, fli.Quarter, fli.PaymentMethodKey, fli.StatusId, fli.LastUpdatedDate FROM factLineItem fli WHERE fli.UniqueKey = ?"
 }  
