@@ -17,7 +17,7 @@ function LineItem() {
   this.amount = 0.0;
   this.typeId = 0;
   this.subtypeId = 0;
-  this.quarterId = 1;
+  this.quarter = 1;
   this.paymentMethodKey = '';
   this.paymentMethodName = '';
   this.accountName = '';
@@ -158,11 +158,11 @@ LineItem.prototype.setSubtypeId = function(value) {
   this.subtypeId = value;
 }
 
-LineItem.prototype.getQuarterId = function() {
+LineItem.prototype.getQuarter = function() {
   return this.quarterId;
 }
 
-LineItem.prototype.setQuarterId = function(value) {
+LineItem.prototype.setQuarter = function(value) {
   this.quarterId = value;
 }
 
