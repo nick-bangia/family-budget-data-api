@@ -1,6 +1,6 @@
 var mysql = require('mysql');
 var Response = require('../service/Response');
-var DataUtils = require('../service/DataUtils');
+var DataUtils = require('../service/utils/DataUtils');
 
 function DBUtils(credentials) {
   this.dbConnection = mysql.createConnection(credentials);

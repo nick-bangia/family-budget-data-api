@@ -436,7 +436,7 @@ CREATE VIEW `FamilyBudget_Test`.`ActiveLineItems_ReconciledCurrentQuarter` AS
     where
         ((`fli`.`TypeId` <> 3)
         and (`fli`.`StatusId` = 0)
-        and (concat(`fli`.`Quarter`, `fli`.`Year`) = concat(quarter(now ()), year(now ())))
+        and (concat(`fli`.`Quarter`, `fli`.`Year`) = concat(quarter(NOW()), year(NOW())))
         and (`sc`.`IsActive` = 1));
 
 -- -----------------------------------------------------

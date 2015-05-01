@@ -21,7 +21,7 @@ var IsALineItem = function(data) {
           'amount' in data &&
           'typeId' in data &&
           'subtypeId' in data &&
-          'quarterId' in data &&
+          'quarter' in data &&
           'paymentMethodKey' in data &&
           'paymentMethodName' in data &&
           'accountName' in data &&
@@ -64,7 +64,7 @@ describe.skip('Line Items', function() {
     
     before(function(done) {
       fs.createReadStream('./test/test-data/searchCriteria.json').pipe(
-        authorizedRequest.get( {url: url + '/lineItems/search' }, function (err, resp, body) {
+        authorizedRequest.post( {url: url + '/lineItems/search' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);
@@ -94,7 +94,7 @@ describe.skip('Line Items', function() {
     
     before(function(done) {
       fs.createReadStream('./test/test-data/newLineItems.json').pipe(
-        authorizedRequest.post( {url: url + '/lineItems/add' }, function (err, resp, body) {
+        authorizedRequest.put( {url: url + '/lineItems/add' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);
@@ -123,7 +123,7 @@ describe.skip('Line Items', function() {
     
     before(function(done) {
       fs.createReadStream('./test/test-data/updatedLineItems.json').pipe(
-        authorizedRequest.post( {url: url + '/lineItems/update' }, function (err, resp, body) {
+        authorizedRequest.put( {url: url + '/lineItems/update' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);
@@ -172,11 +172,11 @@ describe.skip('Line Items', function() {
     });
   });
   
-  describe('when a request is made to add line items but has invalid JSON post data', function() {
+  describe('when a request is made to add line items but has an invalid JSON body', function() {
     
     before(function(done) {
       fs.createReadStream('./test/test-data/invalidFormat.json').pipe(
-        authorizedRequest.post( {url: url + '/lineItems/add' }, function (err, resp, body) {
+        authorizedRequest.put( {url: url + '/lineItems/add' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);
@@ -194,11 +194,33 @@ describe.skip('Line Items', function() {
     });
   });
   
-  describe('when a request is made to update line items but has invalid JSON post data', function() {
+  describe('when a request is made to update line items but has an invalid JSON body', function() {
     
     before(function(done) {
       fs.createReadStream('./test/test-data/invalidFormat.json').pipe(
-        authorizedRequest.post( {url: url + '/lineItems/update' }, function (err, resp, body) {
+        authorizedRequest.put( {url: url + '/lineItems/update' }, function (err, resp, body) {
+          response = resp;
+          results = JSON.parse(body);
+          done(err);
+        })
+      );
+    });
+    
+    it ('should be authorized & OK', function() {
+      expect(response.statusCode).to.equal(200);
+    });
+    
+    it ('should have a failure status with reason of "Request payload is incorrectly formatted"', function() {
+      expect(results.status).to.equal('failure');
+      expect(results.reason).to.have.string('Request payload is incorrectly formatted');
+    });
+  });
+	
+	describe('when a request is made to search for line items but has an invalid JSON body', function() {
+    
+    before(function(done) {
+      fs.createReadStream('./test/test-data/invalidFormat.json').pipe(
+        authorizedRequest.post( {url: url + '/lineItems/search' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);
@@ -216,3 +238,4 @@ describe.skip('Line Items', function() {
     });
   });
 });
+

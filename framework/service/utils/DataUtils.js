@@ -1,4 +1,4 @@
-var Response = require('./Response');
+var Response = require('../Response');
 
 function DataUtil() {
 }

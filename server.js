@@ -1,3 +1,6 @@
+/* CONFIGURE THE APPLICATION */
+// --------------------------//
+
 // required node vars
 var fs = require('fs');
 var https = require('https');
@@ -20,9 +23,12 @@ if (process.env.TEST_ENV || options.indexOf('t') > -1) {
 var serverConfig = require(serverConfigPath);
 var dbCredentials = require(dbCredentialsPath);
 
+/* BEGIN SETTING UP THE API SERVER */
+//---------------------------------//
 // required classes
 var ApiServer = require('apiserver');
 var DBUtils = require('./framework/sql/DBUtils');
+var QueryUtils = require('./framework/service/utils/QueryUtils');
 var AuthorizedUserModule = require('./modules/AuthorizedUserModule');
 var PaymentMethodModule = require('./modules/PaymentMethodModule');
 var AccountModule = require('./modules/AccountModule');
@@ -33,6 +39,8 @@ var SubcategoryModule = require('./modules/SubcategoryModule');
 var server = null;
 // instantiate a class of DBUtil with the credentials from configuration
 var dbUtils = new DBUtils(dbCredentials);
+// instantiate a QueryUtils class
+var queryUtils = new QueryUtils();
 
 // instantiate an http(s) server, depending on whether tls is enabled
 if (serverConfig.tls.enabled) {
@@ -59,53 +67,66 @@ if (serverConfig.tls.enabled) {
   });
 }
 
-// instantiate the authorizedUserModule to get a list of authorized users of this API
-var authorizedUserModule = new AuthorizedUserModule(dbUtils);
+// load & normalize DB queries
+var AccountQueries = require('./queries/AccountQueries');
+var AuthorizedUserQueries = require('./queries/AuthorizedUserQueries');
+var CategoryQueries = require('./queries/CategoryQueries');
+var LineItemQueries = require('./queries/LineItemQueries');
+var PaymentMethodQueries = require('./queries/PaymentMethodQueries');
+var SubcategoryQueries = require('./queries/SubcategoryQueries');
 
-if (serverConfig.authEnabled) {
-  authorizedUserModule.GetAll(function(authorizedUsers) {
-	
-    // set up the httpAuth middleware
-    server.use(/.+/, ApiServer.httpAuth({
-      realm: serverConfig.name,
-      credentials: authorizedUsers,
-      encode: true
-    }));
-	
-    // continue configuring server
-    ConfigureServer(server);	
-  });   
-} else {
-  // continue configuring server
-  ConfigureServer(server);
-}
+// normalize all queries
+var allQueries = { account: AccountQueries, auth: AuthorizedUserQueries, cat: CategoryQueries, item: LineItemQueries, pm: PaymentMethodQueries, subcat: SubcategoryQueries };
+var queryUtils = new QueryUtils();
+queryUtils.NormalizeQueries(allQueries, function(normalizedQueries) {
+	// instantiate the authorizedUserModule to get a list of authorized users of this API
+	var authorizedUserModule = new AuthorizedUserModule(dbUtils, normalizedQueries.auth);
 
-function ConfigureServer(server) {  
+	if (serverConfig.authEnabled) {
+		authorizedUserModule.GetAll(function(authorizedUsers) {
+		
+			// set up the httpAuth middleware
+			server.use(/.+/, ApiServer.httpAuth({
+				realm: serverConfig.name,
+				credentials: authorizedUsers,
+				encode: true
+			}));
+		
+			// continue configuring server
+			ConfigureServer(server, normalizedQueries);	
+		});   
+	} else {
+		// continue configuring server
+		ConfigureServer(server, normalizedQueries);
+	}
+});
+
+function ConfigureServer(server, normalizedQueries) {  
   // configure the payload parser middleware to parse the payload for any route that adds or updates a list
-  server.use(/^.+\/(update|add)$/, ApiServer.payloadParser());
-  
-  // add supported modules
-  server.addModule('v1', 'authorization', authorizedUserModule);
-  server.addModule('v1', 'paymentMethods', new PaymentMethodModule(dbUtils));
-  server.addModule('v1', 'accounts', new AccountModule(dbUtils));
-  server.addModule('v1', 'categories', new CategoryModule(dbUtils));
-  server.addModule('v1', 'subcategories', new SubcategoryModule(dbUtils));
-  
-  // add supported routes
-  server.router.addRoutes(routesConfig);
+	server.use(/^.+\/(update|add)$/, ApiServer.payloadParser());
 
-  // enable console logging on events if in debug mode (-d flag)
-  if (options.indexOf('d') > -1) {
-    server.on('requestStart', function (pathname, time) {
-      console.info('starting %s\n', pathname)
-    });
-  }
+	// add supported modules
+	server.addModule('v1', 'authorization', new AuthorizedUserModule(dbUtils, normalizedQueries.auth));
+	server.addModule('v1', 'paymentMethods', new PaymentMethodModule(dbUtils, normalizedQueries.pm));
+	server.addModule('v1', 'accounts', new AccountModule(dbUtils, normalizedQueries.account));
+	server.addModule('v1', 'categories', new CategoryModule(dbUtils, normalizedQueries.cat));
+	server.addModule('v1', 'subcategories', new SubcategoryModule(dbUtils, normalizedQueries.subcat));
+	
+	// add supported routes
+	server.router.addRoutes(routesConfig);
 
-  // begin listening for requests
-  server.listen(serverConfig.port, function() {
-    if (options.indexOf('d') > -1) {
-      var protocol = serverConfig.tls.enabled ? "https" : "http";
-      console.info('ApiServer listening at ' + protocol + '://localhost:' + serverConfig.port + '\n');
-    }
-  });
+	// enable console logging on events if in debug mode (-d flag)
+	if (options.indexOf('d') > -1) {
+		server.on('requestStart', function (pathname, time) {
+			console.info('starting %s\n', pathname)
+		});
+	}
+
+	// begin listening for requests
+	server.listen(serverConfig.port, function() {
+		if (options.indexOf('d') > -1) {
+			var protocol = serverConfig.tls.enabled ? "https" : "http";
+			console.info('ApiServer listening at ' + protocol + '://localhost:' + serverConfig.port + '\n');
+		}
+	});
 }

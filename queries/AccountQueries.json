@@ -4,4 +4,3 @@
   "InsertRow": "INSERT INTO dimAccount (AccountKey, AccountName, IsActive, LastUpdatedDate) VALUES (?, ?, ?, NOW())",
   "GetRowWithKey": "SELECT acc.AccountKey, acc.AccountName, acc.IsActive, acc.LastUpdatedDate FROM dimAccount acc WHERE acc.AccountKey = ?"
 }
-
