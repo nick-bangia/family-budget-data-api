@@ -1,11 +1,11 @@
 // requires
-var AuthorizedUserQueries = require('../queries/AuthorizedUserQueries');
 var Response = require('../framework/service/Response');
-var DataUtils = require('../framework/service/DataUtils');
+var DataUtils = require('../framework/service/utils/DataUtils');
 
 // constructor
-function AuthorizedUserModule(dbUtils) {
+function AuthorizedUserModule(dbUtils, queries) {
   this.dbUtils = dbUtils;
+	this.queries = queries;
   
   this.GetAuthorizedUserCredentials = function(row, callback) {
   // convert given row into username:password formatted string
@@ -18,8 +18,9 @@ function AuthorizedUserModule(dbUtils) {
 
 // public methods
 AuthorizedUserModule.prototype.GetAll = function(finished) {
-
-  this.dbUtils.SelectRows(AuthorizedUserQueries.SelectAll, this.GetAuthorizedUserCredentials,
+	var self = this;
+	
+  this.dbUtils.SelectRows(self.queries.SelectAll, this.GetAuthorizedUserCredentials,
     function(dbResponse) {
       // check if the query was successful
       if (dbResponse.getStatus() == "ok") {

@@ -1,13 +1,13 @@
 // requires
 var Subcategory = require('../model/Subcategory');
-var SubcategoryQueries = require('../queries/SubcategoryQueries');
 var Response = require('../framework/service/Response');
-var DataUtils = require('../framework/service/DataUtils');
-var ResponseUtils = require('../framework/service/ResponseUtils');
+var DataUtils = require('../framework/service/utils/DataUtils');
+var ResponseUtils = require('../framework/service/utils/ResponseUtils');
 
 // constructor
-function SubcategoryModule(dbUtility) {
+function SubcategoryModule(dbUtility, queries) {
   this.dbUtility = dbUtility;
+	this.queries = queries;
   var self = this;
   
   this.ConvertRowToSubcategory = function(row, callback) {
@@ -31,7 +31,7 @@ function SubcategoryModule(dbUtility) {
   
   this.ReadSingleSubcategoryFromDatabase = function(subcategoryKey, callback) {
     // read a single category from the database given the key
-    self.dbUtility.ReadSingleRowWithKey(SubcategoryQueries.GetRowWithKey, [subcategoryKey], function(readResult) {
+    self.dbUtility.ReadSingleRowWithKey(self.queries.GetRowWithKey, [subcategoryKey], function(readResult) {
       if (readResult.status == 'ok') {
         self.ConvertRowToSubcategory(readResult.data, function(sc) {
           readResult.setData(sc);
@@ -50,7 +50,7 @@ function SubcategoryModule(dbUtility) {
                   subcategoryObject.getSubcategoryName(), subcategoryObject.getSubcategoryPrefix(),
                   subcategoryObject.getIsActive(), subcategoryObject.getIsGoal(), subcategoryObject.getSubcategoryKey()];    
     
-    self.dbUtility.SingleRowCUQueryWithParams(SubcategoryQueries.UpdateRow, params, function(updateResult) {
+    self.dbUtility.SingleRowCUQueryWithParams(self.queries.UpdateRow, params, function(updateResult) {
       // once the update query is complete, get the updated row, and return to callback
       if (updateResult.status == 'ok') {
         // get the updated row
@@ -71,7 +71,7 @@ function SubcategoryModule(dbUtility) {
                   subcategoryObject.getSubcategoryName(), subcategoryObject.getSubcategoryPrefix(),
                   subcategoryObject.getIsActive(), subcategoryObject.getIsGoal()];
     
-    self.dbUtility.SingleRowCUQueryWithParams(SubcategoryQueries.InsertRow, params, function(insertResult) {
+    self.dbUtility.SingleRowCUQueryWithParams(self.queries.InsertRow, params, function(insertResult) {
       // once the insert query is successful, get the newly inserted row, and return to callback
       if (insertResult.status == 'ok') {
         // get the new row
@@ -90,7 +90,7 @@ SubcategoryModule.prototype.GetAll = {
   get: function(request, response) {
     var self = this;
     
-    this.dbUtility.SelectRows(SubcategoryQueries.SelectAll, self.ConvertRowToSubcategory, 
+    this.dbUtility.SelectRows(self.queries.SelectAll, self.ConvertRowToSubcategory, 
       function(dbResponse) {
         // check if the query was successful
         if (dbResponse.getStatus() == "ok") {

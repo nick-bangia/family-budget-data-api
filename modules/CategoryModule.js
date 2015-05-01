@@ -1,13 +1,13 @@
 // requires
 var Category = require('../model/Category');
-var CategoryQueries = require('../queries/CategoryQueries');
 var Response = require('../framework/service/Response');
-var DataUtils = require('../framework/service/DataUtils');
-var ResponseUtils = require('../framework/service/ResponseUtils');
+var DataUtils = require('../framework/service/utils/DataUtils');
+var ResponseUtils = require('../framework/service/utils/ResponseUtils');
 
 // constructor
-function CategoryModule(dbUtility) {
+function CategoryModule(dbUtility, queries) {
   this.dbUtility = dbUtility;
+	this.queries = queries;
   var self = this;
   
   this.ConvertRowToCategory = function(row, callback) {
@@ -25,7 +25,7 @@ function CategoryModule(dbUtility) {
   
   this.ReadSingleCategoryFromDatabase = function(categoryKey, callback) {
     // read a single category from the database given the key
-    self.dbUtility.ReadSingleRowWithKey(CategoryQueries.GetRowWithKey, [categoryKey], function(readResult) {
+    self.dbUtility.ReadSingleRowWithKey(self.queries.GetRowWithKey, [categoryKey], function(readResult) {
       if (readResult.status == 'ok') {
         self.ConvertRowToCategory(readResult.data, function(cat) {
           readResult.setData(cat);
@@ -42,7 +42,7 @@ function CategoryModule(dbUtility) {
     categoryObject.__proto__ = Category.prototype;
     var params = [categoryObject.getCategoryName(), categoryObject.getIsActive(), categoryObject.getCategoryKey()];    
     
-    self.dbUtility.SingleRowCUQueryWithParams(CategoryQueries.UpdateRow, params, function(updateResult) {
+    self.dbUtility.SingleRowCUQueryWithParams(self.queries.UpdateRow, params, function(updateResult) {
       // once the update query is complete, get the updated row, and return to callback
       if (updateResult.status == 'ok') {
         // get the updated row
@@ -61,7 +61,7 @@ function CategoryModule(dbUtility) {
     var newKey = categoryObject.getNewKey();
     var params = [newKey, categoryObject.getCategoryName(), categoryObject.getIsActive()];
     
-    self.dbUtility.SingleRowCUQueryWithParams(CategoryQueries.InsertRow, params, function(insertResult) {
+    self.dbUtility.SingleRowCUQueryWithParams(self.queries.InsertRow, params, function(insertResult) {
       // once the insert query is successful, get the newly inserted row, and return to callback
       if (insertResult.status == 'ok') {
         // get the new row
@@ -80,7 +80,7 @@ CategoryModule.prototype.GetAll = {
   get: function(request, response) {
     var self = this;
     
-    this.dbUtility.SelectRows(CategoryQueries.SelectAll, self.ConvertRowToCategory, 
+    this.dbUtility.SelectRows(self.queries.SelectAll, self.ConvertRowToCategory, 
       function(dbResponse) {
         // check if the query was successful
         if (dbResponse.getStatus() == "ok") {

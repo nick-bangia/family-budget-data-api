@@ -1,13 +1,13 @@
 // requires
 var PaymentMethod = require('../model/PaymentMethod');
-var PaymentMethodQueries = require('../queries/PaymentMethodQueries');
 var Response = require('../framework/service/Response');
-var DataUtils = require('../framework/service/DataUtils');
-var ResponseUtils = require('../framework/service/ResponseUtils');
+var DataUtils = require('../framework/service/utils/DataUtils');
+var ResponseUtils = require('../framework/service/utils/ResponseUtils');
 
 // constructor
-function PaymentMethodModule(dbUtility) {
+function PaymentMethodModule(dbUtility, queries) {
   this.dbUtility = dbUtility;
+	this.queries = queries;
   var self = this;
   
   this.ConvertRowToPaymentMethod = function(row, callback) {
@@ -25,7 +25,7 @@ function PaymentMethodModule(dbUtility) {
   
   this.ReadSinglePaymentMethodFromDatabase = function(paymentMethodKey, callback) {
     // read a single payment method from the database given the key
-    self.dbUtility.ReadSingleRowWithKey(PaymentMethodQueries.GetRowWithKey, [paymentMethodKey], function(readResult) {
+    self.dbUtility.ReadSingleRowWithKey(self.queries.GetRowWithKey, [paymentMethodKey], function(readResult) {
       if (readResult.status == 'ok') {
         self.ConvertRowToPaymentMethod(readResult.data, function(pm) {
           readResult.setData(pm);
@@ -42,7 +42,7 @@ function PaymentMethodModule(dbUtility) {
     paymentMethodObject.__proto__ = PaymentMethod.prototype;
     var params = [paymentMethodObject.getPaymentMethodName(), paymentMethodObject.getIsActive(), paymentMethodObject.getPaymentMethodKey()];    
     
-    self.dbUtility.SingleRowCUQueryWithParams(PaymentMethodQueries.UpdateRow, params, function(updateResult) {
+    self.dbUtility.SingleRowCUQueryWithParams(self.queries.UpdateRow, params, function(updateResult) {
       // once the update query is complete, get the updated row, and return to callback
       if (updateResult.status == 'ok') {
         // get the updated row
@@ -61,7 +61,7 @@ function PaymentMethodModule(dbUtility) {
     var newKey = paymentMethodObject.getNewKey();
     var params = [newKey, paymentMethodObject.getPaymentMethodName(), paymentMethodObject.getIsActive()];
     
-    self.dbUtility.SingleRowCUQueryWithParams(PaymentMethodQueries.InsertRow, params, function(insertResult) {
+    self.dbUtility.SingleRowCUQueryWithParams(self.queries.InsertRow, params, function(insertResult) {
       // once the insert query is successful, get the newly inserted row, and return to callback
       if (insertResult.status == 'ok') {
         // get the new row
@@ -80,7 +80,7 @@ PaymentMethodModule.prototype.GetAll = {
   get: function(request, response) {
     var self = this;
     
-    this.dbUtility.SelectRows(PaymentMethodQueries.SelectAll, self.ConvertRowToPaymentMethod, 
+    this.dbUtility.SelectRows(self.queries.SelectAll, self.ConvertRowToPaymentMethod, 
       function(dbResponse) {
         // check if the query was successful
         if (dbResponse.getStatus() == "ok") {
