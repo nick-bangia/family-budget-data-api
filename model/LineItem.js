@@ -159,11 +159,11 @@ LineItem.prototype.setSubtypeId = function(value) {
 }
 
 LineItem.prototype.getQuarter = function() {
-  return this.quarterId;
+  return this.quarter;
 }
 
 LineItem.prototype.setQuarter = function(value) {
-  this.quarterId = value;
+  this.quarter = value;
 }
 
 LineItem.prototype.getPaymentMethodKey = function() {

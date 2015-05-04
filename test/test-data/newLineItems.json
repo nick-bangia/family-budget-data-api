@@ -5,11 +5,13 @@
       "day": 1,
       "dayOfWeekId": 3,
       "year": 2015,
-      "subcategoryKey": "891B1158-E037-4854-B99B-7814845E0137",
+      "subcategoryKey": "94615CEE-9857-4897-8C5A-64C788BCF29F",
       "description": "Test Line Item 1",
       "amount": -141.89,
       "typeId": 0,
-      "paymentMethodKey": "42F42C49-C3B1-47F8-9A80-9894CD4863F5",
+      "subtypeId": 0,
+      "quarter": 2,
+      "paymentMethodKey": "1117AFEB-3933-46C1-A6F1-7033DE501727",
       "statusId": 0
     },
     {
@@ -17,11 +19,13 @@
       "day": 7,
       "dayOfWeekId": 6,
       "year": 2015,
-      "subcategoryKey": "891B1158-E037-4854-B99B-7814845E0137",
+      "subcategoryKey": "71D83AC4-0F57-4936-BB59-38C50E692E3F",
       "description": "Test Line Item 2",
       "amount": 24.95,
       "typeId": 0,
-      "paymentMethodKey": "42F42C49-C3B1-47F8-9A80-9894CD4863F5",
+      "subtypeId": 1,
+      "quarter": 2,
+      "paymentMethodKey": "97824A38-B1DD-4885-B24B-A46E459A5AB0",
       "statusId": 0
     }
   ]

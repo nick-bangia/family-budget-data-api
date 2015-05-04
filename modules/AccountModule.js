@@ -42,7 +42,7 @@ function AccountModule(dbUtility, queries) {
     accountObject.__proto__ = Account.prototype;
     var params = [accountObject.getAccountName(), accountObject.getIsActive(), accountObject.getAccountKey()];    
     
-    self.dbUtility.SingleRowCUQueryWithParams(self.queries.UpdateRow, params, function(updateResult) {
+    self.dbUtility.SingleRowCUDQueryWithParams(self.queries.UpdateRow, params, function(updateResult) {
       // once the update query is complete, get the updated row, and return to callback
       if (updateResult.status == 'ok') {
         // get the updated row
@@ -61,7 +61,7 @@ function AccountModule(dbUtility, queries) {
     var newKey = accountObject.getNewKey();
     var params = [newKey, accountObject.getAccountName(), accountObject.getIsActive()];
     
-    self.dbUtility.SingleRowCUQueryWithParams(self.queries.InsertRow, params, function(insertResult) {
+    self.dbUtility.SingleRowCUDQueryWithParams(self.queries.InsertRow, params, function(insertResult) {
       // once the insert query is successful, get the newly inserted row, and return to callback
       if (insertResult.status == 'ok') {
         // get the new row

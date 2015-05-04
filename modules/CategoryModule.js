@@ -42,7 +42,7 @@ function CategoryModule(dbUtility, queries) {
     categoryObject.__proto__ = Category.prototype;
     var params = [categoryObject.getCategoryName(), categoryObject.getIsActive(), categoryObject.getCategoryKey()];    
     
-    self.dbUtility.SingleRowCUQueryWithParams(self.queries.UpdateRow, params, function(updateResult) {
+    self.dbUtility.SingleRowCUDQueryWithParams(self.queries.UpdateRow, params, function(updateResult) {
       // once the update query is complete, get the updated row, and return to callback
       if (updateResult.status == 'ok') {
         // get the updated row
@@ -61,7 +61,7 @@ function CategoryModule(dbUtility, queries) {
     var newKey = categoryObject.getNewKey();
     var params = [newKey, categoryObject.getCategoryName(), categoryObject.getIsActive()];
     
-    self.dbUtility.SingleRowCUQueryWithParams(self.queries.InsertRow, params, function(insertResult) {
+    self.dbUtility.SingleRowCUDQueryWithParams(self.queries.InsertRow, params, function(insertResult) {
       // once the insert query is successful, get the newly inserted row, and return to callback
       if (insertResult.status == 'ok') {
         // get the new row

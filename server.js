@@ -8,7 +8,7 @@ var https = require('https');
 // required configurations. If this server is running in a test context, use differnt configurations
 var routesConfig = require('./config/routes');
 var serverConfigPath = './config/server';
-var dbCredentialsPath = './config/dbCredentials';
+var dbConfigPath = './config/db';
 
 // get the options (if any) into a variable
 var options = ((typeof process.argv[2]) === 'undefined') ? '' : process.argv[2];
@@ -17,11 +17,11 @@ var options = ((typeof process.argv[2]) === 'undefined') ? '' : process.argv[2];
 // so configure the server & db appropriately
 if (process.env.TEST_ENV || options.indexOf('t') > -1) {
   serverConfigPath = './test/config/server';
-  dbCredentialsPath = './test/config/dbCredentials';
+  dbConfigPath = './test/config/db';
 }
 
 var serverConfig = require(serverConfigPath);
-var dbCredentials = require(dbCredentialsPath);
+var dbConfig = require(dbConfigPath);
 
 /* BEGIN SETTING UP THE API SERVER */
 //---------------------------------//
@@ -34,11 +34,12 @@ var PaymentMethodModule = require('./modules/PaymentMethodModule');
 var AccountModule = require('./modules/AccountModule');
 var CategoryModule = require('./modules/CategoryModule');
 var SubcategoryModule = require('./modules/SubcategoryModule');
+var LineItemModule = require('./modules/LineItemModule');
 
 // initialize the server variable
 var server = null;
-// instantiate a class of DBUtil with the credentials from configuration
-var dbUtils = new DBUtils(dbCredentials);
+// instantiate a class of DBUtil with the db config values
+var dbUtils = new DBUtils(dbConfig);
 // instantiate a QueryUtils class
 var queryUtils = new QueryUtils();
 
@@ -103,7 +104,7 @@ queryUtils.NormalizeQueries(allQueries, function(normalizedQueries) {
 
 function ConfigureServer(server, normalizedQueries) {  
   // configure the payload parser middleware to parse the payload for any route that adds or updates a list
-	server.use(/^.+\/(update|add)$/, ApiServer.payloadParser());
+	server.use(/^.+\/(update|add|search)$/, ApiServer.payloadParser());
 
 	// add supported modules
 	server.addModule('v1', 'authorization', new AuthorizedUserModule(dbUtils, normalizedQueries.auth));
@@ -111,6 +112,7 @@ function ConfigureServer(server, normalizedQueries) {
 	server.addModule('v1', 'accounts', new AccountModule(dbUtils, normalizedQueries.account));
 	server.addModule('v1', 'categories', new CategoryModule(dbUtils, normalizedQueries.cat));
 	server.addModule('v1', 'subcategories', new SubcategoryModule(dbUtils, normalizedQueries.subcat));
+  server.addModule('v1', 'lineItems', new LineItemModule(dbUtils, normalizedQueries.item));
 	
 	// add supported routes
 	server.router.addRoutes(routesConfig);

@@ -11,5 +11,10 @@
   ["/categories/add", "v1/categories#InsertList"],
   ["/subcategories/all", "v1/subcategories#GetAll"],
   ["/subcategories/update", "v1/subcategories#UpdateList"],
-  ["/subcategories/add", "v1/subcategories#InsertList"]
+  ["/subcategories/add", "v1/subcategories#InsertList"],
+  ["/lineItems/all", "v1/lineItems#GetAll"],
+  ["/lineItems/update", "v1/lineItems#UpdateList"],
+  ["/lineItems/add", "v1/lineItems#InsertList"],
+  ["/lineItems/delete/:key", "v1/lineItems#DeleteItem"],
+  ["/lineItems/search", "v1/lineItems#Search"]
 ]

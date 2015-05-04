@@ -31,7 +31,7 @@ var IsALineItem = function(data) {
          );
 }
 
-describe.skip('Line Items', function() {
+describe('Line Items', function() {
   
   before(function() {
     url = testUtils.GetRootURL();
@@ -111,7 +111,7 @@ describe.skip('Line Items', function() {
       testUtils.TestStandardExpectationsForSuccessfulResult(results, 1);
       
       // test the standard expectations for a post result
-      testUtils.TestStandardExpectationsForSuccessfulPostResult(results.data, newLineItems.data.length);      
+      testUtils.TestStandardExpectationsForSuccessfulPutResult(results.data, newLineItems.data.length);      
     });
     
     it ('should have line item objects in the successful result', function() {
@@ -140,7 +140,7 @@ describe.skip('Line Items', function() {
       testUtils.TestStandardExpectationsForSuccessfulResult(results, 1);
       
       // test the standard expectations for a post result
-      testUtils.TestStandardExpectationsForSuccessfulPostResult(results.data, updatedLineItems.data.length);
+      testUtils.TestStandardExpectationsForSuccessfulPutResult(results.data, updatedLineItems.data.length);
              
       // test individual results for the update operation. We should expect 1 success and 1 failure due to no rows affected
       expect(results.data.filter( testUtils.TestSuccessfulResult ).length).to.be.above(0);

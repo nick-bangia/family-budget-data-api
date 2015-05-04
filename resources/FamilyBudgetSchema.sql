@@ -2,7 +2,7 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
--- ----authorizeduser-------------------------------------------------
+-- -----------------------------------------------------
 -- Schema FamilyBudget
 -- -----------------------------------------------------
 DROP SCHEMA IF EXISTS `FamilyBudget` ;
@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS `FamilyBudget`.`dimSubcategory` (
     REFERENCES `FamilyBudget`.`dimCategory` (`CategoryKey`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_dimSubCategory_dimAccount1`
+  CONSTRAINT `fk_dimSubcategory_dimAccount1`
 	FOREIGN KEY (`AccountKey`)
 	REFERENCES `FamilyBudget`.`dimAccount` (`AccountKey`)
 	ON DELETE NO ACTION
@@ -157,7 +157,7 @@ SHOW WARNINGS;
 CREATE TABLE IF NOT EXISTS `FamilyBudget`.`Subtypes` (
   `SubtypeId` TINYINT(4) NOT NULL,
   `SubtypeName` VARCHAR(50) NOT NULL,
-  PRIMARY KEY (`SubtypeId`))
+  PRIMARY KEY (`SubTypeId`))
 ENGINE = InnoDB;
 
 SHOW WARNINGS;
@@ -224,7 +224,7 @@ CREATE TABLE IF NOT EXISTS `FamilyBudget`.`factLineItem` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_factLineItem_Subtypes1`
-    FOREIGN KEY (`SubTypeId`)
+    FOREIGN KEY (`SubtypeId`)
     REFERENCES `FamilyBudget`.`Subtypes` (`SubtypeId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
@@ -283,40 +283,40 @@ SHOW WARNINGS;
 
 CREATE VIEW `FamilyBudget`.`ActiveLineItems_PendingFutureGoal` AS
     select 
-        `fli`.`UniqueKey` AS `UniqueKey`,
-        `fli`.`MonthId` AS `MonthId`,
-		`m`.`MonthName` AS `Month`,
-        `fli`.`DayOfMonth` AS `DayOfMonth`,
-        `fli`.`DayOfWeekId` AS `DayOfWeekId`,
-		`dow`.`DayOfWeekName` AS `DayOfWeek`,
-        `fli`.`Year` AS `Year`,
-		`c`.`CategoryKey`,
-		`c`.`CategoryName`,
-        `fli`.`SubcategoryKey` AS `SubcategoryKey`,
-		`sc`.`SubcategoryName` AS `SubcategoryName`,
-		`sc`.`SubcategoryPrefix` AS `SubcategoryPrefix`,
-        `fli`.`Description` AS `Description`,
-        `fli`.`Amount` AS `Amount`,
-        `fli`.`TypeId` AS `TypeId`,
-        `fli`.`SubtypeId` AS `SubtypeId`,
-        `fli`.`Quarter` AS `Quarter`,
-        `fli`.`PaymentMethodKey` AS `PaymentMethodKey`,
-		`pm`.`PaymentMethodName` AS `PaymentMethodName`,
-		`a`.`AccountName` AS `AccountName`,
-        `fli`.`StatusId` AS `StatusId`,
-		`sc`.`IsGoal`,
-        `fli`.`LastUpdatedDate` AS `LastUpdatedDate`
+      `fli`.`UniqueKey` AS `UniqueKey`,
+      `fli`.`MonthId` AS `MonthId`,
+      `m`.`MonthName` AS `MonthName`,
+      `fli`.`DayOfMonth` AS `DayOfMonth`,
+      `fli`.`DayOfWeekId` AS `DayOfWeekId`,
+      `dow`.`DayOfWeekName` AS `DayOfWeekName`,
+      `fli`.`Year` AS `Year`,
+      `c`.`CategoryKey`,
+      `c`.`CategoryName`,
+      `fli`.`SubcategoryKey` AS `SubcategoryKey`,
+      `sc`.`SubcategoryName` AS `SubcategoryName`,
+      `sc`.`SubcategoryPrefix` AS `SubcategoryPrefix`,
+      `fli`.`Description` AS `Description`,
+      `fli`.`Amount` AS `Amount`,
+      `fli`.`TypeId` AS `TypeId`,
+      `fli`.`SubtypeId` AS `SubtypeId`,
+      `fli`.`Quarter` AS `Quarter`,
+      `fli`.`PaymentMethodKey` AS `PaymentMethodKey`,
+      `pm`.`PaymentMethodName` AS `PaymentMethodName`,
+      `a`.`AccountName` AS `AccountName`,
+      `fli`.`StatusId` AS `StatusId`,
+      `sc`.`IsGoal`,
+      `fli`.`LastUpdatedDate` AS `LastUpdatedDate`
     from
-        (`factLineItem` `fli`
-        join `dimSubcategory` `sc` ON (`fli`.`SubcategoryKey` = `sc`.`SubcategoryKey`)
-		join `dimAccount` `a` ON (`sc`.`AccountKey` = `a`.`AccountKey`)
-		join `dimCategory` `c` ON (`sc`.`CategoryKey` = `c`.`CategoryKey`)
-		join `Months` `m` ON (`fli`.`MonthId` = `m`.`MonthId`)
-		join `DaysOfWeek` `dow` ON (`fli`.`DayOfWeekId` = `dow`.`DayOfWeekId`)
-		join `dimPaymentMethod` `pm` ON (`fli`.`PaymentMethodKey` = `pm`.`PaymentMethodKey`))
+      (`factLineItem` `fli`
+      join `dimSubcategory` `sc` ON (`fli`.`SubcategoryKey` = `sc`.`SubcategoryKey`)
+      join `dimAccount` `a` ON (`sc`.`AccountKey` = `a`.`AccountKey`)
+      join `dimCategory` `c` ON (`sc`.`CategoryKey` = `c`.`CategoryKey`)
+      join `Months` `m` ON (`fli`.`MonthId` = `m`.`MonthId`)
+      join `DaysOfWeek` `dow` ON (`fli`.`DayOfWeekId` = `dow`.`DayOfWeekId`)
+      join `dimPaymentMethod` `pm` ON (`fli`.`PaymentMethodKey` = `pm`.`PaymentMethodKey`))
     where
-        ((`fli`.`StatusId` in (1 , 2, 3))
-        and (`sc`.`IsActive` = 1));
+      ((`fli`.`StatusId` in (1 , 2, 3))
+      and (`sc`.`IsActive` = 1));
 SHOW WARNINGS;
 
 -- -----------------------------------------------------
@@ -327,70 +327,70 @@ SHOW WARNINGS;
 
 CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledPriorQuarters_Condensed` AS
     select 
-        'CONDENSED_KEYS' AS `UniqueKey`,
-        (case `fli`.`Quarter`
-            when 1 then 3
-            when 2 then 6
-            when 3 then 9
-            when 4 then 12
-        end) AS `MonthId`,
-		(case `fli`.`Quarter`
-            when 1 then 'March'
-            when 2 then 'June'
-            when 3 then 'September'
-            when 4 then 'December'
-        end) AS `MonthName`,
-        (case `fli`.`Quarter`
-            when 1 then 31
-            when 2 then 30
-            when 3 then 31
-            when 4 then 31
-        end) AS `DayOfMonth`,
-        (case `fli`.`Quarter`
-            when 1 then dayofweek(str_to_date(concat('3-31-', `fli`.`Year`), '%m-%d-%Y'))
-            when 2 then dayofweek(str_to_date(concat('6-30-', `fli`.`Year`), '%m-%d-%Y'))
-            when 3 then dayofweek(str_to_date(concat('9-31-', `fli`.`Year`), '%m-%d-%Y'))
-            when 4 then dayofweek(str_to_date(concat('12-31-', `fli`.`Year`),'%m-%d-%Y'))
-        end) AS `DayOfWeekId`,
-		(case `fli`.`Quarter`
-            when 1 then dayname(str_to_date(concat('3-31-', `fli`.`Year`), '%m-%d-%Y'))
-            when 2 then dayname(str_to_date(concat('6-30-', `fli`.`Year`), '%m-%d-%Y'))
-            when 3 then dayname(str_to_date(concat('9-31-', `fli`.`Year`), '%m-%d-%Y'))
-            when 4 then dayname(str_to_date(concat('12-31-', `fli`.`Year`),'%m-%d-%Y'))
-        end) AS `DayOfWeek`,
-        `fli`.`Year` AS `Year`,
-		`c`.`CategoryKey` AS `CategoryKey`,
-		`c`.`CategoryName` AS `CategoryName`,
-        `fli`.`SubcategoryKey` AS `SubcategoryKey`,
-		`sc`.`SubcategoryName` AS `SubcategoryName`,
-		`sc`.`SubcategoryPrefix` AS `SubcategoryPrefix`,
-        'CONDENSED ENTRIES' AS `Description`,
-        sum(`fli`.`Amount`) AS `Amount`,
-        4 AS `TypeId`,
-        3 AS `SubtypeId`,
-        `fli`.`Quarter` AS `Quarter`,
-        'CONDENSED_KEYS' AS `PaymentMethodKey`,
-		'CONDENSED ENTRIES' AS `PaymentMethodName`,
-		`a`.`AccountName` AS `AccountName`,
-        0 AS `StatusId`,
-		`sc`.`IsGoal` AS `IsGoal`,
-        max(`fli`.`LastUpdatedDate`) AS `LastUpdatedDate`
+      'CONDENSED_KEYS' AS `UniqueKey`,
+      (case `fli`.`Quarter`
+        when 1 then 3
+        when 2 then 6
+        when 3 then 9
+        when 4 then 12
+      end) AS `MonthId`,
+      (case `fli`.`Quarter`
+        when 1 then 'March'
+        when 2 then 'June'
+        when 3 then 'September'
+        when 4 then 'December'
+      end) AS `MonthName`,
+      (case `fli`.`Quarter`
+        when 1 then 31
+        when 2 then 30
+        when 3 then 31
+        when 4 then 31
+      end) AS `DayOfMonth`,
+      (case `fli`.`Quarter`
+        when 1 then dayofweek(str_to_date(concat('3-31-', `fli`.`Year`), '%m-%d-%Y'))
+        when 2 then dayofweek(str_to_date(concat('6-30-', `fli`.`Year`), '%m-%d-%Y'))
+        when 3 then dayofweek(str_to_date(concat('9-31-', `fli`.`Year`), '%m-%d-%Y'))
+        when 4 then dayofweek(str_to_date(concat('12-31-', `fli`.`Year`),'%m-%d-%Y'))
+      end) AS `DayOfWeekId`,
+      (case `fli`.`Quarter`
+        when 1 then dayname(str_to_date(concat('3-31-', `fli`.`Year`), '%m-%d-%Y'))
+        when 2 then dayname(str_to_date(concat('6-30-', `fli`.`Year`), '%m-%d-%Y'))
+        when 3 then dayname(str_to_date(concat('9-31-', `fli`.`Year`), '%m-%d-%Y'))
+        when 4 then dayname(str_to_date(concat('12-31-', `fli`.`Year`),'%m-%d-%Y'))
+      end) AS `DayOfWeekName`,
+      `fli`.`Year` AS `Year`,
+      `c`.`CategoryKey` AS `CategoryKey`,
+      `c`.`CategoryName` AS `CategoryName`,
+      `fli`.`SubcategoryKey` AS `SubcategoryKey`,
+      `sc`.`SubcategoryName` AS `SubcategoryName`,
+      `sc`.`SubcategoryPrefix` AS `SubcategoryPrefix`,
+      'CONDENSED ENTRIES' AS `Description`,
+      sum(`fli`.`Amount`) AS `Amount`,
+      4 AS `TypeId`,
+      3 AS `SubtypeId`,
+      `fli`.`Quarter` AS `Quarter`,
+      'CONDENSED_KEYS' AS `PaymentMethodKey`,
+      'CONDENSED ENTRIES' AS `PaymentMethodName`,
+      `a`.`AccountName` AS `AccountName`,
+      0 AS `StatusId`,
+      `sc`.`IsGoal` AS `IsGoal`,
+      max(`fli`.`LastUpdatedDate`) AS `LastUpdatedDate`
     from
-        (`factLineItem` `fli`
-        join `dimSubcategory` `sc` ON ((`fli`.`SubcategoryKey` = `sc`.`SubcategoryKey`))
-		join `dimCategory` `c` ON ((`sc`.`CategoryKey` = `c`.`CategoryKey`))
-		join `dimAccount` `a` ON ((`sc`.`AccountKey` = `a`.`AccountKey`)))
+      (`factLineItem` `fli`
+      join `dimSubcategory` `sc` ON ((`fli`.`SubcategoryKey` = `sc`.`SubcategoryKey`))
+      join `dimCategory` `c` ON ((`sc`.`CategoryKey` = `c`.`CategoryKey`))
+      join `dimAccount` `a` ON ((`sc`.`AccountKey` = `a`.`AccountKey`)))
     where
-        ((`fli`.`TypeId` <> 3)
-        and (`fli`.`StatusId` = 0)
-        and (concat(`fli`.`Quarter`, `fli`.`Year`) <> concat(quarter(NOW()), year(NOW())))
-        and (`sc`.`IsActive` = 1))
+      ((`fli`.`TypeId` <> 3)
+      and (`fli`.`StatusId` = 0)
+      and (concat(`fli`.`Quarter`, `fli`.`Year`) <> concat(quarter(NOW()), year(NOW())))
+      and (`sc`.`IsActive` = 1))
     group by 
       `fli`.`SubcategoryKey`,
-	  `sc`.`SubcategoryName`,
-	  `a`.`AccountName`,
-	  `c`.`CategoryKey`,
-	  `c`.`CategoryName`,
+      `sc`.`SubcategoryName`,
+      `a`.`AccountName`,
+      `c`.`CategoryKey`,
+      `c`.`CategoryName`,
       `fli`.`Year`,
       `fli`.`Quarter`;
 
@@ -402,37 +402,37 @@ SHOW WARNINGS;
 
 CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledCurrentQuarter` AS
     select 
-       `fli`.`UniqueKey` AS `UniqueKey`,
-        `fli`.`MonthId` AS `MonthId`,
-		`m`.`MonthName` AS `Month`,
-        `fli`.`DayOfMonth` AS `DayOfMonth`,
-        `fli`.`DayOfWeekId` AS `DayOfWeekId`,
-		`dow`.`DayOfWeekName` AS `DayOfWeek`,
-        `fli`.`Year` AS `Year`,
-		`c`.`CategoryKey`,
-		`c`.`CategoryName`,
-        `fli`.`SubcategoryKey` AS `SubcategoryKey`,
-		`sc`.`SubcategoryName` AS `SubcategoryName`,
-		`sc`.`SubcategoryPrefix` AS `SubcategoryPrefix`,
-        `fli`.`Description` AS `Description`,
-        `fli`.`Amount` AS `Amount`,
-        `fli`.`TypeId` AS `TypeId`,
-        `fli`.`SubtypeId` AS `SubtypeId`,
-        `fli`.`Quarter` AS `Quarter`,
-        `fli`.`PaymentMethodKey` AS `PaymentMethodKey`,
-		`pm`.`PaymentMethodName` AS `PaymentMethodName`,
-		`a`.`AccountName` AS `AccountName`,
-        `fli`.`StatusId` AS `StatusId`,
-		`sc`.`IsGoal`,
-        `fli`.`LastUpdatedDate` AS `LastUpdatedDate`
+      `fli`.`UniqueKey` AS `UniqueKey`,
+      `fli`.`MonthId` AS `MonthId`,
+      `m`.`MonthName` AS `MonthName`,
+      `fli`.`DayOfMonth` AS `DayOfMonth`,
+      `fli`.`DayOfWeekId` AS `DayOfWeekId`,
+      `dow`.`DayOfWeekName` AS `DayOfWeekName`,
+      `fli`.`Year` AS `Year`,
+      `c`.`CategoryKey`,
+      `c`.`CategoryName`,
+      `fli`.`SubcategoryKey` AS `SubcategoryKey`,
+      `sc`.`SubcategoryName` AS `SubcategoryName`,
+      `sc`.`SubcategoryPrefix` AS `SubcategoryPrefix`,
+      `fli`.`Description` AS `Description`,
+      `fli`.`Amount` AS `Amount`,
+      `fli`.`TypeId` AS `TypeId`,
+      `fli`.`SubtypeId` AS `SubtypeId`,
+      `fli`.`Quarter` AS `Quarter`,
+      `fli`.`PaymentMethodKey` AS `PaymentMethodKey`,
+      `pm`.`PaymentMethodName` AS `PaymentMethodName`,
+      `a`.`AccountName` AS `AccountName`,
+      `fli`.`StatusId` AS `StatusId`,
+      `sc`.`IsGoal`,
+      `fli`.`LastUpdatedDate` AS `LastUpdatedDate`
     from
         (`factLineItem` `fli`
         join `dimSubcategory` `sc` ON (`fli`.`SubcategoryKey` = `sc`.`SubcategoryKey`)
-		join `dimAccount` `a` ON (`sc`.`AccountKey` = `a`.`AccountKey`)
-		join `dimCategory` `c` ON (`sc`.`CategoryKey` = `c`.`CategoryKey`)
-		join `Months` `m` ON (`fli`.`MonthId` = `m`.`MonthId`)
-		join `DaysOfWeek` `dow` ON (`fli`.`DayOfWeekId` = `dow`.`DayOfWeekId`)
-		join `dimPaymentMethod` `pm` ON (`fli`.`PaymentMethodKey` = `pm`.`PaymentMethodKey`))
+        join `dimAccount` `a` ON (`sc`.`AccountKey` = `a`.`AccountKey`)
+        join `dimCategory` `c` ON (`sc`.`CategoryKey` = `c`.`CategoryKey`)
+        join `Months` `m` ON (`fli`.`MonthId` = `m`.`MonthId`)
+        join `DaysOfWeek` `dow` ON (`fli`.`DayOfWeekId` = `dow`.`DayOfWeekId`)
+        join `dimPaymentMethod` `pm` ON (`fli`.`PaymentMethodKey` = `pm`.`PaymentMethodKey`))
     where
         ((`fli`.`TypeId` <> 3)
         and (`fli`.`StatusId` = 0)

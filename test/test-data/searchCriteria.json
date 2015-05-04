@@ -1,15 +1,13 @@
 {
   "data": [
     {
-      "uniqueKey": "",
       "dateCompareOperator": "gte",
       "minDate": "2015-01-18",
-      "maxDate": "",
       "year": 2015,
       "quarter": 1,
       "month": 1,
       "day": 18,
-      "dayOfWeek": 0,
+      "dayOfWeek": 1,
       "descriptionContains": "178",
       "categoryKey": "A749EB2F-CBF3-4C07-A2DC-E61F6094A9D4",
       "subcategoryKey": "BCB2E098-7FA5-432E-8E7A-B7EA4C510002",
@@ -19,8 +17,7 @@
       "type": 0,
       "subtype": 0,
       "paymentMethodKey": "66798E19-15F0-4AD8-800B-2CC5255F8C6F",
-      "status": 0,
-      "updatedAfter": ""
+      "status": 0
     }
   ]
 }

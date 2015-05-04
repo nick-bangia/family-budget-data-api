@@ -1,7 +1,7 @@
 // require mysql in order to precondition all tests
 var fs = require('fs');
 var mysql = require('mysql');
-var dbCredentials = JSON.parse(fs.readFileSync('./test/config/dbCredentials.json'));
+var dbCredentials = JSON.parse(fs.readFileSync('./test/config/db.json'));
 var dbRefreshQueryScriptPath = './resources/FamilyBudgetSchema-TestDB.sql';
 
 // set environment variables
