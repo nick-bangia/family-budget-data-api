@@ -11,7 +11,7 @@ var IsABudgetAllowance = function(data) {
          );
 }
 
-describe.skip('Budget Allowances', function() {
+describe('Budget Allowances', function() {
   
   before(function() {
     url = testUtils.GetRootURL();

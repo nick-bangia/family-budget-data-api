@@ -1,6 +1,6 @@
 var fs = require('fs');
-var newLineItems = require('../test-data/newLineItems');
-var updatedLineItems = require('../test-data/updatedLineItems');
+var newLineItems = require('../data/lineItems/newLineItems');
+var updatedLineItems = require('../data/lineItems/updatedLineItems');
 var url, response, results;
 var authorizedRequest = testUtils.GetAuthorizedRequest();
 
@@ -63,7 +63,7 @@ describe('Line Items', function() {
   describe('when a request is made to /lineItems/search', function() {
     
     before(function(done) {
-      fs.createReadStream('./test/test-data/searchCriteria.json').pipe(
+      fs.createReadStream('./test/data/lineItems/searchCriteria.json').pipe(
         authorizedRequest.post( {url: url + '/lineItems/search' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
@@ -93,7 +93,7 @@ describe('Line Items', function() {
   describe('when a request is made to add line items (/lineItems/add)', function() {
     
     before(function(done) {
-      fs.createReadStream('./test/test-data/newLineItems.json').pipe(
+      fs.createReadStream('./test/data/lineItems/newLineItems.json').pipe(
         authorizedRequest.put( {url: url + '/lineItems/add' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
@@ -122,7 +122,7 @@ describe('Line Items', function() {
   describe('when a request is made to update line items (/lineItems/update)', function() {
     
     before(function(done) {
-      fs.createReadStream('./test/test-data/updatedLineItems.json').pipe(
+      fs.createReadStream('./test/data/lineItems/updatedLineItems.json').pipe(
         authorizedRequest.put( {url: url + '/lineItems/update' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
@@ -175,7 +175,7 @@ describe('Line Items', function() {
   describe('when a request is made to add line items but has an invalid JSON body', function() {
     
     before(function(done) {
-      fs.createReadStream('./test/test-data/invalidFormat.json').pipe(
+      fs.createReadStream('./test/data/invalidFormat.json').pipe(
         authorizedRequest.put( {url: url + '/lineItems/add' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
@@ -197,7 +197,7 @@ describe('Line Items', function() {
   describe('when a request is made to update line items but has an invalid JSON body', function() {
     
     before(function(done) {
-      fs.createReadStream('./test/test-data/invalidFormat.json').pipe(
+      fs.createReadStream('./test/data/invalidFormat.json').pipe(
         authorizedRequest.put( {url: url + '/lineItems/update' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
@@ -219,7 +219,7 @@ describe('Line Items', function() {
 	describe('when a request is made to search for line items but has an invalid JSON body', function() {
     
     before(function(done) {
-      fs.createReadStream('./test/test-data/invalidFormat.json').pipe(
+      fs.createReadStream('./test/data/invalidFormat.json').pipe(
         authorizedRequest.post( {url: url + '/lineItems/search' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
@@ -237,5 +237,49 @@ describe('Line Items', function() {
       expect(results.reason).to.have.string('Request payload is incorrectly formatted');
     });
   });
+  
+  describe('when a request is made to add a line item with incomplete data', function() {
+    
+    before(function(done) {
+      fs.createReadStream('./test/data/lineItems/insufficientAddData.json').pipe(
+        authorizedRequest.put( {url: url + '/lineItems/add' }, function (err, resp, body) {
+          response = resp;
+          results = JSON.parse(body);
+          done(err);
+        })
+      );
+    });
+    
+    it ('should be authorized & OK', function() {
+      expect(response.statusCode).to.equal(200);
+    });
+    
+    it ('should have a failure status with reason of "Bad Input - Missing Required Fields!"', function() {
+      expect(results.data[0].status).to.equal('failure');
+      expect(results.data[0].reason).to.have.string('Bad Input - Missing Required Fields!');
+    });
+  });
+  
+  describe('when a request is made to update a line item with incomplete data', function() {
+    
+    before(function(done) {
+      fs.createReadStream('./test/data/lineItems/insufficientUpdateData.json').pipe(
+        authorizedRequest.put( {url: url + '/lineItems/update' }, function (err, resp, body) {
+          response = resp;
+          results = JSON.parse(body);
+          done(err);
+        })
+      );
+    });
+    
+    it ('should be authorized & OK', function() {
+      expect(response.statusCode).to.equal(200);
+    });
+    
+    it ('should have a failure status with reason of "Bad Input - Missing Required Fields!"', function() {
+      expect(results.data[0].status).to.equal('failure');
+      expect(results.data[0].reason).to.have.string('Bad Input - Missing Required Fields!');
+    });
+  });  
 });
 

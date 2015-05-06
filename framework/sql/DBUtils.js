@@ -120,7 +120,7 @@ DBUtils.prototype.SingleRowCUDQueryWithParams = function(theQuery, params, query
       dbResponse.setStatus("failure");
       
       // for given SQL errors, provide more friendly error reasons
-      if (err.code == 'ER_BAD_NULL_ERROR') {
+      if (err.code.indexOf('ER_BAD_NULL_ERROR') != -1) {
         dbResponse.setReason('Bad Input - Missing Required Fields!');
       } else {
         dbResponse.setReason(err.code);

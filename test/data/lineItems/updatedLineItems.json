@@ -10,6 +10,8 @@
       "description": "Test Line Item - Updated",
       "amount": 15.00,
       "typeId": 0,
+      "subtypeId": 1,
+      "quarter": 2,
       "paymentMethodKey": "2F7552F5-E69E-48B2-9FE6-B125BDE851E4",
       "statusId": 0
     },
@@ -23,6 +25,8 @@
       "description": "Test Line Item - Attempted Update",
       "amount": -20.00,
       "typeId": 0,
+      "subtypeId": 1,
+      "quarter": 2,
       "paymentMethodKey": "0E021ACA-D3EB-40EC-8254-AA14185F4428",
       "statusId": 0
     }

@@ -35,6 +35,7 @@ var AccountModule = require('./modules/AccountModule');
 var CategoryModule = require('./modules/CategoryModule');
 var SubcategoryModule = require('./modules/SubcategoryModule');
 var LineItemModule = require('./modules/LineItemModule');
+var BudgetAllowanceModule = require('./modules/BudgetAllowanceModule');
 
 // initialize the server variable
 var server = null;
@@ -75,9 +76,10 @@ var CategoryQueries = require('./queries/CategoryQueries');
 var LineItemQueries = require('./queries/LineItemQueries');
 var PaymentMethodQueries = require('./queries/PaymentMethodQueries');
 var SubcategoryQueries = require('./queries/SubcategoryQueries');
+var BudgetAllowanceQueries = require('./queries/BudgetAllowanceQueries');
 
 // normalize all queries
-var allQueries = { account: AccountQueries, auth: AuthorizedUserQueries, cat: CategoryQueries, item: LineItemQueries, pm: PaymentMethodQueries, subcat: SubcategoryQueries };
+var allQueries = { account: AccountQueries, auth: AuthorizedUserQueries, cat: CategoryQueries, item: LineItemQueries, pm: PaymentMethodQueries, subcat: SubcategoryQueries, allowances: BudgetAllowanceQueries };
 var queryUtils = new QueryUtils();
 queryUtils.NormalizeQueries(allQueries, function(normalizedQueries) {
 	// instantiate the authorizedUserModule to get a list of authorized users of this API
@@ -113,6 +115,7 @@ function ConfigureServer(server, normalizedQueries) {
 	server.addModule('v1', 'categories', new CategoryModule(dbUtils, normalizedQueries.cat));
 	server.addModule('v1', 'subcategories', new SubcategoryModule(dbUtils, normalizedQueries.subcat));
   server.addModule('v1', 'lineItems', new LineItemModule(dbUtils, normalizedQueries.item));
+  server.addModule('v1', 'budgetAllowances', new BudgetAllowanceModule(dbUtils, normalizedQueries.allowances));
 	
 	// add supported routes
 	server.router.addRoutes(routesConfig);

@@ -1,0 +1,10 @@
+{
+  "data": [
+    {
+      "isActive": true
+    },
+    {
+      "paymentMethodName": "Test Payment Method 2"
+    }
+  ]
+}

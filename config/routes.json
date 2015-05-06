@@ -16,5 +16,6 @@
   ["/lineItems/update", "v1/lineItems#UpdateList"],
   ["/lineItems/add", "v1/lineItems#InsertList"],
   ["/lineItems/delete/:key", "v1/lineItems#DeleteItem"],
-  ["/lineItems/search", "v1/lineItems#Search"]
+  ["/lineItems/search", "v1/lineItems#Search"],
+  ["/allowances", "v1/budgetAllowances#GetAll"]
 ]

@@ -78,7 +78,7 @@ SHOW WARNINGS;
 CREATE TABLE IF NOT EXISTS `FamilyBudget_Test`.`dimAccount` (
 	`AccountKey` CHAR(36) NOT NULL,
 	`AccountName` VARCHAR(100) NOT NULL,
-  `IsActive` TINYINT(1) NOT NULL,
+    `IsActive` TINYINT(1) NOT NULL,
 	`LastUpdatedDate` DATETIME NULL,
 	PRIMARY KEY (`AccountKey`))
 ENGINE = InnoDB;
@@ -271,7 +271,8 @@ CREATE TABLE IF NOT EXISTS `FamilyBudget_Test`.`BudgetAllowances` (
 	`ReconciledAmount` DECIMAL(7,2) NOT NULL,
 	`PendingAmount` DECIMAL(7,2) NOT NULL,
 	`LatestTransactionDate` DATETIME NULL,
-	PRIMARY KEY (`SubcategoryName`))
+	PRIMARY KEY (`SubcategoryName`)
+)
 ENGINE = InnoDB;
 SHOW WARNINGS;
 
@@ -1147,10 +1148,58 @@ VALUES ('D5C0BD73-DA78-46D1-9D7D-63C6D1204C1E',1,22,5,2015,'B1F4EBEE-ABBD-4501-A
 			 ('8F956F53-B77D-4EBB-91AE-6576C7C6EF6B',1,28,4,2015,'C4CD23AC-5B64-4234-9515-9CC7EC92E577','Test Line Item 585',-102.47,0,0,1,'878BA1FC-4DC5-4219-A581-3A81A16EAAAE',0,NOW()),
 			 ('47F4789B-E0F8-47EA-8CCB-983F2F06C88C',3,23,2,2015,'E4C5A03D-9A9F-4D5D-BD14-5B51730BA1B1','Test Line Item 586',-74.15,0,0,1,'1117AFEB-3933-46C1-A6F1-7033DE501727',0,NOW());
 
+-- Truncate the BudgetAllowances Table
+TRUNCATE TABLE BudgetAllowances;
 
-
-INSERT INTO BudgetAllowances (CategoryName, SubcategoryName, ReconciledAmount, PendingAmount, LatestTransactionDate)
-  VALUES ('Test Category', 'Test SubCategory', 80, 34.25, NOW());
+-- Build it from test data
+INSERT INTO BudgetAllowances
+SELECT
+	c.CategoryName,
+	sc.SubcategoryName,
+	CASE
+		WHEN ri.ReconciledAmount IS NULL THEN 0.0
+		ELSE ri.ReconciledAmount
+	END AS ReconciledAmount,
+	CASE 
+		WHEN pi.PendingAmount IS NULL THEN 0.0
+		ELSE pi.PendingAmount
+	END AS PendingAmount,
+	CASE
+		WHEN ri.LatestTxnDate IS NULL AND pi.LatestTxnDate IS NULL THEN null
+		WHEN ri.LatestTxnDate IS NOT NULL AND pi.LatestTxnDate IS NULL THEN ri.LatestTxnDate
+		WHEN ri.LatestTxnDate IS NULL AND pi.LatestTxnDate IS NOT NULL THEN pi.LatestTxnDate
+		WHEN ri.LatestTxnDate >= pi.LatestTxnDate THEN ri.LatestTxnDate
+		ELSE pi.LatestTxnDate
+	END AS LatestTransactionDate
+FROM
+	dimSubcategory sc
+	INNER JOIN
+	dimCategory c
+	ON sc.CategoryKey = c.CategoryKey
+	LEFT OUTER JOIN
+	(SELECT
+		fli.SubcategoryKey,
+		SUM(fli.Amount) AS ReconciledAmount,
+		MAX(fli.LastUpdatedDate) AS LatestTxnDate
+	FROM
+		factLineItem fli
+	WHERE
+		fli.StatusId = 0 -- reconciled items only
+	GROUP BY
+		fli.SubcategoryKey) AS ri
+	ON sc.SubcategoryKey = ri.SubcategoryKey
+	LEFT OUTER JOIN
+	(SELECT
+		fli.SubcategoryKey,
+		SUM(fli.Amount) AS PendingAmount,
+		MAX(fli.LastUpdatedDate) AS LatestTxnDate
+	FROM
+		factLineItem fli
+	WHERE
+		fli.StatusId = 1 -- pending items only
+	GROUP BY
+		fli.SubcategoryKey) AS pi
+	ON sc.SubcategoryKey = pi.SubcategoryKey;
                            
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

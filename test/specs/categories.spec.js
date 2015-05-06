@@ -1,6 +1,6 @@
 var fs = require('fs');
-var newCategories = require('../test-data/newCategories');
-var updatedCategories = require('../test-data/updatedCategories');
+var newCategories = require('../data/categories/newCategories');
+var updatedCategories = require('../data/categories/updatedCategories');
 var url, response, results;
 var authorizedRequest = testUtils.GetAuthorizedRequest();
 
@@ -42,7 +42,7 @@ describe('Categories', function() {
   
   describe('when a request is made to add categories (/categories/add)', function() {
     before(function(done) {
-      fs.createReadStream('./test/test-data/newCategories.json').pipe(
+      fs.createReadStream('./test/data/categories/newCategories.json').pipe(
         authorizedRequest.put( {url: url + '/categories/add' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
@@ -70,7 +70,7 @@ describe('Categories', function() {
   
   describe('when a request is made to update categories (/categories/update)', function() {
     before(function(done) {
-      fs.createReadStream('./test/test-data/updatedCategories.json').pipe(
+      fs.createReadStream('./test/data/categories/updatedCategories.json').pipe(
         authorizedRequest.put( {url: url + '/categories/update' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
@@ -104,7 +104,7 @@ describe('Categories', function() {
   describe('when a request is made to add categories but has an invalid JSON body', function() {
     
     before(function(done) {
-      fs.createReadStream('./test/test-data/invalidFormat.json').pipe(
+      fs.createReadStream('./test/data/invalidFormat.json').pipe(
         authorizedRequest.put( {url: url + '/categories/add' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
@@ -126,7 +126,7 @@ describe('Categories', function() {
   describe('when a request is made to update categories but has an invalid JSON body', function() {
     
     before(function(done) {
-      fs.createReadStream('./test/test-data/invalidFormat.json').pipe(
+      fs.createReadStream('./test/data/invalidFormat.json').pipe(
         authorizedRequest.put( {url: url + '/categories/update' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
@@ -142,6 +142,50 @@ describe('Categories', function() {
     it ('should have a failure status with reason of "Request payload is incorrectly formatted"', function() {
       expect(results.status).to.equal('failure');
       expect(results.reason).to.have.string('Request payload is incorrectly formatted');
+    });
+  });
+  
+  describe('when a request is made to add a category with incomplete data', function() {
+    
+    before(function(done) {
+      fs.createReadStream('./test/data/categories/insufficientAddData.json').pipe(
+        authorizedRequest.put( {url: url + '/categories/add' }, function (err, resp, body) {
+          response = resp;
+          results = JSON.parse(body);
+          done(err);
+        })
+      );
+    });
+    
+    it ('should be authorized & OK', function() {
+      expect(response.statusCode).to.equal(200);
+    });
+    
+    it ('should have a failure status with reason of "Bad Input - Missing Required Fields!"', function() {
+      expect(results.data[0].status).to.equal('failure');
+      expect(results.data[0].reason).to.have.string('Bad Input - Missing Required Fields!');
+    });
+  });
+  
+  describe('when a request is made to update a category with incomplete data', function() {
+    
+    before(function(done) {
+      fs.createReadStream('./test/data/categories/insufficientUpdateData.json').pipe(
+        authorizedRequest.put( {url: url + '/categories/update' }, function (err, resp, body) {
+          response = resp;
+          results = JSON.parse(body);
+          done(err);
+        })
+      );
+    });
+    
+    it ('should be authorized & OK', function() {
+      expect(response.statusCode).to.equal(200);
+    });
+    
+    it ('should have a failure status with reason of "Bad Input - Missing Required Fields!"', function() {
+      expect(results.data[0].status).to.equal('failure');
+      expect(results.data[0].reason).to.have.string('Bad Input - Missing Required Fields!');
     });
   });
 });

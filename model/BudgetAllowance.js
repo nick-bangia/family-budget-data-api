@@ -15,11 +15,11 @@ BudgetAllowance.prototype.setCategoryName = function(value) {
 }
 
 BudgetAllowance.prototype.getSubcategoryName = function() {
-	return this.SubcategoryName;
+	return this.subcategoryName;
 }
 
 BudgetAllowance.prototype.setSubcategoryName = function(value) {
-	this.SubcategoryName = value;
+	this.subcategoryName = value;
 }
 
 BudgetAllowance.prototype.getReconciledAmount = function() {

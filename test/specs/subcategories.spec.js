@@ -1,6 +1,6 @@
 var fs = require('fs');
-var newSubcategories = require('../test-data/newSubcategories');
-var updatedSubcategories = require('../test-data/updatedSubcategories');
+var newSubcategories = require('../data/subcategories/newSubcategories');
+var updatedSubcategories = require('../data/subcategories/updatedSubcategories');
 var url, response, results;
 var authorizedRequest = testUtils.GetAuthorizedRequest();
 
@@ -48,7 +48,7 @@ describe('Subcategories', function() {
   
   describe('when a request is made to add subcategories (/subcategories/add)', function() {
     before(function(done) {
-      fs.createReadStream('./test/test-data/newSubcategories.json').pipe(
+      fs.createReadStream('./test/data/subcategories/newSubcategories.json').pipe(
         authorizedRequest.put( {url: url + '/subcategories/add' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
@@ -76,7 +76,7 @@ describe('Subcategories', function() {
   
   describe('when a request is made to update subcategories (/subcategories/update)', function() {
     before(function(done) {
-      fs.createReadStream('./test/test-data/updatedSubcategories.json').pipe(
+      fs.createReadStream('./test/data/subcategories/updatedSubcategories.json').pipe(
         authorizedRequest.put( {url: url + '/subcategories/update' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
@@ -110,7 +110,7 @@ describe('Subcategories', function() {
   describe('when a request is made to add subcategories but has an invalid JSON body', function() {
     
     before(function(done) {
-      fs.createReadStream('./test/test-data/invalidFormat.json').pipe(
+      fs.createReadStream('./test/data/invalidFormat.json').pipe(
         authorizedRequest.put( {url: url + '/subcategories/add' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
@@ -132,7 +132,7 @@ describe('Subcategories', function() {
   describe('when a request is made to update subcategories but has an invalid JSON body', function() {
     
     before(function(done) {
-      fs.createReadStream('./test/test-data/invalidFormat.json').pipe(
+      fs.createReadStream('./test/data/invalidFormat.json').pipe(
         authorizedRequest.put( {url: url + '/subcategories/update' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
@@ -148,6 +148,50 @@ describe('Subcategories', function() {
     it ('should have a failure status with reason of "Request payload is incorrectly formatted"', function() {
       expect(results.status).to.equal('failure');
       expect(results.reason).to.have.string('Request payload is incorrectly formatted');
+    });
+  });
+  
+  describe('when a request is made to add a subcategory with incomplete data', function() {
+    
+    before(function(done) {
+      fs.createReadStream('./test/data/subcategories/insufficientAddData.json').pipe(
+        authorizedRequest.put( {url: url + '/subcategories/add' }, function (err, resp, body) {
+          response = resp;
+          results = JSON.parse(body);
+          done(err);
+        })
+      );
+    });
+    
+    it ('should be authorized & OK', function() {
+      expect(response.statusCode).to.equal(200);
+    });
+    
+    it ('should have a failure status with reason of "Bad Input - Missing Required Fields!"', function() {
+      expect(results.data[0].status).to.equal('failure');
+      expect(results.data[0].reason).to.have.string('Bad Input - Missing Required Fields!');
+    });
+  });
+  
+  describe('when a request is made to update a subcategories with incomplete data', function() {
+    
+    before(function(done) {
+      fs.createReadStream('./test/data/subcategories/insufficientUpdateData.json').pipe(
+        authorizedRequest.put( {url: url + '/subcategories/update' }, function (err, resp, body) {
+          response = resp;
+          results = JSON.parse(body);
+          done(err);
+        })
+      );
+    });
+    
+    it ('should be authorized & OK', function() {
+      expect(response.statusCode).to.equal(200);
+    });
+    
+    it ('should have a failure status with reason of "Bad Input - Missing Required Fields!"', function() {
+      expect(results.data[0].status).to.equal('failure');
+      expect(results.data[0].reason).to.have.string('Bad Input - Missing Required Fields!');
     });
   });
 });

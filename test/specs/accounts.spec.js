@@ -1,6 +1,6 @@
 var fs = require('fs');
-var newAccounts = require('../test-data/newAccounts');
-var updatedAccounts = require('../test-data/updatedAccounts');
+var newAccounts = require('../data/accounts/newAccounts');
+var updatedAccounts = require('../data/accounts/updatedAccounts');
 var url, response, results;
 var authorizedRequest = testUtils.GetAuthorizedRequest();
 
@@ -42,7 +42,7 @@ describe('Accounts', function() {
   
   describe('when a request is made to add accounts (/accounts/add)', function() {
     before(function(done) {
-      fs.createReadStream('./test/test-data/newAccounts.json').pipe(
+      fs.createReadStream('./test/data/accounts/newAccounts.json').pipe(
         authorizedRequest.put( {url: url + '/accounts/add' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
@@ -70,7 +70,7 @@ describe('Accounts', function() {
   
   describe('when a request is made to update accounts (/accounts/update)', function() {
     before(function(done) {
-      fs.createReadStream('./test/test-data/updatedAccounts.json').pipe(
+      fs.createReadStream('./test/data/accounts/updatedAccounts.json').pipe(
         authorizedRequest.put( {url: url + '/accounts/update' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
@@ -104,7 +104,7 @@ describe('Accounts', function() {
   describe('when a request is made to add accounts but has an invalid JSON body', function() {
     
     before(function(done) {
-      fs.createReadStream('./test/test-data/invalidFormat.json').pipe(
+      fs.createReadStream('./test/data/invalidFormat.json').pipe(
         authorizedRequest.put( {url: url + '/accounts/add' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
@@ -126,7 +126,7 @@ describe('Accounts', function() {
   describe('when a request is made to update accounts but has an invalid JSON body', function() {
     
     before(function(done) {
-      fs.createReadStream('./test/test-data/invalidFormat.json').pipe(
+      fs.createReadStream('./test/data/invalidFormat.json').pipe(
         authorizedRequest.put( {url: url + '/accounts/update' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
@@ -142,6 +142,50 @@ describe('Accounts', function() {
     it ('should have a failure status with reason of "Request payload is incorrectly formatted"', function() {
       expect(results.status).to.equal('failure');
       expect(results.reason).to.have.string('Request payload is incorrectly formatted');
+    });
+  });
+  
+  describe('when a request is made to add an account with incomplete data', function() {
+    
+    before(function(done) {
+      fs.createReadStream('./test/data/accounts/insufficientAddData.json').pipe(
+        authorizedRequest.put( {url: url + '/accounts/add' }, function (err, resp, body) {
+          response = resp;
+          results = JSON.parse(body);
+          done(err);
+        })
+      );
+    });
+    
+    it ('should be authorized & OK', function() {
+      expect(response.statusCode).to.equal(200);
+    });
+    
+    it ('should have a failure status with reason of "Bad Input - Missing Required Fields!"', function() {
+      expect(results.data[0].status).to.equal('failure');
+      expect(results.data[0].reason).to.have.string('Bad Input - Missing Required Fields!');
+    });
+  });
+  
+  describe('when a request is made to update an account with incomplete data', function() {
+    
+    before(function(done) {
+      fs.createReadStream('./test/data/accounts/insufficientUpdateData.json').pipe(
+        authorizedRequest.put( {url: url + '/accounts/update' }, function (err, resp, body) {
+          response = resp;
+          results = JSON.parse(body);
+          done(err);
+        })
+      );
+    });
+    
+    it ('should be authorized & OK', function() {
+      expect(response.statusCode).to.equal(200);
+    });
+    
+    it ('should have a failure status with reason of "Bad Input - Missing Required Fields!"', function() {
+      expect(results.data[0].status).to.equal('failure');
+      expect(results.data[0].reason).to.have.string('Bad Input - Missing Required Fields!');
     });
   });
 });

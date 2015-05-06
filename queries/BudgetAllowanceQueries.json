@@ -1,0 +1,3 @@
+{
+  "SelectAll": "SELECT ba.CategoryName, ba.SubcategoryName, ba.ReconciledAmount, ba.PendingAmount, ba.LatestTransactionDate FROM BudgetAllowances ba"
+}

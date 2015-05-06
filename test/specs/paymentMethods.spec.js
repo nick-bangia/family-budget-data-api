@@ -1,6 +1,6 @@
 var fs = require('fs');
-var newPaymentMethods = require('../test-data/newPaymentMethods');
-var updatedPaymentMethods = require('../test-data/updatedPaymentMethods');
+var newPaymentMethods = require('../data/paymentMethods/newPaymentMethods');
+var updatedPaymentMethods = require('../data/paymentMethods/updatedPaymentMethods');
 var url, response, results;
 var authorizedRequest = testUtils.GetAuthorizedRequest();
 
@@ -42,7 +42,7 @@ describe('PaymentMethods', function() {
   
   describe('when a request is made to add payment methods (/paymentMethods/add)', function() {
     before(function(done) {
-      fs.createReadStream('./test/test-data/newPaymentMethods.json').pipe(
+      fs.createReadStream('./test/data/paymentMethods/newPaymentMethods.json').pipe(
         authorizedRequest.put( {url: url + '/paymentMethods/add' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
@@ -70,7 +70,7 @@ describe('PaymentMethods', function() {
   
   describe('when a request is made to update payment methods (/paymentMethods/update)', function() {
     before(function(done) {
-      fs.createReadStream('./test/test-data/updatedPaymentMethods.json').pipe(
+      fs.createReadStream('./test/data/paymentMethods/updatedPaymentMethods.json').pipe(
         authorizedRequest.put( {url: url + '/paymentMethods/update' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
@@ -104,7 +104,7 @@ describe('PaymentMethods', function() {
   describe('when a request is made to add payment methods but has an invalid JSON body', function() {
     
     before(function(done) {
-      fs.createReadStream('./test/test-data/invalidFormat.json').pipe(
+      fs.createReadStream('./test/data/invalidFormat.json').pipe(
         authorizedRequest.put( {url: url + '/paymentMethods/add' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
@@ -126,7 +126,7 @@ describe('PaymentMethods', function() {
   describe('when a request is made to update payment methods but has an invalid JSON body', function() {
     
     before(function(done) {
-      fs.createReadStream('./test/test-data/invalidFormat.json').pipe(
+      fs.createReadStream('./test/data/invalidFormat.json').pipe(
         authorizedRequest.put( {url: url + '/paymentMethods/update' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
@@ -142,6 +142,50 @@ describe('PaymentMethods', function() {
     it ('should have a failure status with reason of "Request payload is incorrectly formatted"', function() {
       expect(results.status).to.equal('failure');
       expect(results.reason).to.have.string('Request payload is incorrectly formatted');
+    });
+  });
+  
+  describe('when a request is made to add a payment method with incomplete data', function() {
+    
+    before(function(done) {
+      fs.createReadStream('./test/data/paymentMethods/insufficientAddData.json').pipe(
+        authorizedRequest.put( {url: url + '/paymentMethods/add' }, function (err, resp, body) {
+          response = resp;
+          results = JSON.parse(body);
+          done(err);
+        })
+      );
+    });
+    
+    it ('should be authorized & OK', function() {
+      expect(response.statusCode).to.equal(200);
+    });
+    
+    it ('should have a failure status with reason of "Bad Input - Missing Required Fields!"', function() {
+      expect(results.data[0].status).to.equal('failure');
+      expect(results.data[0].reason).to.have.string('Bad Input - Missing Required Fields!');
+    });
+  });
+  
+  describe('when a request is made to update a payment method with incomplete data', function() {
+    
+    before(function(done) {
+      fs.createReadStream('./test/data/paymentMethods/insufficientUpdateData.json').pipe(
+        authorizedRequest.put( {url: url + '/paymentMethods/update' }, function (err, resp, body) {
+          response = resp;
+          results = JSON.parse(body);
+          done(err);
+        })
+      );
+    });
+    
+    it ('should be authorized & OK', function() {
+      expect(response.statusCode).to.equal(200);
+    });
+    
+    it ('should have a failure status with reason of "Bad Input - Missing Required Fields!"', function() {
+      expect(results.data[0].status).to.equal('failure');
+      expect(results.data[0].reason).to.have.string('Bad Input - Missing Required Fields!');
     });
   });
 });
