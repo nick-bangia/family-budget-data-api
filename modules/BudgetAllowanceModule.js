@@ -56,5 +56,16 @@ BudgetAllowanceModule.prototype.GetAll = {
   }
 }
 
+BudgetAllowanceModule.prototype.Refresh = {
+  get: function(request, response) {
+    var self = this;
+    
+    this.dbUtility.ExecuteQuery(self.queries.Refresh, function(dbResponse) {
+      // since this is just a simple DBQuery, just return the dbResponse directly
+      response.serveJSON(dbResponse);
+    });
+  }
+}
+
 // export the module
 module.exports = BudgetAllowanceModule;

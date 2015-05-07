@@ -26,7 +26,7 @@ describe('Budget Allowances', function() {
       });
     });
     
-   it ('should be authorized & OK', function() {
+    it ('should be authorized & OK', function() {
       expect(response.statusCode).to.equal(200);
     });
     
@@ -36,6 +36,25 @@ describe('Budget Allowances', function() {
       
       // list items are budget allowances
       expect(IsABudgetAllowance(results.data[0])).to.be.true;
+    });
+  });
+  
+  describe('when a request is made to /refreshAllowances', function() {
+    before(function(done) {
+      authorizedRequest.get( {url: url + '/refreshAllowances' }, function(err, resp, body) {
+        response = resp;
+        results = JSON.parse(body);
+        done(err);
+      });
+    });
+    
+    it ('should be authorized & OK', function() {
+      expect(response.statusCode).to.equal(200);
+    })
+    
+    it ('should return a success object with a valid list of budget allowances', function() {
+      // test the standard expectations for a successful result
+      testUtils.TestStandardExpectationsForSuccessfulResult(results, 0);
     });
   });
 });

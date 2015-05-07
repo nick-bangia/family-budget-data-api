@@ -1,3 +1,4 @@
 {
-  "SelectAll": "SELECT ba.CategoryName, ba.SubcategoryName, ba.ReconciledAmount, ba.PendingAmount, ba.LatestTransactionDate FROM BudgetAllowances ba"
+  "SelectAll": "SELECT ba.CategoryName, ba.SubcategoryName, ba.ReconciledAmount, ba.PendingAmount, ba.LatestTransactionDate FROM BudgetAllowances ba",
+  "Refresh": "file://./resources/BudgetAllowancesQuery.sql"
 }

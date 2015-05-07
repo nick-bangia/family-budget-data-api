@@ -7,6 +7,27 @@ function DBUtils(connectionOptions) {
   this.pool = mysql.createPool(connectionOptions);
 }
 
+DBUtils.prototype.ExecuteQuery = function(theQuery, queryComplete) {
+  
+  this.pool.query(theQuery, function(err, rows, fields) {
+    
+    var dbResponse = new Response();
+    
+    if (err) {
+      // if an error occurs, set up response object accordingly
+      dbResponse.setStatus("failure");
+      dbResponse.setReason(err.code);
+      dbResponse.setData(err);
+      
+      // return to caller with response
+      queryComplete(dbResponse);
+    } else {
+      // otherwise, if successful, return a successful response
+      queryComplete(dbResponse);
+    }
+  });
+}
+
 DBUtils.prototype.SelectRows = function(theQuery, rowProcessor, queryComplete) {
 
   this.pool.query(theQuery, function(err, rows, fields) {

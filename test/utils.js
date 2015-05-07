@@ -48,7 +48,6 @@ TestUtils.prototype.TestStandardExpectationsForSuccessfulResult = function(resul
   expect(results.reason).to.equal('success');
   
   // data property is a list
-  //expect(this.TypeOf( results.data )).to.equal(this.TypeOf([]));
   expect(_.isArray(results.data)).to.be.true;
   expect(results.data.length).to.be.at.least(expectedListLength);
 }
