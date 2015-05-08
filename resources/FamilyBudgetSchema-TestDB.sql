@@ -18,7 +18,7 @@ DROP TABLE IF EXISTS `FamilyBudget_Test`.`AuthorizedUser` ;
 SHOW WARNINGS;
 CREATE TABLE IF NOT EXISTS `FamilyBudget_Test`.`AuthorizedUser` (
   `Username` VARCHAR(30) NOT NULL,
-  `Password` VARCHAR(32) NOT NULL,
+  `Password` VARCHAR(36) NOT NULL,
   `IsActive` TINYINT(1) NOT NULL,
   PRIMARY KEY (`Username`))
 ENGINE = InnoDB;
