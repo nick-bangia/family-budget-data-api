@@ -10,3 +10,5 @@ CREATE USER '$user'@'127.0.0.1' IDENTIFIED BY '$password';
 -- REPLACE $host WITH THE HOSTNAME OF THE COMPUTER FROM ABOVE CREATE USER
 GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON familybudget.* TO '$user'@'localhost';
 GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON familybudget.* TO '$user'@'127.0.0.1';
+GRANT DROP ON familybudget.BudgetAllowances TO '$user'@'localhost';
+GRANT DROP ON familybudget.BudgetAllowances TO '$user'@'127.0.0.1';

@@ -18,7 +18,7 @@ DROP TABLE IF EXISTS `FamilyBudget`.`AuthorizedUser` ;
 SHOW WARNINGS;
 CREATE TABLE IF NOT EXISTS `FamilyBudget`.`AuthorizedUser` (
   `Username` VARCHAR(30) NOT NULL,
-  `Password` VARCHAR(32) NOT NULL,
+  `Password` VARCHAR(36) NOT NULL,
   `IsActive` TINYINT(1) NOT NULL,
   PRIMARY KEY (`Username`))
 ENGINE = InnoDB;
@@ -478,6 +478,8 @@ INSERT INTO Types (TypeId, TypeName) VALUES (1, 'Allocation');
 INSERT INTO Types (TypeId, TypeName) VALUES (2, 'Bucket Adjustment');
 INSERT INTO Types (TypeId, TypeName) VALUES (3, 'Goal');
 INSERT INTO Types (TypeId, TypeName) VALUES (4, 'Mixed');
+
+INSERT INTO AuthorizedUser (Username, Password, IsActive) VALUES ('cronjob', 'REPLACE_ME', 1); 
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
