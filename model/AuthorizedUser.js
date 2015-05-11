@@ -26,7 +26,7 @@ AuthorizedUser.prototype.getIsActive = function() {
 }
 
 AuthorizedUser.prototype.setIsActive = function(value) {
-  this.isActive = value;
+  this.isActive = value ? true : false;
 }
 
 module.exports = AuthorizedUser;

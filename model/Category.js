@@ -33,7 +33,7 @@ Category.prototype.getIsActive = function() {
 }
 
 Category.prototype.setIsActive = function(value) {
-  this.isActive = value;
+  this.isActive = value ? true : false;
 }
 
 Category.prototype.getLastUpdated = function() {

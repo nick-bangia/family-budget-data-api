@@ -1,9 +1,18 @@
 function BudgetAllowance() {
-	this.categoryName = '';
+	this.accountName = '';
+  this.categoryName = '';
 	this.subcategoryName = '';
 	this.reconciledAmount = 0;
 	this.pendingAmount = 0;
 	this.latestTransactionDate = '2015-01-01';
+}
+
+BudgetAllowance.prototype.getAccountName = function() {
+  return this.accountName;
+}
+
+BudgetAllowance.prototype.setAccountName = function(value) {
+  this.accountName = value;
 }
 
 BudgetAllowance.prototype.getCategoryName = function() {

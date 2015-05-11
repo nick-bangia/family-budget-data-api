@@ -79,7 +79,7 @@ Subcategory.prototype.getIsActive = function() {
 }
 
 Subcategory.prototype.setIsActive = function(value) {
-  this.isActive = value;
+  this.isActive = value ? true : false;
 }
 
 Subcategory.prototype.getIsGoal = function() {
@@ -87,7 +87,7 @@ Subcategory.prototype.getIsGoal = function() {
 }
 
 Subcategory.prototype.setIsGoal = function(value) {
-  this.isGoal = value;
+  this.isGoal = value ? true : false;
 }
 
 Subcategory.prototype.getLastUpdated = function() {

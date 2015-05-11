@@ -33,7 +33,7 @@ Account.prototype.getIsActive = function() {
 }
 
 Account.prototype.setIsActive = function(value) {
-  this.isActive = value;
+  this.isActive = value ? true : false;
 }
 
 Account.prototype.getLastUpdated = function() {

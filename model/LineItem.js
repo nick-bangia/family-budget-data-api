@@ -22,7 +22,7 @@ function LineItem() {
   this.paymentMethodName = '';
   this.accountName = '';
   this.statusId = 0;
-  this.isGoal = 0;
+  this.isGoal = false;
   this.lastUpdated = new Date();
 }
 
@@ -203,7 +203,7 @@ LineItem.prototype.getIsGoal = function() {
 }
 
 LineItem.prototype.setIsGoal = function(value) {
-  this.isGoal = value;
+  this.isGoal = value ? true : false;
 }
 
 LineItem.prototype.getLastUpdated = function() {
