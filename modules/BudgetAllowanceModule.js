@@ -14,6 +14,7 @@ function BudgetAllowanceModule(dbUtility, queries) {
     // convert the given row into a BudgetAllowance and push it to callback
     var ba = new BudgetAllowance();
 
+    ba.setAccountName(row.AccountName);
     ba.setCategoryName(row.CategoryName);
     ba.setSubcategoryName(row.SubcategoryName);
     ba.setReconciledAmount(row.ReconciledAmount);

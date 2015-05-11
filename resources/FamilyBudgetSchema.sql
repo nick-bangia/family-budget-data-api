@@ -266,7 +266,8 @@ DROP TABLE IF EXISTS `FamilyBudget`.`BudgetAllowances`;
 SHOW WARNINGS;
 
 CREATE TABLE IF NOT EXISTS `FamilyBudget`.`BudgetAllowances` (
-	`CategoryName` VARCHAR(100) NOT NULL,
+	`AccountName` VARCHAR(100) NOT NULL,
+  `CategoryName` VARCHAR(100) NOT NULL,
 	`SubcategoryName` VARCHAR(100) NOT NULL,
 	`ReconciledAmount` DECIMAL(7,2) NOT NULL,
 	`PendingAmount` DECIMAL(7,2) NOT NULL,

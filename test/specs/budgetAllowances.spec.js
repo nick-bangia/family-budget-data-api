@@ -3,7 +3,8 @@ var url, response, results;
 var authorizedRequest = testUtils.GetAuthorizedRequest();
 
 var IsABudgetAllowance = function(data) {
-  return ('categoryName' in data &&
+  return ('accountName' in data &&
+          'categoryName' in data &&
           'subcategoryName' in data &&
           'reconciledAmount' in data &&
           'pendingAmount' in data &&

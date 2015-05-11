@@ -2,7 +2,8 @@ TRUNCATE TABLE BudgetAllowances;
 
 INSERT INTO BudgetAllowances
 SELECT
-	c.CategoryName,
+	a.AccountName,
+  c.CategoryName,
 	sc.SubcategoryName,
 	CASE
 		WHEN ri.ReconciledAmount IS NULL THEN 0.0
@@ -24,6 +25,9 @@ FROM
 	INNER JOIN
 	dimCategory c
 	ON sc.CategoryKey = c.CategoryKey
+  INNER JOIN
+  dimAccount a
+  ON sc.AccountKey = a.AccountKey
 	LEFT OUTER JOIN
 	(SELECT
 		fli.SubcategoryKey,

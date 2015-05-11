@@ -266,7 +266,8 @@ DROP TABLE IF EXISTS `FamilyBudget_Test`.`BudgetAllowances`;
 SHOW WARNINGS;
 
 CREATE TABLE IF NOT EXISTS `FamilyBudget_Test`.`BudgetAllowances` (
-	`CategoryName` VARCHAR(100) NOT NULL,
+	`AccountName` VARCHAR(100) NOT NULL,
+  `CategoryName` VARCHAR(100) NOT NULL,
 	`SubcategoryName` VARCHAR(100) NOT NULL,
 	`ReconciledAmount` DECIMAL(7,2) NOT NULL,
 	`PendingAmount` DECIMAL(7,2) NOT NULL,
@@ -1154,6 +1155,7 @@ TRUNCATE TABLE BudgetAllowances;
 -- Build it from test data
 INSERT INTO BudgetAllowances
 SELECT
+  a.AccountName,
 	c.CategoryName,
 	sc.SubcategoryName,
 	CASE
@@ -1176,6 +1178,9 @@ FROM
 	INNER JOIN
 	dimCategory c
 	ON sc.CategoryKey = c.CategoryKey
+  INNER JOIN
+  dimAccount a
+  ON sc.AccountKey = a.AccountKey
 	LEFT OUTER JOIN
 	(SELECT
 		fli.SubcategoryKey,
