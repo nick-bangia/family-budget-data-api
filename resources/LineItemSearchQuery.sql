@@ -58,7 +58,7 @@ FROM
 	INNER JOIN
 	dimPaymentMethod pm ON fli.PaymentMethodKey = pm.PaymentMethodKey
 WHERE
-	(@uniqueKey IS NULL OR @uniqueKey = fli.UniqueKey)
+	(@uniqueKey = 'nil' OR fli.UniqueKey = @uniqueKey COLLATE utf8_unicode_ci)
 	AND ((@minDate IS NULL AND @maxDate IS NULL) 
 			OR ((@dateCompareOperator IS NULL AND @minDate IS NOT NULL AND 
 				 @minDate = str_to_date(CONCAT(fli.Year, '-', fli.MonthId, '-', fli.DayOfMonth), '%Y-%m-%d'))) 
@@ -83,9 +83,9 @@ WHERE
 	AND (@month IS NULL OR @month = fli.MonthId)
 	AND (@day IS NULL OR @day = fli.DayOfMonth)
 	AND (@dayOfWeek IS NULL OR @dayOfWeek = fli.DayOfWeekId)
-	AND (@descriptionContains IS NULL OR fli.Description LIKE @descriptionContains COLLATE utf8_unicode_ci)
-	AND (@categoryKey IS NULL OR sc.CategoryKey = @categoryKey COLLATE utf8_unicode_ci)
-	AND (@subcategoryKey IS NULL OR fli.SubcategoryKey = @subcategoryKey COLLATE utf8_unicode_ci)
+	AND (@descriptionContains = 'nil' OR fli.Description LIKE @descriptionContains COLLATE utf8_unicode_ci)
+	AND (@categoryKey = 'nil' OR sc.CategoryKey = @categoryKey COLLATE utf8_unicode_ci)
+	AND (@subcategoryKey = 'nil' OR fli.SubcategoryKey = @subcategoryKey COLLATE utf8_unicode_ci)
 	AND ((@minAmount IS NULL AND @maxAmount IS NULL)
 			OR ((@amountCompareOperator IS NULL AND @minAmount IS NOT NULL AND
 				 @minAmount = fli.Amount))
@@ -106,7 +106,7 @@ WHERE
 		)
 	AND (@type IS NULL OR @type = fli.TypeId)
 	AND (@subtype IS NULL OR @subtype = fli.SubtypeId)
-	AND (@paymentMethodKey IS NULL OR @paymentMethodKey = fli.PaymentMethodKey COLLATE utf8_unicode_ci)
+	AND (@paymentMethodKey = 'nil' OR fli.PaymentMethodKey = @paymentMethodKey COLLATE utf8_unicode_ci)
 	AND (@status IS NULL OR @status = fli.StatusId)
 	AND (@updatedAfter IS NULL OR fli.LastUpdatedDate >= @updatedAfter)
 ORDER BY

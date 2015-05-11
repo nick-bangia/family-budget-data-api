@@ -107,7 +107,8 @@ function LineItemModule(dbUtility, queries) {
     
     // go through each search criteria, and check if it is the default value
     // if so, set the param to null, otherwise, set the param accordingly
-    params[0]  = searchCriteria.getUniqueKey();
+    params[0]  = searchCriteria.getUniqueKey() == undefined ?
+      'nil' : searchCriteria.getUniqueKey();
     params[1]  = searchCriteria.getDateCompareOperator();
     params[2]  = searchCriteria.getMinDate();
     params[3]  = searchCriteria.getMaxDate();
@@ -117,15 +118,18 @@ function LineItemModule(dbUtility, queries) {
     params[7]  = searchCriteria.getDay();
     params[8]  = searchCriteria.getDayOfWeek();
     params[9]  = searchCriteria.getDescriptionContains() == undefined ? 
-      null : '%' + searchCriteria.getDescriptionContains() + '%';
-    params[10] = searchCriteria.getCategoryKey();
-    params[11] = searchCriteria.getSubcategoryKey();
+      'nil' : '%' + searchCriteria.getDescriptionContains() + '%';
+    params[10] = searchCriteria.getCategoryKey() == undefined ?
+      'nil' : searchCriteria.getCategoryKey();
+    params[11] = searchCriteria.getSubcategoryKey() == undefined ?
+      'nil' : searchCriteria.getSubcategoryKey();
     params[12] = searchCriteria.getAmountCompareOperator();
     params[13] = searchCriteria.getMinAmount();
     params[14] = searchCriteria.getMaxAmount();
     params[15] = searchCriteria.getType();
     params[16] = searchCriteria.getSubtype();
-    params[17] = searchCriteria.getPaymentMethodKey();
+    params[17] = searchCriteria.getPaymentMethodKey() == undefined ?
+      'nil' : searchCriteria.getPaymentMethodKey();
     params[18] = searchCriteria.getStatus();
     params[19] = searchCriteria.getUpdatedAfter();  
     
