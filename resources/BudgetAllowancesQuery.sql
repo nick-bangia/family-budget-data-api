@@ -51,4 +51,6 @@ FROM
 		fli.StatusId = 1 -- pending items only
 	GROUP BY
 		fli.SubcategoryKey) AS pi
-	ON sc.SubcategoryKey = pi.SubcategoryKey;
+	ON sc.SubcategoryKey = pi.SubcategoryKey
+WHERE
+  sc.IsActive = 1;
