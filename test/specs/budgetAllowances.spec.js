@@ -4,11 +4,20 @@ var authorizedRequest = testUtils.GetAuthorizedRequest();
 
 var IsABudgetAllowance = function(data) {
   return ('accountName' in data &&
-          'categoryName' in data &&
-          'subcategoryName' in data &&
           'reconciledAmount' in data &&
           'pendingAmount' in data &&
-          'latestTransactionDate' in data
+          'latestTransactionDate' in data &&
+          'categories' in data &&
+          'accountName' in data.categories[0] &&
+          'categoryName' in data.categories[0] &&
+          'reconciledAmount' in data.categories[0] &&
+          'pendingAmount' in data.categories[0] &&
+          'latestTransactionDate' in data.categories[0] &&
+          'subcategories' in data.categories[0] &&
+          'subcategoryName' in data.categories[0].subcategories[0] &&
+          'reconciledAmount' in data.categories[0].subcategories[0] &&
+          'pendingAmount' in data.categories[0].subcategories[0] &&
+          'latestTransactionDate' in data.categories[0].subcategories[0]
          );
 }
 

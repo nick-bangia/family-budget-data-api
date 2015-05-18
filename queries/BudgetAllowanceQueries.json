@@ -1,4 +1,6 @@
 {
-  "SelectAll": "SELECT ba.AccountName, ba.CategoryName, ba.SubcategoryName, ba.ReconciledAmount, ba.PendingAmount, ba.LatestTransactionDate FROM BudgetAllowances ba",
+  "SelectAccounts": "SELECT ba.AccountName, SUM(ba.ReconciledAmount) AS 'ReconciledAmount', SUM(ba.PendingAmount) AS 'PendingAmount', MAX(ba.LatestTransactionDate) AS 'LatestTransactionDate' FROM BudgetAllowances ba GROUP BY ba.AccountName",
+  "SelectCategories": "SELECT ba.AccountName, ba.CategoryName, SUM(ba.ReconciledAmount) AS 'ReconciledAmount', SUM(ba.PendingAmount) AS 'PendingAmount', MAX(ba.LatestTransactionDate) AS 'LatestTransactionDate' FROM BudgetAllowances ba WHERE ba.AccountName = ? GROUP BY ba.AccountName, ba.CategoryName",
+  "SelectSubcategories": "SELECT ba.SubcategoryName, ba.ReconciledAmount, ba.PendingAmount, ba.LatestTransactionDate FROM BudgetAllowances ba WHERE ba.AccountName = ? AND ba.CategoryName = ?",
   "Refresh": "file://./resources/BudgetAllowancesQuery.sql"
 }
