@@ -7,6 +7,7 @@ This API requires the following dependencies:
 * MySQL ( `npm install mysql` )
 * Forever ( Global Install in order to run it on a server *forever*. Install with `npm install forever -g` )
 * random-js ( `npm install random-js` )
+* underscore ( `npm install underscore` )
 
 ## Dev-Dependencies
 If developing and/or testing, the following dependencies are required:
@@ -37,6 +38,10 @@ You can install this web API by following the steps below:
 9. Reboot by executing `sudo reboot`
 
 10. Verify that the service is up and running on the port you selected in `./config/server.json`
+
+11. Run the bash script `./resources/CreateCrontabFile.sh [DB_USER] [DB_PWD] [Interval]` to establish a random password for the `cronjob` MySQL user and generate a file called `crontab.txt` that runs a cronjob to refresh the budget allowances at a regular interval. The parameters for the script are the MySQL Username/Password and the Interval at which you want the cronjob to run.
+
+12. Create the cronjob by executing `crontab crontab.txt`. If all is well, no errors should be reported. To see a list of active cronjobs use `crontab -l` and to remove a cronjob use `crontab -r`
 
 ## HTTPS Server Configuration
 This API can be run in an encrypted state using TLS v1.2. Follow the steps below in a terminal to generate the proper private key & certificate for the server. Openssl is required.
