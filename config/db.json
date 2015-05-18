@@ -3,5 +3,6 @@
   "user": "[USERNAME]",
   "password": "[PASSWORD]",
   "database": "familybudget",
-  "multipleStatements": true
+  "multipleStatements": true,
+  "connectionLimit": 20
 }

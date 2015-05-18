@@ -3,5 +3,6 @@
   "user": "root",
   "password": "",
   "database": "familybudget_test",
-  "multipleStatements": true
+  "multipleStatements": true,
+  "connectionLimit": 20
 }

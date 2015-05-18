@@ -244,7 +244,7 @@ LineItemModule.prototype.Search = {
         // select the rows that qualify given the search criteria
         var searchCriteria = request.body.data[0];
         self.GetSearchParams(searchCriteria, function(params) {
-          self.dbUtility.SelectRowsWithParams(self.queries.Search, params, self.ConvertRowToLineItem, 
+          self.dbUtility.SelectRowsWithParams(self.queries.Search, params, self.ConvertRowToLineItem, true,
             function(dbResponse) {
               // check if the query was successful
               if (dbResponse.getStatus() == "ok") {
