@@ -22,6 +22,11 @@ TestUtils.prototype.GetInvalidCredentials = function() {
   return { Username: authorizationConfig.Username, Password: authorizationConfig.InvalidPassword };
 }
 
+TestUtils.prototype.GetStaticToken = function() {
+  
+  return authorizationConfig.StaticToken;
+}
+
 TestUtils.prototype.GetExpectedWWWAuthenticateHeader = function() {
   
   return "Basic realm='" + serverConfig.name + "'";
@@ -29,12 +34,11 @@ TestUtils.prototype.GetExpectedWWWAuthenticateHeader = function() {
 
 TestUtils.prototype.GetAuthorizedRequest = function() {
 
-  var authorizedCredentials = this.GetValidCredentials();
+  var staticToken = this.GetStaticToken();
 
   var authorizedRequest = request.defaults({
-    'auth': {
-      'user': authorizedCredentials.Username,
-      'pass': authorizedCredentials.Password
+    'headers': {
+      'x_access_token' : staticToken
     }
   });
   

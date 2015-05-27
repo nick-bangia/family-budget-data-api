@@ -1,3 +1,5 @@
 {
-  "SelectAll": "SELECT au.Username, au.Password, au.IsActive FROM AuthorizedUser au WHERE au.IsActive = 1"
+  "SelectAll": "SELECT au.Username, au.Password, au.IsActive FROM AuthorizedUser au WHERE au.IsActive = 1",
+  "Login": "file://./resources/LoginQuery.sql",
+  "CheckAccess": "file://./resources/CheckAccess.sql"
 }

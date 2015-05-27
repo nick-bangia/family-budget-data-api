@@ -1,5 +1,6 @@
 {
   "Username": "TestUser",
   "ValidPassword": "Testing123!",
-  "InvalidPassword": "ThisIsATest123!"
+  "InvalidPassword": "ThisIsATest123!",
+  "StaticToken": "80FD82BD-45C0-4945-87B9-B2DDC4705E11"
 }

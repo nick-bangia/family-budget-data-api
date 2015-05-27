@@ -2,7 +2,7 @@ var url, invalidCredentials, validCredentials, expectedWWWAuthenticateHeader, re
 
 describe('Authorization Testing', function() {
   before(function () {
-    url = testUtils.GetRootURL() + '/ping';
+    url = testUtils.GetRootURL() + '/login';
     invalidCredentials = testUtils.GetInvalidCredentials();
     validCredentials = testUtils.GetValidCredentials();
     expectedWWWAuthenticateHeader = testUtils.GetExpectedWWWAuthenticateHeader();
@@ -12,7 +12,7 @@ describe('Authorization Testing', function() {
     before(function(done) {
       request.get( {url: url }, function(err, resp, body) {
         response = resp;
-        done(err);        
+        done(err);
       });
     });
     
@@ -63,8 +63,9 @@ describe('Authorization Testing', function() {
       testUtils.TestStandardExpectationsForSuccessfulResult(results, 1);
     });
     
-    it ('should have an entry in the data property of "isAuthorized: true"', function () {
-      expect(results.data[0].isAuthorized).to.be.true;
+    it ('should return an auth token object to be used in future requests.', function() {
+      expect('access_token' in results.data[0]).to.be.true;
+      expect('expires_on' in results.data[0]).to.be.true;
     });
   });
 });

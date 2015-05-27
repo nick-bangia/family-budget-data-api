@@ -36,6 +36,7 @@ var CategoryModule = require('./modules/CategoryModule');
 var SubcategoryModule = require('./modules/SubcategoryModule');
 var LineItemModule = require('./modules/LineItemModule');
 var BudgetAllowanceModule = require('./modules/BudgetAllowanceModule');
+var AccessChecker = require('./middleware/apiaccess');
 
 // initialize the server variable
 var server = null;
@@ -83,17 +84,20 @@ var allQueries = { account: AccountQueries, auth: AuthorizedUserQueries, cat: Ca
 var queryUtils = new QueryUtils();
 queryUtils.NormalizeQueries(allQueries, function(normalizedQueries) {
 	// instantiate the authorizedUserModule to get a list of authorized users of this API
-	var authorizedUserModule = new AuthorizedUserModule(dbUtils, normalizedQueries.auth);
+	var authorizedUserModule = new AuthorizedUserModule(dbUtils, normalizedQueries.auth, serverConfig.authIntervalInMinutes);
 
 	if (serverConfig.authEnabled) {
 		authorizedUserModule.GetAll(function(authorizedUsers) {
 		
 			// set up the httpAuth middleware
-			server.use(/.+/, ApiServer.httpAuth({
+			server.use(/^\/login/, ApiServer.httpAuth({
 				realm: serverConfig.name,
 				credentials: authorizedUsers,
 				encode: true
 			}));
+      
+      // regex for token middleware - /^(?!\/login)(.+)$/
+      server.use(/^(?!\/login)(.+)$/, new AccessChecker(dbUtils, normalizedQueries.auth.CheckAccess));
 		
 			// continue configuring server
 			ConfigureServer(server, normalizedQueries);	
@@ -109,7 +113,7 @@ function ConfigureServer(server, normalizedQueries) {
 	server.use(/^.+\/(update|add|search)$/, ApiServer.payloadParser());
 
 	// add supported modules
-	server.addModule('v1', 'authorization', new AuthorizedUserModule(dbUtils, normalizedQueries.auth));
+	server.addModule('v1', 'authorization', new AuthorizedUserModule(dbUtils, normalizedQueries.auth, serverConfig.authIntervalInMinutes));
 	server.addModule('v1', 'paymentMethods', new PaymentMethodModule(dbUtils, normalizedQueries.pm));
 	server.addModule('v1', 'accounts', new AccountModule(dbUtils, normalizedQueries.account));
 	server.addModule('v1', 'categories', new CategoryModule(dbUtils, normalizedQueries.cat));

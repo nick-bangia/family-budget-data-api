@@ -9,5 +9,6 @@
     "requestClientCert": false,
     "clientCertFile": "./config/keys/family-budget-ca.crt"
   },
-  "authEnabled": true
+  "authEnabled": true,
+  "authIntervalInMinutes": 20
 }

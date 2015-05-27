@@ -26,6 +26,22 @@ ENGINE = InnoDB;
 SHOW WARNINGS;
 
 -- -----------------------------------------------------
+-- Table `FamilyBudget`.`AccessToken`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `FamilyBudget`.`AccessToken`;
+
+SHOW WARNINGS;
+CREATE TABLE IF NOT EXISTS `FamilyBudget`.`AccessToken` (
+	`AuthorizedUser` VARCHAR(100) NOT NULL,
+	`Token`	   VARCHAR(36) NOT NULL,
+	`Expires`  DATETIME NOT NULL,
+	`IsActive` TINYINT(1) NOT NULL,
+	PRIMARY KEY (`AuthorizedUser`, `Token`))
+ENGINE = InnoDB;
+
+SHOW WARNINGS;
+
+-- -----------------------------------------------------
 -- Table `FamilyBudget`.`Months`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `FamilyBudget`.`Months` ;
