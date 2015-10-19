@@ -33,15 +33,13 @@ You can install this web API by following the steps below:
 
 7. Update the dbCredentials.json file in `./config` to use the newly created user & password
 
-8. Copy the family-budget-api init.d script in `./resources` to `/etc/init.d/`
+8. Copy the family-budget-api init.d script in `./resources` to `/etc/init.d/` and switch to that directory
 
-9. Reboot by executing `sudo reboot`
+9. Register the script by running `sudo update-rc.d family-budget-api defaults` in `/etc/init.d`
 
-10. Verify that the service is up and running on the port you selected in `./config/server.json`
+10. Reboot by executing `sudo reboot`
 
-11. Run the bash script `./resources/CreateCrontabFile.sh [DB_USER] [DB_PWD] [Interval]` to establish a random password for the `cronjob` MySQL user and generate a file called `crontab.txt` that runs a cronjob to refresh the budget allowances at a regular interval. The parameters for the script are the MySQL Username/Password and the Interval at which you want the cronjob to run.
-
-12. Create the cronjob by executing `crontab crontab.txt`. If all is well, no errors should be reported. To see a list of active cronjobs use `crontab -l` and to remove a cronjob use `crontab -r`
+11. Verify that the service is up and running on the port you selected in `./config/server.json`
 
 ## HTTPS Server Configuration
 This API can be run in an encrypted state using TLS v1.2. Follow the steps below in a terminal to generate the proper private key & certificate for the server. Openssl is required.
