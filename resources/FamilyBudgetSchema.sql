@@ -337,43 +337,57 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_PendingGoal` AS
 SHOW WARNINGS;
 
 -- -----------------------------------------------------
--- View  `FamilyBudget`.`ActiveLineItems_ReconciledPriorQuarters_Condensed`
+-- View  `FamilyBudget`.`ActiveLineItems_ReconciledPriorMonths_Condensed`
 -- -----------------------------------------------------
-DROP VIEW IF EXISTS `FamilyBudget`.`ActiveLineItems_ReconciledPriorQuarters_Condensed`;
+DROP VIEW IF EXISTS `FamilyBudget`.`ActiveLineItems_ReconciledPriorMonths_Condensed`;
 SHOW WARNINGS;
 
-CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledPriorQuarters_Condensed` AS
+CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledPriorMonths_Condensed` AS
     select 
       'CONDENSED_KEYS' AS `UniqueKey`,
-      (case `fli`.`Quarter`
-        when 1 then 3
-        when 2 then 6
-        when 3 then 9
-        when 4 then 12
-      end) AS `MonthId`,
-      (case `fli`.`Quarter`
-        when 1 then 'March'
-        when 2 then 'June'
-        when 3 then 'September'
-        when 4 then 'December'
-      end) AS `MonthName`,
-      (case `fli`.`Quarter`
+      `fli`. `MonthId`,
+      `fli`. `MonthName`,
+      (case `fli`.`MonthId`
         when 1 then 31
-        when 2 then 30
+        when 2 then 28
         when 3 then 31
-        when 4 then 31
+        when 4 then 30
+        when 5 then 31
+        when 6 then 30
+        when 7 then 31
+        when 8 then 31
+        when 9 then 30
+        when 10 then 31
+        when 11 then 30
+        when 12 then 31
       end) AS `DayOfMonth`,
-      (case `fli`.`Quarter`
-        when 1 then dayofweek(str_to_date(concat('3-31-', `fli`.`Year`), '%m-%d-%Y'))
-        when 2 then dayofweek(str_to_date(concat('6-30-', `fli`.`Year`), '%m-%d-%Y'))
-        when 3 then dayofweek(str_to_date(concat('9-30-', `fli`.`Year`), '%m-%d-%Y'))
-        when 4 then dayofweek(str_to_date(concat('12-31-', `fli`.`Year`),'%m-%d-%Y'))
+      (case `fli`.`MonthId`
+        when 1 then dayofweek(str_to_date(concat('1-31-', `fli`.`Year`), '%m-%d-%Y'))
+        when 2 then dayofweek(str_to_date(concat('2-28-', `fli`.`Year`), '%m-%d-%Y'))
+        when 3 then dayofweek(str_to_date(concat('3-31-', `fli`.`Year`), '%m-%d-%Y'))
+        when 4 then dayofweek(str_to_date(concat('4-30-', `fli`.`Year`),'%m-%d-%Y'))
+        when 5 then dayofweek(str_to_date(concat('5-31-', `fli`.`Year`),'%m-%d-%Y'))
+        when 6 then dayofweek(str_to_date(concat('6-30-', `fli`.`Year`),'%m-%d-%Y'))
+        when 7 then dayofweek(str_to_date(concat('7-31-', `fli`.`Year`),'%m-%d-%Y'))
+        when 8 then dayofweek(str_to_date(concat('8-31-', `fli`.`Year`),'%m-%d-%Y'))
+        when 9 then dayofweek(str_to_date(concat('9-30-', `fli`.`Year`),'%m-%d-%Y'))
+        when 10 then dayofweek(str_to_date(concat('10-31-', `fli`.`Year`),'%m-%d-%Y'))
+        when 11 then dayofweek(str_to_date(concat('11-30-', `fli`.`Year`),'%m-%d-%Y'))
+        when 12 then dayofweek(str_to_date(concat('12-31-', `fli`.`Year`),'%m-%d-%Y'))
       end) AS `DayOfWeekId`,
-      (case `fli`.`Quarter`
-        when 1 then dayname(str_to_date(concat('3-31-', `fli`.`Year`), '%m-%d-%Y'))
-        when 2 then dayname(str_to_date(concat('6-30-', `fli`.`Year`), '%m-%d-%Y'))
-        when 3 then dayname(str_to_date(concat('9-30-', `fli`.`Year`), '%m-%d-%Y'))
-        when 4 then dayname(str_to_date(concat('12-31-', `fli`.`Year`),'%m-%d-%Y'))
+      (case `fli`.`MonthId`
+        when 1 then dayname(str_to_date(concat('1-31-', `fli`.`Year`), '%m-%d-%Y'))
+        when 2 then dayname(str_to_date(concat('2-28-', `fli`.`Year`), '%m-%d-%Y'))
+        when 3 then dayname(str_to_date(concat('3-31-', `fli`.`Year`), '%m-%d-%Y'))
+        when 4 then dayname(str_to_date(concat('4-30-', `fli`.`Year`),'%m-%d-%Y'))
+        when 5 then dayname(str_to_date(concat('5-31-', `fli`.`Year`),'%m-%d-%Y'))
+        when 6 then dayname(str_to_date(concat('6-30-', `fli`.`Year`),'%m-%d-%Y'))
+        when 7 then dayname(str_to_date(concat('7-31-', `fli`.`Year`),'%m-%d-%Y'))
+        when 8 then dayname(str_to_date(concat('8-31-', `fli`.`Year`),'%m-%d-%Y'))
+        when 9 then dayname(str_to_date(concat('9-30-', `fli`.`Year`),'%m-%d-%Y'))
+        when 10 then dayname(str_to_date(concat('10-31-', `fli`.`Year`),'%m-%d-%Y'))
+        when 11 then dayname(str_to_date(concat('11-30-', `fli`.`Year`),'%m-%d-%Y'))
+        when 12 then dayname(str_to_date(concat('12-31-', `fli`.`Year`),'%m-%d-%Y'))
       end) AS `DayOfWeekName`,
       `fli`.`Year` AS `Year`,
       `c`.`CategoryKey` AS `CategoryKey`,
@@ -383,8 +397,8 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledPriorQuarters_Condensed` A
       `sc`.`SubcategoryPrefix` AS `SubcategoryPrefix`,
       'CONDENSED ENTRIES' AS `Description`,
       sum(`fli`.`Amount`) AS `Amount`,
-      4 AS `TypeId`,
-      3 AS `SubtypeId`,
+      `fli`.`TypeId`,
+      `fli`.`SubtypeId`,
       `fli`.`Quarter` AS `Quarter`,
       'CONDENSED_KEYS' AS `PaymentMethodKey`,
       'CONDENSED ENTRIES' AS `PaymentMethodName`,
@@ -400,7 +414,7 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledPriorQuarters_Condensed` A
     where
       ((`fli`.`TypeId` <> 3)
       and (`fli`.`StatusId` = 0)
-      and (concat(`fli`.`Quarter`, `fli`.`Year`) <> concat(quarter(NOW()), year(NOW())))
+      and (concat(`fli`.`MonthId`, `fli`.`Year`) <> concat(month(NOW()), year(NOW())))
       and (`sc`.`IsActive` = 1))
     group by 
       `fli`.`SubcategoryKey`,
@@ -409,15 +423,18 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledPriorQuarters_Condensed` A
       `c`.`CategoryKey`,
       `c`.`CategoryName`,
       `fli`.`Year`,
-      `fli`.`Quarter`;
+      `fli`.`Quarter`,
+      `fli`.`MonthId`,
+      `fli`.`TypeId`,
+      `fli`.`SubtypeId`;
 
 -- -----------------------------------------------------
--- View  `FamilyBudget`.`ActiveLineItems_ReconciledCurrentQuarter`
+-- View  `FamilyBudget`.`ActiveLineItems_ReconciledCurrentMonth`
 -- -----------------------------------------------------
-DROP VIEW IF EXISTS `FamilyBudget`.`ActiveLineItems_ReconciledCurrentQuarter`;
+DROP VIEW IF EXISTS `FamilyBudget`.`ActiveLineItems_ReconciledCurrentMonth`;
 SHOW WARNINGS;
 
-CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledCurrentQuarter` AS
+CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledCurrentMonth` AS
     select 
       `fli`.`UniqueKey` AS `UniqueKey`,
       `fli`.`MonthId` AS `MonthId`,
@@ -453,7 +470,7 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledCurrentQuarter` AS
     where
         ((`fli`.`TypeId` <> 3)
         and (`fli`.`StatusId` = 0)
-        and (concat(`fli`.`Quarter`, `fli`.`Year`) = concat(quarter(NOW()), year(NOW())))
+        and (concat(`fli`.`MonthId`, `fli`.`Year`) = concat(month(NOW()), year(NOW())))
         and (`sc`.`IsActive` = 1));
 
 -- -----------------------------------------------------
