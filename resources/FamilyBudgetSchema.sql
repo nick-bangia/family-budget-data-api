@@ -366,13 +366,13 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledPriorQuarters_Condensed` A
       (case `fli`.`Quarter`
         when 1 then dayofweek(str_to_date(concat('3-31-', `fli`.`Year`), '%m-%d-%Y'))
         when 2 then dayofweek(str_to_date(concat('6-30-', `fli`.`Year`), '%m-%d-%Y'))
-        when 3 then dayofweek(str_to_date(concat('9-31-', `fli`.`Year`), '%m-%d-%Y'))
+        when 3 then dayofweek(str_to_date(concat('9-30-', `fli`.`Year`), '%m-%d-%Y'))
         when 4 then dayofweek(str_to_date(concat('12-31-', `fli`.`Year`),'%m-%d-%Y'))
       end) AS `DayOfWeekId`,
       (case `fli`.`Quarter`
         when 1 then dayname(str_to_date(concat('3-31-', `fli`.`Year`), '%m-%d-%Y'))
         when 2 then dayname(str_to_date(concat('6-30-', `fli`.`Year`), '%m-%d-%Y'))
-        when 3 then dayname(str_to_date(concat('9-31-', `fli`.`Year`), '%m-%d-%Y'))
+        when 3 then dayname(str_to_date(concat('9-30-', `fli`.`Year`), '%m-%d-%Y'))
         when 4 then dayname(str_to_date(concat('12-31-', `fli`.`Year`),'%m-%d-%Y'))
       end) AS `DayOfWeekName`,
       `fli`.`Year` AS `Year`,
