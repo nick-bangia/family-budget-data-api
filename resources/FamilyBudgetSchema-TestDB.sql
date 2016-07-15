@@ -505,13 +505,11 @@ INSERT INTO Statuses (StatusId, StatusName) VALUES (3, 'Goal');
 INSERT INTO Subtypes (SubtypeId, SubtypeName) VALUES (0, 'Debit');
 INSERT INTO Subtypes (SubtypeId, SubtypeName) VALUES (1, 'Credit');
 INSERT INTO Subtypes (SubtypeId, SubtypeName) VALUES (2, 'Goal');
-INSERT INTO Subtypes (SubtypeId, SubtypeName) VALUES (3, 'Mixed');
 
 INSERT INTO Types (TypeId, TypeName) VALUES (0, 'Expense');
 INSERT INTO Types (TypeId, TypeName) VALUES (1, 'Allocation');
 INSERT INTO Types (TypeId, TypeName) VALUES (2, 'Bucket Adjustment');
 INSERT INTO Types (TypeId, TypeName) VALUES (3, 'Goal');
-INSERT INTO Types (TypeId, TypeName) VALUES (4, 'Mixed');
 
 -- -----------------------------------------------------
 -- Test Data
