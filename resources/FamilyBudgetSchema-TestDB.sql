@@ -294,12 +294,12 @@ ENGINE = InnoDB;
 SHOW WARNINGS;
 
 -- -----------------------------------------------------
--- View  `FamilyBudget_Test`.`ActiveLineItems_PendingFutureGoal`
+-- View  `FamilyBudget_Test`.`ActiveLineItems_PendingGoal`
 -- -----------------------------------------------------
-DROP VIEW IF EXISTS `FamilyBudget_Test`.`ActiveLineItems_PendingFutureGoal`;
+DROP VIEW IF EXISTS `FamilyBudget_Test`.`ActiveLineItems_PendingGoal`;
 SHOW WARNINGS;
 
-CREATE VIEW `FamilyBudget_Test`.`ActiveLineItems_PendingFutureGoal` AS
+CREATE VIEW `FamilyBudget_Test`.`ActiveLineItems_PendingGoal` AS
     select 
       `fli`.`UniqueKey` AS `UniqueKey`,
       `fli`.`MonthId` AS `MonthId`,
@@ -333,7 +333,7 @@ CREATE VIEW `FamilyBudget_Test`.`ActiveLineItems_PendingFutureGoal` AS
       join `DaysOfWeek` `dow` ON (`fli`.`DayOfWeekId` = `dow`.`DayOfWeekId`)
       join `dimPaymentMethod` `pm` ON (`fli`.`PaymentMethodKey` = `pm`.`PaymentMethodKey`))
     where
-      ((`fli`.`StatusId` in (1 , 2, 3))
+      ((`fli`.`StatusId` in (1, 3))
       and (`sc`.`IsActive` = 1));
 SHOW WARNINGS;
 
@@ -483,7 +483,6 @@ INSERT INTO DaysOfWeek (DayOfWeekId, DayOfWeekName) VALUES (7, 'Saturday');
 
 INSERT INTO Statuses (StatusId, StatusName) VALUES (0, 'Reconciled');
 INSERT INTO Statuses (StatusId, StatusName) VALUES (1, 'Pending');
-INSERT INTO Statuses (StatusId, StatusName) VALUES (2, 'Future');
 INSERT INTO Statuses (StatusId, StatusName) VALUES (3, 'Goal');
 
 INSERT INTO Subtypes (SubtypeId, SubtypeName) VALUES (0, 'Debit');
@@ -1134,7 +1133,7 @@ VALUES ('D5C0BD73-DA78-46D1-9D7D-63C6D1204C1E',1,22,5,2015,'B1F4EBEE-ABBD-4501-A
 			 ('124816C0-EA7E-43A2-BD8C-2528818E3A69',2,16,2,2015,'E4C5A03D-9A9F-4D5D-BD14-5B51730BA1B1','Test Line Item 552',-102.95,0,0,1,'1117AFEB-3933-46C1-A6F1-7033DE501727',0,NOW()),
 			 ('1DB528B8-C9E8-4059-899B-BE1184E87FC4',4,18,7,2015,'C4CD23AC-5B64-4234-9515-9CC7EC92E577','Test Line Item 553',-2.77,0,0,2,'1117AFEB-3933-46C1-A6F1-7033DE501727',0,NOW()),
 			 ('A820D9FC-0375-4EB2-8B7A-C1B3DF9C13E7',4,1,4,2015,'2638253D-B50C-427F-B587-7703EB29BBBA','Test Line Item 554',638.76,1,1,2,'97824A38-B1DD-4885-B24B-A46E459A5AB0',0,NOW()),
-			 ('3D891B27-8A4E-4AA3-8BBF-0B0A60EC442E',5,1,6,2015,'302D08BD-D007-4B1F-96F0-111FCB1683BE','Test Line Item 555',1181.71,1,1,2,'97824A38-B1DD-4885-B24B-A46E459A5AB0',2,NOW()),
+			 ('3D891B27-8A4E-4AA3-8BBF-0B0A60EC442E',5,1,6,2015,'302D08BD-D007-4B1F-96F0-111FCB1683BE','Test Line Item 555',1181.71,1,1,2,'97824A38-B1DD-4885-B24B-A46E459A5AB0',1,NOW()),
 			 ('CD44F331-0434-4BA1-A50C-AD99A4A82006',4,1,4,2015,'0EAB9B99-4BC4-4B54-8E08-024A8A4BCAD6','Test Line Item 556',1755.9,1,1,2,'97824A38-B1DD-4885-B24B-A46E459A5AB0',0,NOW()),
 			 ('D2D9F979-3673-4743-A739-0CEEF8E712CE',2,11,4,2015,'74801902-27FC-47F6-B6DE-B6D956FCDF34','Test Line Item 557',0.21,2,1,1,'2F7552F5-E69E-48B2-9FE6-B125BDE851E4',0,NOW()),
 			 ('F3C95616-9D64-496B-B85F-6C960732EE74',3,11,4,2015,'39BA6ADF-6526-4D8A-A502-72468A9733F3','Test Line Item 558',-732.18,2,0,1,'97824A38-B1DD-4885-B24B-A46E459A5AB0',0,NOW()),

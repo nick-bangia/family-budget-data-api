@@ -293,12 +293,12 @@ ENGINE = InnoDB;
 SHOW WARNINGS;
 
 -- -----------------------------------------------------
--- View  `FamilyBudget`.`ActiveLineItems_PendingFutureGoal`
+-- View  `FamilyBudget`.`ActiveLineItems_PendingGoal`
 -- -----------------------------------------------------
-DROP VIEW IF EXISTS `FamilyBudget`.`ActiveLineItems_PendingFutureGoal`;
+DROP VIEW IF EXISTS `FamilyBudget`.`ActiveLineItems_PendingGoal`;
 SHOW WARNINGS;
 
-CREATE VIEW `FamilyBudget`.`ActiveLineItems_PendingFutureGoal` AS
+CREATE VIEW `FamilyBudget`.`ActiveLineItems_PendingGoal` AS
     select 
       `fli`.`UniqueKey` AS `UniqueKey`,
       `fli`.`MonthId` AS `MonthId`,
@@ -332,7 +332,7 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_PendingFutureGoal` AS
       join `DaysOfWeek` `dow` ON (`fli`.`DayOfWeekId` = `dow`.`DayOfWeekId`)
       join `dimPaymentMethod` `pm` ON (`fli`.`PaymentMethodKey` = `pm`.`PaymentMethodKey`))
     where
-      ((`fli`.`StatusId` in (1 , 2, 3))
+      ((`fli`.`StatusId` in (1, 3))
       and (`sc`.`IsActive` = 1));
 SHOW WARNINGS;
 
@@ -482,7 +482,6 @@ INSERT INTO DaysOfWeek (DayOfWeekId, DayOfWeekName) VALUES (7, 'Saturday');
 
 INSERT INTO Statuses (StatusId, StatusName) VALUES (0, 'Reconciled');
 INSERT INTO Statuses (StatusId, StatusName) VALUES (1, 'Pending');
-INSERT INTO Statuses (StatusId, StatusName) VALUES (2, 'Future');
 INSERT INTO Statuses (StatusId, StatusName) VALUES (3, 'Goal');
 
 INSERT INTO Subtypes (SubtypeId, SubtypeName) VALUES (0, 'Debit');

@@ -1,5 +1,5 @@
 {
-  "GetAllCondensed": "SELECT * FROM ActiveLineItems_ReconciledPriorQuarters_Condensed UNION ALL SELECT * FROM ActiveLineItems_ReconciledCurrentQuarter UNION ALL SELECT * FROM ActiveLineItems_PendingFutureGoal ORDER BY Year DESC, MonthId DESC, DayOfMonth DESC",
+  "GetAllCondensed": "SELECT * FROM ActiveLineItems_ReconciledPriorQuarters_Condensed UNION ALL SELECT * FROM ActiveLineItems_ReconciledCurrentQuarter UNION ALL SELECT * FROM ActiveLineItems_PendingGoal ORDER BY Year DESC, MonthId DESC, DayOfMonth DESC",
 	"Search": "file://./resources/LineItemSearchQuery.sql",
   "UpdateRow": "UPDATE factLineItem fli SET fli.MonthId = ?, fli.DayOfMonth = ?, fli.DayOfWeekId = ?, fli.Year = ?, fli.SubcategoryKey = ?, fli.Description = ?, fli.Amount = ?, fli.TypeId = ?, fli.SubtypeId = ?, fli.Quarter = ?, fli.PaymentMethodKey = ?, fli.StatusId = ?, fli.LastUpdatedDate = NOW() WHERE fli.UniqueKey = ?",
 	"InsertRow": "INSERT INTO factLineItem (UniqueKey, MonthId, DayOfMonth, DayOfWeekId, Year, SubcategoryKey, Description, Amount, TypeId, SubtypeId, Quarter, PaymentMethodKey, StatusId, LastUpdatedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())",
