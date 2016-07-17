@@ -115,6 +115,7 @@ CREATE TABLE IF NOT EXISTS `FamilyBudget`.`dimSubcategory` (
   `SubcategoryPrefix` VARCHAR(10) NOT NULL,
   `IsActive` TINYINT(1) NOT NULL,
   `IsGoal` TINYINT(1) NOT NULL,
+  `IsAllocatable` TINYINT(1) NOT NULL,
   `LastUpdatedDate` DATETIME NULL,
   PRIMARY KEY (`SubcategoryKey`),
   CONSTRAINT `fk_dimSubcategory_dimCategory1`
@@ -212,6 +213,7 @@ CREATE TABLE IF NOT EXISTS `FamilyBudget`.`factLineItem` (
   `Quarter` TINYINT(4) NOT NULL,
   `PaymentMethodKey` CHAR(36) NOT NULL,
   `StatusId` TINYINT(4) NOT NULL,
+  `IsTaxDeductible` TINYINT(1) NOT NULL,
   `LastUpdatedDate` DATETIME NULL,
   PRIMARY KEY (`UniqueKey`),
   CONSTRAINT `fk_factLineItem_Months`
@@ -307,8 +309,8 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_PendingGoal` AS
       `fli`.`DayOfWeekId` AS `DayOfWeekId`,
       `dow`.`DayOfWeekName` AS `DayOfWeekName`,
       `fli`.`Year` AS `Year`,
-      `c`.`CategoryKey`,
-      `c`.`CategoryName`,
+      `c`.`CategoryKey` AS `CategoryKey`,
+      `c`.`CategoryName` AS `CategoryName`,
       `fli`.`SubcategoryKey` AS `SubcategoryKey`,
       `sc`.`SubcategoryName` AS `SubcategoryName`,
       `sc`.`SubcategoryPrefix` AS `SubcategoryPrefix`,
@@ -321,7 +323,8 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_PendingGoal` AS
       `pm`.`PaymentMethodName` AS `PaymentMethodName`,
       `a`.`AccountName` AS `AccountName`,
       `fli`.`StatusId` AS `StatusId`,
-      `sc`.`IsGoal`,
+      `sc`.`IsGoal` AS `IsGoal`,
+      `fli`.`IsTaxDeductible` AS `IsTaxDeductible`,
       `fli`.`LastUpdatedDate` AS `LastUpdatedDate`
     from
       (`factLineItem` `fli`
@@ -345,8 +348,8 @@ SHOW WARNINGS;
 CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledPriorMonths_Condensed` AS
     select 
       'CONDENSED_KEYS' AS `UniqueKey`,
-      `fli`. `MonthId`,
-      `fli`. `MonthName`,
+      `fli`.`MonthId`,
+      `m`.`MonthName`,
       (case `fli`.`MonthId`
         when 1 then 31
         when 2 then 28
@@ -405,12 +408,14 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledPriorMonths_Condensed` AS
       `a`.`AccountName` AS `AccountName`,
       0 AS `StatusId`,
       `sc`.`IsGoal` AS `IsGoal`,
+      `fli`.`IsTaxDeductible` AS `IsTaxDeductible`,
       max(`fli`.`LastUpdatedDate`) AS `LastUpdatedDate`
     from
       (`factLineItem` `fli`
       join `dimSubcategory` `sc` ON ((`fli`.`SubcategoryKey` = `sc`.`SubcategoryKey`))
       join `dimCategory` `c` ON ((`sc`.`CategoryKey` = `c`.`CategoryKey`))
       join `dimAccount` `a` ON ((`sc`.`AccountKey` = `a`.`AccountKey`)))
+      join `Months` `m` ON (`fli`.`MonthId` = `m`.`MonthId`)
     where
       ((`fli`.`TypeId` <> 3)
       and (`fli`.`StatusId` = 0)
@@ -443,8 +448,8 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledCurrentMonth` AS
       `fli`.`DayOfWeekId` AS `DayOfWeekId`,
       `dow`.`DayOfWeekName` AS `DayOfWeekName`,
       `fli`.`Year` AS `Year`,
-      `c`.`CategoryKey`,
-      `c`.`CategoryName`,
+      `c`.`CategoryKey` AS `CategoryKey`,
+      `c`.`CategoryName` AS `CategoryName`,
       `fli`.`SubcategoryKey` AS `SubcategoryKey`,
       `sc`.`SubcategoryName` AS `SubcategoryName`,
       `sc`.`SubcategoryPrefix` AS `SubcategoryPrefix`,
@@ -457,7 +462,8 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledCurrentMonth` AS
       `pm`.`PaymentMethodName` AS `PaymentMethodName`,
       `a`.`AccountName` AS `AccountName`,
       `fli`.`StatusId` AS `StatusId`,
-      `sc`.`IsGoal`,
+      `sc`.`IsGoal` AS `IsGoal`,
+      `IsTaxDeductible` AS `IsTaxDeductible`,
       `fli`.`LastUpdatedDate` AS `LastUpdatedDate`
     from
         (`factLineItem` `fli`
