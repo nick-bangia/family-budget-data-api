@@ -132,7 +132,7 @@ function ConfigureServer(server, normalizedQueries) {
 		});
 	}
 
-	// begin listening for requests
+	// begin listening for requests and do any follow up work in the callback
 	server.listen(serverConfig.port, function() {
 		if (options.indexOf('d') > -1 || options.indexOf('t') > -1 || process.env.TEST_ENV) {
 			var protocol = serverConfig.tls.enabled ? "https" : "http";
@@ -142,7 +142,9 @@ function ConfigureServer(server, normalizedQueries) {
         if ((process.env.TEST_ENV || options.indexOf('t') > -1) && 'runTests' in serverConfig && serverConfig.runTests) {
             // if in testing mode and the runTests configuration exists and is true, run mocha testware
             console.info('Running Testware....');
-            require('./node_modules/mocha/bin/_mocha');
+            var TestRunnerModule = require('./modules/TestRunnerModule');
+            var testRunner = new TestRunnerModule();
+            testRunner.RunTests();
         }
 	});
 }
