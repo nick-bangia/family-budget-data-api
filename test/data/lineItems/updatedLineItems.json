@@ -13,7 +13,8 @@
       "subtypeId": 1,
       "quarter": 2,
       "paymentMethodKey": "2F7552F5-E69E-48B2-9FE6-B125BDE851E4",
-      "statusId": 0
+      "statusId": 0,
+      "isTaxDeductible": 0
     },
     {
       "uniqueKey": "05731617-F8DB-479C-9C39-3973B7268191",
@@ -28,7 +29,8 @@
       "subtypeId": 1,
       "quarter": 2,
       "paymentMethodKey": "0E021ACA-D3EB-40EC-8254-AA14185F4428",
-      "statusId": 0
+      "statusId": 0,
+      "isTaxDeductible": 1
     }
   ]
 }

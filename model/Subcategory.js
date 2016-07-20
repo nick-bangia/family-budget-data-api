@@ -11,6 +11,7 @@ function Subcategory() {
   this.subcategoryPrefix = '';
   this.isActive = true;
   this.isGoal = false;
+  this.isAllocatable = false;
   this.lastUpdated = new Date();
 }
 
@@ -88,6 +89,14 @@ Subcategory.prototype.getIsGoal = function() {
 
 Subcategory.prototype.setIsGoal = function(value) {
   this.isGoal = value ? true : false;
+}
+
+Subcategory.prototype.getIsAllocatable = function() {
+  return this.isAllocatable;
+}
+
+Subcategory.prototype.setIsAllocatable = function(value) {
+  this.isAllocatable = value ? true : false;
 }
 
 Subcategory.prototype.getLastUpdated = function() {

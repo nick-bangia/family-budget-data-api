@@ -12,7 +12,8 @@
       "subtypeId": 0,
       "quarter": 2,
       "paymentMethodKey": "1117AFEB-3933-46C1-A6F1-7033DE501727",
-      "statusId": 0
+      "statusId": 0,
+      "isTaxDeductible": 1
     },
     {
       "monthId": 4,
@@ -26,7 +27,8 @@
       "subtypeId": 1,
       "quarter": 2,
       "paymentMethodKey": "97824A38-B1DD-4885-B24B-A46E459A5AB0",
-      "statusId": 0
+      "statusId": 0,
+      "isTaxDeductible": 0
     }
   ]
 }

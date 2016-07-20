@@ -6,7 +6,8 @@
       "subcategoryName": "Subcategory Test #13 - Updated",
       "subcategoryPrefix": "TSC13U",
       "isActive": false,
-      "isGoal": false
+      "isGoal": false,
+      "isAllocatable": true
     },
     {
       "subcategoryKey": "87F4F069-0C7D-4E45-879B-6CDC163C4454",
@@ -14,7 +15,8 @@
       "accountKey": "C5F1F81B-6FE6-41A5-8830-A5B6A19AB514",
       "subcategoryName": "Subcategory Testing #3 - Attempted",
       "isActive": true,
-      "isGoal": false
+      "isGoal": false,
+      "isAllocatable": false
     }
   ]
 }

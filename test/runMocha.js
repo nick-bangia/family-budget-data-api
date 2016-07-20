@@ -16,6 +16,8 @@ process.exit = function (code) {
   }, 200);
 };
 
+
+
 // prepare to refresh the DB before continuing
 var connectionObj = {
   host: dbCredentials.host, 
@@ -31,10 +33,9 @@ var refreshDbQuery = fs.readFileSync(dbRefreshQueryScriptPath, 'utf8');
 connection.query(refreshDbQuery, function(err, results) {
   if (err) throw err;
   
-  // if successful query, continue to run tests
+  // if successful query, continue to start the API server and run tests
   require('../server');
-  require('../node_modules/mocha/bin/_mocha'); 
   
-  // terminate the connection gracefully
+  // terminate the db connection gracefully
   connection.end();
 });

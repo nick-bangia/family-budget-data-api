@@ -27,6 +27,7 @@ var IsALineItem = function(data) {
           'accountName' in data &&
           'statusId' in data &&
           'isGoal' in data &&
+          'isTaxDeductible' in data &&
           'lastUpdated' in data
          );
 }

@@ -21,6 +21,7 @@ SELECT
 	a.AccountName,
 	fli.StatusId,
 	sc.IsGoal,
+    fli.IsTaxDeductible,
 	fli.LastUpdatedDate
 FROM 
 	factLineItem fli

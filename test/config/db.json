@@ -1,7 +1,7 @@
 {
   "host": "localhost",
   "user": "root",
-  "password": "",
+  "password": "peachy631",
   "database": "familybudget_test",
   "multipleStatements": true,
   "connectionLimit": 20

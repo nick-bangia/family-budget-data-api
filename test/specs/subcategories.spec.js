@@ -14,6 +14,7 @@ var IsASubcategory = function(data) {
           'subcategoryPrefix' in data &&
           'isActive' in data &&
           'isGoal' in data &&
+          'isAllocatable' in data &&
           'lastUpdated' in data
          );
 }

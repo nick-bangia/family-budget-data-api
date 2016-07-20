@@ -19,25 +19,26 @@ function LineItemModule(dbUtility, queries) {
     item.setYear(row.Year);
     item.setMonthId(row.MonthId);
     item.setMonth(row.MonthName);
-		item.setDay(row.DayOfMonth);
-		item.setDayOfWeekId(row.DayOfWeekId);
-		item.setDayOfWeek(row.DayOfWeekName);
-		item.setCategoryKey(row.CategoryKey);
-		item.setCategoryName(row.CategoryName);
-		item.setSubcategoryKey(row.SubcategoryKey);
-		item.setSubcategoryName(row.SubcategoryName);
-		item.setSubcategoryPrefix(row.SubcategoryPrefix);
-		item.setDescription(row.Description);
-		item.setAmount(row.Amount);
-		item.setTypeId(row.TypeId);
-		item.setSubtypeId(row.SubtypeId);
-		item.setQuarter(row.Quarter);
-		item.setPaymentMethodKey(row.PaymentMethodKey);
-		item.setPaymentMethodName(row.PaymentMethodName);
-		item.setAccountName(row.AccountName);
-		item.setStatusId(row.StatusId);
-		item.setIsGoal(row.IsGoal);
-		item.setLastUpdated(row.LastUpdatedDate);
+    item.setDay(row.DayOfMonth);
+    item.setDayOfWeekId(row.DayOfWeekId);
+    item.setDayOfWeek(row.DayOfWeekName);
+    item.setCategoryKey(row.CategoryKey);
+    item.setCategoryName(row.CategoryName);
+    item.setSubcategoryKey(row.SubcategoryKey);
+    item.setSubcategoryName(row.SubcategoryName);
+    item.setSubcategoryPrefix(row.SubcategoryPrefix);
+    item.setDescription(row.Description);
+    item.setAmount(row.Amount);
+    item.setTypeId(row.TypeId);
+    item.setSubtypeId(row.SubtypeId);
+    item.setQuarter(row.Quarter);
+    item.setPaymentMethodKey(row.PaymentMethodKey);
+    item.setPaymentMethodName(row.PaymentMethodName);
+    item.setAccountName(row.AccountName);
+    item.setStatusId(row.StatusId);
+    item.setIsGoal(row.IsGoal);
+    item.setIsTaxDeductible(row.IsTaxDeductible);
+    item.setLastUpdated(row.LastUpdatedDate);
 
     // push the PaymentMethod to callback
     callback(item);
@@ -60,10 +61,20 @@ function LineItemModule(dbUtility, queries) {
   this.UpdateLineItemInDatabase = function(lineItemObject, callback) {
     // convert the given object to a LineItem and update it in the DB
     lineItemObject.__proto__ = LineItem.prototype;
-    var params = [lineItemObject.getMonthId(), lineItemObject.getDay(), lineItemObject.getDayOfWeekId(), lineItemObject.getYear(),
-									lineItemObject.getSubcategoryKey(), lineItemObject.getDescription(), lineItemObject.getAmount(), lineItemObject.getTypeId(),
-									lineItemObject.getSubtypeId(), lineItemObject.getQuarter(), lineItemObject.getPaymentMethodKey(), lineItemObject.getStatusId(),
-									lineItemObject.getUniqueKey()];
+    var params = [lineItemObject.getMonthId(), 
+                  lineItemObject.getDay(), 
+                  lineItemObject.getDayOfWeekId(), 
+                  lineItemObject.getYear(), 
+                  lineItemObject.getSubcategoryKey(), 
+                  lineItemObject.getDescription(), 
+                  lineItemObject.getAmount(), 
+                  lineItemObject.getTypeId(),
+                  lineItemObject.getSubtypeId(), 
+                  lineItemObject.getQuarter(), 
+                  lineItemObject.getPaymentMethodKey(), 
+                  lineItemObject.getStatusId(), 
+                  lineItemObject.getIsTaxDeductible(), 
+                  lineItemObject.getUniqueKey()];
     
     self.dbUtility.SingleRowCUDQueryWithParams(self.queries.UpdateRow, params, function(updateResult) {
       // once the update query is complete, get the updated row, and return to callback
@@ -82,9 +93,20 @@ function LineItemModule(dbUtility, queries) {
     // convert the given object to a LineItem and insert into into the DB
     lineItemObject.__proto__ = LineItem.prototype;
     var newKey = lineItemObject.getNewKey();
-    var params = [newKey, lineItemObject.getMonthId(), lineItemObject.getDay(), lineItemObject.getDayOfWeekId(), lineItemObject.getYear(),
-									lineItemObject.getSubcategoryKey(), lineItemObject.getDescription(), lineItemObject.getAmount(), lineItemObject.getTypeId(),
-									lineItemObject.getSubtypeId(), lineItemObject.getQuarter(), lineItemObject.getPaymentMethodKey(), lineItemObject.getStatusId()];
+    var params = [newKey, 
+                  lineItemObject.getMonthId(), 
+                  lineItemObject.getDay(), 
+                  lineItemObject.getDayOfWeekId(), 
+                  lineItemObject.getYear(), 
+                  lineItemObject.getSubcategoryKey(), 
+                  lineItemObject.getDescription(), 
+                  lineItemObject.getAmount(), 
+                  lineItemObject.getTypeId(), 
+                  lineItemObject.getSubtypeId(), 
+                  lineItemObject.getQuarter(), 
+                  lineItemObject.getPaymentMethodKey(), 
+                  lineItemObject.getStatusId(), 
+                  lineItemObject.getIsTaxDeductible()];
     
     self.dbUtility.SingleRowCUDQueryWithParams(self.queries.InsertRow, params, function(insertResult) {
       // once the insert query is successful, get the newly inserted row, and return to callback
@@ -131,7 +153,8 @@ function LineItemModule(dbUtility, queries) {
     params[17] = searchCriteria.getPaymentMethodKey() == undefined ?
       'nil' : searchCriteria.getPaymentMethodKey();
     params[18] = searchCriteria.getStatus();
-    params[19] = searchCriteria.getUpdatedAfter();  
+    params[19] = searchCriteria.getIsTaxDeductible();
+    params[20] = searchCriteria.getUpdatedAfter();  
     
     callback(params);
   }

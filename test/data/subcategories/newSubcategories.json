@@ -6,7 +6,8 @@
       "subcategoryName": "Subcategory Test 1",
       "subcategoryPrefix": "SC1",
       "isActive": true,
-      "isGoal": false
+      "isGoal": false,
+      "isAllocatable": true
     },
     {
       "categoryKey": "2B7F5E4C-3516-4496-B7EC-DA2F7B294AB0",
@@ -14,7 +15,8 @@
       "subcategoryName": "Subcategory Test 2",
       "subcategoryPrefix": "SC2",
       "isActive": true,
-      "isGoal": true
+      "isGoal": true,
+      "isAllocatable": false
     }
   ]
 }

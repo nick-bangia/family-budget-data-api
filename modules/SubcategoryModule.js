@@ -23,6 +23,7 @@ function SubcategoryModule(dbUtility, queries) {
     sc.setSubcategoryPrefix(row.SubcategoryPrefix);
     sc.setIsActive(row.IsActive);
     sc.setIsGoal(row.IsGoal);
+    sc.setIsAllocatable(row.IsAllocatable);
     sc.setLastUpdated(row.LastUpdatedDate);
 
     // push the Subcategory to callback
@@ -46,9 +47,14 @@ function SubcategoryModule(dbUtility, queries) {
   this.UpdateSubcategoryInDatabase = function(subcategoryObject, callback) {
     // convert the given object to a Subcategory and update it in the DB
     subcategoryObject.__proto__ = Subcategory.prototype;
-    var params = [subcategoryObject.getCategoryKey(), subcategoryObject.getAccountKey(), 
-                  subcategoryObject.getSubcategoryName(), subcategoryObject.getSubcategoryPrefix(),
-                  subcategoryObject.getIsActive(), subcategoryObject.getIsGoal(), subcategoryObject.getSubcategoryKey()];    
+    var params = [subcategoryObject.getCategoryKey(), 
+                  subcategoryObject.getAccountKey(), 
+                  subcategoryObject.getSubcategoryName(), 
+                  subcategoryObject.getSubcategoryPrefix(),
+                  subcategoryObject.getIsActive(), 
+                  subcategoryObject.getIsGoal(),
+                  subcategoryObject.getIsAllocatable(),
+                  subcategoryObject.getSubcategoryKey()];    
     
     self.dbUtility.SingleRowCUDQueryWithParams(self.queries.UpdateRow, params, function(updateResult) {
       // once the update query is complete, get the updated row, and return to callback
@@ -67,9 +73,14 @@ function SubcategoryModule(dbUtility, queries) {
     // convert the given object to a Subcategory and update it in the DB
     subcategoryObject.__proto__ = Subcategory.prototype;
     var newKey = subcategoryObject.getNewKey();
-    var params = [newKey, subcategoryObject.getCategoryKey(), subcategoryObject.getAccountKey(),
-                  subcategoryObject.getSubcategoryName(), subcategoryObject.getSubcategoryPrefix(),
-                  subcategoryObject.getIsActive(), subcategoryObject.getIsGoal()];
+    var params = [newKey, 
+                  subcategoryObject.getCategoryKey(), 
+                  subcategoryObject.getAccountKey(),
+                  subcategoryObject.getSubcategoryName(), 
+                  subcategoryObject.getSubcategoryPrefix(),
+                  subcategoryObject.getIsActive(), 
+                  subcategoryObject.getIsGoal(),
+                  subcategoryObject.getIsAllocatable()];
     
     self.dbUtility.SingleRowCUDQueryWithParams(self.queries.InsertRow, params, function(insertResult) {
       // once the insert query is successful, get the newly inserted row, and return to callback

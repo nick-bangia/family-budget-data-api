@@ -18,6 +18,7 @@ function SearchCriteria() {
   this.subtype = -1;
   this.paymentMethodKey = 'nil';
   this.status = -1;
+  this.isTaxDeductible = false;
   this.updatedAfter = 'nil';
 }
 
@@ -171,6 +172,14 @@ SearchCriteria.prototype.getStatus = function() {
 
 SearchCriteria.prototype.setStatus = function(value) {
   this.status = value;
+}
+
+SearchCriteria.prototype.getIsTaxDeductible = function() {
+  return this.isTaxDeductible;
+}
+
+SearchCriteria.prototype.setIsTaxDeductible = function(value) {
+  this.isTaxDeductible = value ? true : false;
 }
 
 SearchCriteria.prototype.getUpdatedAfter = function() {

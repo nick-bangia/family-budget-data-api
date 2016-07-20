@@ -17,6 +17,7 @@ SET @type = ?;
 SET @subtype = ?;
 SET @paymentMethodKey = ?;
 SET @status = ?;
+SET @isTaxDeductible = ?;
 SET @updatedAfter = ?;
 
 SELECT
@@ -42,6 +43,7 @@ SELECT
 	`a`.`AccountName`,
 	`fli`.`StatusId`,
 	`sc`.`IsGoal`,
+    `fli`.`IsTaxDeductible`,
 	`fli`.`LastUpdatedDate`
 FROM
 	factLineItem fli
@@ -108,6 +110,7 @@ WHERE
 	AND (@subtype IS NULL OR @subtype = fli.SubtypeId)
 	AND (@paymentMethodKey = 'nil' OR fli.PaymentMethodKey = @paymentMethodKey COLLATE utf8_unicode_ci)
 	AND (@status IS NULL OR @status = fli.StatusId)
+    AND (@isTaxDeductible IS NULL OR @isTaxDeductible = fli.IsTaxDeductible)
 	AND (@updatedAfter IS NULL OR fli.LastUpdatedDate >= @updatedAfter)
 ORDER BY
 	fli.Year,

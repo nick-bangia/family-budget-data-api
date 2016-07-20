@@ -23,6 +23,7 @@ function LineItem() {
   this.accountName = '';
   this.statusId = 0;
   this.isGoal = false;
+  this.isTaxDeductible = false;
   this.lastUpdated = new Date();
 }
 
@@ -204,6 +205,14 @@ LineItem.prototype.getIsGoal = function() {
 
 LineItem.prototype.setIsGoal = function(value) {
   this.isGoal = value ? true : false;
+}
+
+LineItem.prototype.getIsTaxDeductible = function() {
+  return this.isTaxDeductible;
+}
+
+LineItem.prototype.setIsTaxDeductible = function(value) {
+  this.isTaxDeductible = value ? true : false;
 }
 
 LineItem.prototype.getLastUpdated = function() {

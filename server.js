@@ -5,7 +5,7 @@
 var fs = require('fs');
 var https = require('https');
 
-// required configurations. If this server is running in a test context, use differnt configurations
+// required configurations. If this server is running in a test context, use different configurations
 var routesConfig = require('./config/routes');
 var serverConfigPath = './config/server';
 var dbConfigPath = './config/db';
@@ -89,19 +89,19 @@ queryUtils.NormalizeQueries(allQueries, function(normalizedQueries) {
 	if (serverConfig.authEnabled) {
 		authorizedUserModule.GetAll(function(authorizedUsers) {
 		
-			// set up the httpAuth middleware
-			server.use(/^\/login/, ApiServer.httpAuth({
-				realm: serverConfig.name,
-				credentials: authorizedUsers,
-				encode: true
-			}));
+            // set up the httpAuth middleware
+            server.use(/^\/login/, ApiServer.httpAuth({
+                realm: serverConfig.name,
+                credentials: authorizedUsers,
+                encode: true
+            }));
       
       // regex for token middleware - /^(?!\/login)(.+)$/
       server.use(/^(?!\/login)(.+)$/, new AccessChecker(dbUtils, normalizedQueries.auth.CheckAccess));
 		
-			// continue configuring server
-			ConfigureServer(server, normalizedQueries);	
-		});   
+        // continue configuring server
+        ConfigureServer(server, normalizedQueries);	
+      });   
 	} else {
 		// continue configuring server
 		ConfigureServer(server, normalizedQueries);
@@ -110,16 +110,17 @@ queryUtils.NormalizeQueries(allQueries, function(normalizedQueries) {
 
 function ConfigureServer(server, normalizedQueries) {  
   // configure the payload parser middleware to parse the payload for any route that adds or updates a list
-	server.use(/^.+\/(update|add|search)$/, ApiServer.payloadParser());
+    server.use(/^.+\/(update|add|search)$/, ApiServer.payloadParser());
 
-	// add supported modules
-	server.addModule('v1', 'authorization', new AuthorizedUserModule(dbUtils, normalizedQueries.auth, serverConfig.authIntervalInMinutes));
-	server.addModule('v1', 'paymentMethods', new PaymentMethodModule(dbUtils, normalizedQueries.pm));
-	server.addModule('v1', 'accounts', new AccountModule(dbUtils, normalizedQueries.account));
-	server.addModule('v1', 'categories', new CategoryModule(dbUtils, normalizedQueries.cat));
-	server.addModule('v1', 'subcategories', new SubcategoryModule(dbUtils, normalizedQueries.subcat));
-  server.addModule('v1', 'lineItems', new LineItemModule(dbUtils, normalizedQueries.item));
-  server.addModule('v1', 'budgetAllowances', new BudgetAllowanceModule(dbUtils, normalizedQueries.allowances));
+    // add supported modules
+    server.addModule('v1', 'authorization', new AuthorizedUserModule(dbUtils, normalizedQueries.auth,
+        serverConfig.authIntervalInMinutes));
+    server.addModule('v1', 'paymentMethods', new PaymentMethodModule(dbUtils, normalizedQueries.pm));
+    server.addModule('v1', 'accounts', new AccountModule(dbUtils, normalizedQueries.account));
+    server.addModule('v1', 'categories', new CategoryModule(dbUtils, normalizedQueries.cat));
+    server.addModule('v1', 'subcategories', new SubcategoryModule(dbUtils, normalizedQueries.subcat));
+    server.addModule('v1', 'lineItems', new LineItemModule(dbUtils, normalizedQueries.item));
+    server.addModule('v1', 'budgetAllowances', new BudgetAllowanceModule(dbUtils, normalizedQueries.allowances));
 	
 	// add supported routes
 	server.router.addRoutes(routesConfig);
@@ -133,9 +134,15 @@ function ConfigureServer(server, normalizedQueries) {
 
 	// begin listening for requests
 	server.listen(serverConfig.port, function() {
-		if (options.indexOf('d') > -1) {
+		if (options.indexOf('d') > -1 || options.indexOf('t') > -1 || process.env.TEST_ENV) {
 			var protocol = serverConfig.tls.enabled ? "https" : "http";
 			console.info('ApiServer listening at ' + protocol + '://localhost:' + serverConfig.port + '\n');
 		}
+        
+        if ((process.env.TEST_ENV || options.indexOf('t') > -1) && 'runTests' in serverConfig && serverConfig.runTests) {
+            // if in testing mode and the runTests configuration exists and is true, run mocha testware
+            console.info('Running Testware....');
+            require('./node_modules/mocha/bin/_mocha');
+        }
 	});
 }

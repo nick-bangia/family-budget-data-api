@@ -431,7 +431,8 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledPriorMonths_Condensed` AS
       `fli`.`Quarter`,
       `fli`.`MonthId`,
       `fli`.`TypeId`,
-      `fli`.`SubtypeId`;
+      `fli`.`SubtypeId`,
+      `fli`.`IsTaxDeductible`;
 
 -- -----------------------------------------------------
 -- View  `FamilyBudget`.`ActiveLineItems_ReconciledCurrentMonth`
