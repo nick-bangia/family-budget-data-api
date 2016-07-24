@@ -37,6 +37,7 @@ var SubcategoryModule = require('./modules/SubcategoryModule');
 var LineItemModule = require('./modules/LineItemModule');
 var BudgetAllowanceModule = require('./modules/BudgetAllowanceModule');
 var AccessChecker = require('./middleware/apiaccess');
+var HttpAuthentication = require('./middleware/httpAuth');
 
 // initialize the server variable
 var server = null;
@@ -87,17 +88,17 @@ queryUtils.NormalizeQueries(allQueries, function(normalizedQueries) {
 	var authorizedUserModule = new AuthorizedUserModule(dbUtils, normalizedQueries.auth, serverConfig.authIntervalInMinutes);
 
 	if (serverConfig.authEnabled) {
-		authorizedUserModule.GetAll(function(authorizedUsers) {
+        authorizedUserModule.GetAll(function(authorizedUsers) {
 		
             // set up the httpAuth middleware
-            server.use(/^\/login/, ApiServer.httpAuth({
+            server.use(/^\/login/, new HttpAuthentication({
                 realm: serverConfig.name,
                 credentials: authorizedUsers,
                 encode: true
             }));
-      
-      // regex for token middleware - /^(?!\/login)(.+)$/
-      server.use(/^(?!\/login)(.+)$/, new AccessChecker(dbUtils, normalizedQueries.auth.CheckAccess));
+        
+        // regex for token middleware - /^(?!\/login)(.+)$/
+        server.use(/^(?!\/login)(.+)$/, new AccessChecker(serverConfig.name, dbUtils, normalizedQueries.auth.CheckAccess));
 		
         // continue configuring server
         ConfigureServer(server, normalizedQueries);	
@@ -139,7 +140,7 @@ function ConfigureServer(server, normalizedQueries) {
 			console.info('ApiServer listening at ' + protocol + '://localhost:' + serverConfig.port + '\n');
 		}
         
-        if ((process.env.TEST_ENV || options.indexOf('t') > -1) && 'runTests' in serverConfig && serverConfig.runTests) {
+        if (process.env.TEST_ENV && 'runTests' in serverConfig && serverConfig.runTests) {
             // if in testing mode and the runTests configuration exists and is true, run mocha testware
             console.info('Running Testware....');
             var TestRunnerModule = require('./modules/TestRunnerModule');

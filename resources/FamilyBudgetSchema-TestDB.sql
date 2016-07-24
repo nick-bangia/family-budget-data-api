@@ -35,7 +35,6 @@ CREATE TABLE IF NOT EXISTS `FamilyBudget_Test`.`AccessToken` (
 	`AuthorizedUser` VARCHAR(100) NOT NULL,
 	`Token`	   VARCHAR(36) NOT NULL,
 	`Expires`  DATETIME NOT NULL,
-	`IsActive` TINYINT(1) NOT NULL,
 	PRIMARY KEY (`AuthorizedUser`, `Token`))
 ENGINE = InnoDB;
 
@@ -523,7 +522,7 @@ INSERT INTO Types (TypeId, TypeName) VALUES (3, 'Goal');
 -- -----------------------------------------------------
 INSERT INTO AuthorizedUser (Username, Password, IsActive) VALUES ('TestUser', 'Testing123!', 1);
 
-INSERT INTO AccessToken (AuthorizedUser, Token, Expires, IsActive) VALUES ('Static', '80FD82BD-45C0-4945-87B9-B2DDC4705E11', '2099-12-31 23:59:59', 1);
+INSERT INTO AccessToken (AuthorizedUser, Token, Expires) VALUES ('Static', '80FD82BD-45C0-4945-87B9-B2DDC4705E11', '2099-12-31 23:59:59');
 
 INSERT INTO `dimpaymentmethod` 
 VALUES ('2F7552F5-E69E-48B2-9FE6-B125BDE851E4','Test PM 1',1,'2015-04-21 12:43:53'),

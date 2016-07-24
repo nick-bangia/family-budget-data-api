@@ -15,4 +15,29 @@ ResponseUtils.prototype.GenerateParseErrorResponse = function(error, callback) {
   callback(errorResponse);
 }
 
+ResponseUtils.prototype.Serve401 = function(response, authType, realm, error, description) {
+
+  var www_authenticate_header = authType + ' realm="' + realm + '"';
+    
+  if (error !== undefined) {
+    www_authenticate_header += ', error="' + error + '"';
+  }
+    
+  if (description !== undefined) {
+    www_authenticate_header += ', error_description="' + description + '"';
+  }
+    
+  response.serveJSON(null, {
+    httpStatusCode: 401,
+    headers: { 'www-authenticate': www_authenticate_header }
+  });
+}
+
+ResponseUtils.prototype.Serve500 = function(response, reason) {
+
+  response.serveJSON( { error: reason }, {
+      httpStatusCode: 500
+  });
+}
+
 module.exports = ResponseUtils;

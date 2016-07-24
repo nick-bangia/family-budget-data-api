@@ -35,7 +35,6 @@ CREATE TABLE IF NOT EXISTS `FamilyBudget`.`AccessToken` (
 	`AuthorizedUser` VARCHAR(100) NOT NULL,
 	`Token`	   VARCHAR(36) NOT NULL,
 	`Expires`  DATETIME NOT NULL,
-	`IsActive` TINYINT(1) NOT NULL,
 	PRIMARY KEY (`AuthorizedUser`, `Token`))
 ENGINE = InnoDB;
 

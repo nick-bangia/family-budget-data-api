@@ -2,5 +2,15 @@
   "Username": "TestUser",
   "ValidPassword": "Testing123!",
   "InvalidPassword": "ThisIsATest123!",
-  "StaticToken": "80FD82BD-45C0-4945-87B9-B2DDC4705E11"
+  "StaticAuthorizedAccessToken": "80FD82BD-45C0-4945-87B9-B2DDC4705E11",
+  "StaticAuthorizedAccessTokenForRefresh": "8D592C65-F6A3-45D4-AE58-37C5392877F2",
+  "StaticExpiredAccessToken": "B2F1B371-E7E9-4A39-AFCD-F8BEDE3EC4AA",
+  "StaticExpiredAccessTokenForRefresh": "18C61039-9972-4C37-B778-10308652BA32",
+  "StaticExpiredAccessTokenForExpiredRefresh": "8875B761-6D8C-4722-8045-E903F2639611",
+  "StaticExpiredAccessTokenForInvalidRefresh": "EDDC1A6C-F329-4D30-821C-62B082CAA589",
+  "StaticInvalidAccessToken": "80FD82AE-43C0-4951-87BF-B2DACB70AE24",
+  "StaticValidRefreshTokenForValidAccessToken": "097855E5-C15D-44B3-B186-21FB0C4F9963",
+  "StaticValidRefreshTokenForExpiredAccessToken": "280A4765-A762-4EE3-9B86-96347F4C6DE9",
+  "StaticExpiredRefreshTokenForExpiredAccessToken": "7432A9FD-152A-49B6-B0B7-F052386752E5",
+  "StaticInvalidRefreshTokenForExpiredAccessToken": "EEB0D6EE-15F2-4C78-BC0A-EC1EAB6522D4"
 }

@@ -11,5 +11,6 @@
   },
   "authEnabled": true,
   "authIntervalInMinutes": 20,
+  "refreshTokenValidForMinutes": 2880,
   "runTests": true
 }
