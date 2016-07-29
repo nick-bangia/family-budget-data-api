@@ -1,13 +1,15 @@
 // requires
 var Response = require('../framework/service/Response');
+var ResponseUtils = require('../framework/service/utils/ResponseUtils');
 var DataUtils = require('../framework/service/utils/DataUtils');
 var Random = require('random-js');
 
 // constructor
-function AuthorizedUserModule(dbUtils, queries, authInterval) {
+function AuthorizedUserModule(dbUtils, queries, authInterval, refreshInterval) {
   this.dbUtils = dbUtils;
-	this.queries = queries;
+  this.queries = queries;
   this.authInterval = authInterval;
+  this.refreshInterval = refreshInterval;
   
   this.GetAuthorizedUserCredentials = function(row, callback) {
     // convert given row into username:password formatted string
@@ -19,7 +21,7 @@ function AuthorizedUserModule(dbUtils, queries, authInterval) {
   
   this.GetAccessToken = function(row, callback) {
     // convert given row into an access token object
-    var accessToken = { access_token: row.Token, expires_on: row.Expires };
+    var accessToken = { access_token: row.AccessToken, access_expires_on: row.AccessExpires, refresh_token: row.RefreshToken, refresh_expires_on: row.RefreshExpires };
     
     // push the token to the calllback
     callback(accessToken);
@@ -52,15 +54,36 @@ AuthorizedUserModule.prototype.GetAll = function(finished) {
   );
 }
 
-AuthorizedUserModule.prototype.Login = {
+AuthorizedUserModule.prototype.GrantAccess = {
 
   get: function(request, response) {
     var self = this;
+    var authorizedUser;
+    var accessQuery;
+    
+    // setup the variables for granting access
+    if (request.headers.authorization !== undefined) {
+        // if authorization header is present, we will use the login query
+        authorizedUser = request.headers.authorization;
+        accessQuery = self.queries.Login;
+    } else if (request.headers.x_access_token !== undefined) {
+        authorizedUser = request.headers.x_access_token;
+        accessQuery = self.queries.RenewAccess;
+    } else {
+        // if for some reason this request gets called without any authorization context
+        // serve an error. This should not get called as long as the middleware exists and
+        // is configured properly.
+        response.serveJSON(null, {
+           httpStatusCode: 500 
+        });
+    }
     
     // Logs in a user by invalidating any current access tokens & generating a new one
-    var authorizedUser = request.headers.authorization;
-    var newToken = Random.uuid4(Random.engines.mt19937().autoSeed());
-    this.dbUtils.SelectRowsWithParams(self.queries.Login, [authorizedUser, newToken, self.authInterval], self.GetAccessToken, true,
+    var newAccessToken = Random.uuid4(Random.engines.mt19937().autoSeed());
+    var newRefreshToken = Random.uuid4(Random.engines.mt19937().autoSeed());
+    this.dbUtils.SelectRowsWithParams(accessQuery, 
+                                      [authorizedUser, newAccessToken, self.authInterval, newRefreshToken, self.refreshInterval], self.GetAccessToken, 
+                                      true,
       function(dbResponse) {
         // check if the query was successful
         if (dbResponse.getStatus() == "ok") {

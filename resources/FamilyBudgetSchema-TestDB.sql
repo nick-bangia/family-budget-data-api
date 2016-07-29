@@ -33,9 +33,11 @@ DROP TABLE IF EXISTS `FamilyBudget_Test`.`AccessToken`;
 SHOW WARNINGS;
 CREATE TABLE IF NOT EXISTS `FamilyBudget_Test`.`AccessToken` (
 	`AuthorizedUser` VARCHAR(100) NOT NULL,
-	`Token`	   VARCHAR(36) NOT NULL,
-	`Expires`  DATETIME NOT NULL,
-	PRIMARY KEY (`AuthorizedUser`, `Token`))
+	`AccessToken` VARCHAR(36) NOT NULL,
+	`AccessExpires`  DATETIME NOT NULL,
+    `RefreshToken` VARCHAR(36) NOT NULL,
+    `RefreshExpires` DATETIME NOT NULL,
+	PRIMARY KEY (`AuthorizedUser`, `AccessToken`))
 ENGINE = InnoDB;
 
 SHOW WARNINGS;
@@ -522,7 +524,13 @@ INSERT INTO Types (TypeId, TypeName) VALUES (3, 'Goal');
 -- -----------------------------------------------------
 INSERT INTO AuthorizedUser (Username, Password, IsActive) VALUES ('TestUser', 'Testing123!', 1);
 
-INSERT INTO AccessToken (AuthorizedUser, Token, Expires) VALUES ('Static', '80FD82BD-45C0-4945-87B9-B2DDC4705E11', '2099-12-31 23:59:59');
+INSERT INTO AccessToken (AuthorizedUser, AccessToken, AccessExpires, RefreshToken, RefreshExpires) 
+VALUES ('StaticAuthorizedAccessToken', '80FD82BD-45C0-4945-87B9-B2DDC4705E11', '2099-12-31 23:59:59', 'A942A8CF-F7FF-4EB2-BABC-80FA30F7EF83', '3000-01-02 23:59:59'),
+	   ('StaticAuthorizedAccessTokenForRefresh', '8D592C65-F6A3-45D4-AE58-37C5392877F2', DATE_ADD(NOW(), INTERVAL 20 MINUTE), '097855E5-C15D-44B3-B186-21FB0C4F9963', DATE_ADD(NOW(), INTERVAL 48 HOUR)),
+       ('StaticExpiredAccessToken', 'B2F1B371-E7E9-4A39-AFCD-F8BEDE3EC4AA', DATE_ADD(NOW(), INTERVAL -1 MINUTE), 'B247B1BF-BBC8-4D2F-B812-0CFAB393A9AF', DATE_ADD(NOW(), INTERVAL 48 HOUR)),
+       ('StaticExpiredAccessTokenForRefresh', '18C61039-9972-4C37-B778-10308652BA32', DATE_ADD(NOW(), INTERVAL -2 MINUTE), '280A4765-A762-4EE3-9B86-96347F4C6DE9', DATE_ADD(NOW(), INTERVAL 48 HOUR)),
+       ('StaticExpiredAccessTokenForExpiredRefresh', '8875B761-6D8C-4722-8045-E903F2639611', DATE_ADD(NOW(), INTERVAL -3 DAY), '7432A9FD-152A-49B6-B0B7-F052386752E5', DATE_ADD(NOW(), INTERVAL -1 DAY)),
+       ('StaticExpiredAccessTokenForInvalidRefresh', 'EDDC1A6C-F329-4D30-821C-62B082CAA589', DATE_ADD(NOW(), INTERVAL -1 DAY), '16F37B1D-0292-42B5-A19D-4DF261D25530', DATE_ADD(NOW(), INTERVAL 1 DAY));
 
 INSERT INTO `dimpaymentmethod` 
 VALUES ('2F7552F5-E69E-48B2-9FE6-B125BDE851E4','Test PM 1',1,'2015-04-21 12:43:53'),

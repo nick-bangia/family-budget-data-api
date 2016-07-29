@@ -1,5 +1,6 @@
 [
-  ["/login", "v1/authorization#Login"],
+  ["/login", "v1/authorization#GrantAccess"],
+  ["/renew", "v1/authorization#GrantAccess"],
   ["/paymentMethods/all", "v1/paymentMethods#GetAll"],
   ["/paymentMethods/update", "v1/paymentMethods#UpdateList"],
   ["/paymentMethods/add", "v1/paymentMethods#InsertList"],

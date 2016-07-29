@@ -27,9 +27,9 @@ TestUtils.prototype.GetStaticAuthorizedAccessToken = function() {
     return authorizationConfig.StaticAuthorizedAccessToken;
 }
 
-TestUtils.prototype.GetStaticAuthorizedAccessTokenForRefresh = function() {
+TestUtils.prototype.GetStaticAuthorizedAccessTokenForRenew = function() {
     
-    return authorizationConfig.StaticAuthorizedAccessTokenForRefresh;
+    return authorizationConfig.StaticAuthorizedAccessTokenForRenew;
 }
 
 TestUtils.prototype.GetStaticExpiredAccessToken = function() {
@@ -37,19 +37,19 @@ TestUtils.prototype.GetStaticExpiredAccessToken = function() {
     return authorizationConfig.StaticExpiredAccessToken;
 }
 
-TestUtils.prototype.GetStaticExpiredAccessTokenForRefresh = function() {
+TestUtils.prototype.GetStaticExpiredAccessTokenForRenew = function() {
     
-    return authorizationConfig.StaticExpiredAccessTokenForRefresh;
+    return authorizationConfig.StaticExpiredAccessTokenForRenew;
 }
 
-TestUtils.prototype.GetStaticExpiredAccessTokenForExpiredRefresh = function() {
+TestUtils.prototype.GetStaticExpiredAccessTokenForExpiredRenew = function() {
     
-    return authorizationConfig.StaticExpiredAccessTokenForExpiredRefresh;
+    return authorizationConfig.StaticExpiredAccessTokenForExpiredRenew;
 }
 
-TestUtils.prototype.GetStaticExpiredAccessTokenForInvalidRefresh = function() {
+TestUtils.prototype.GetStaticExpiredAccessTokenForInvalidRenew = function() {
     
-    return authorizationConfig.StaticExpiredAccessTokenForInvalidRefresh;
+    return authorizationConfig.StaticExpiredAccessTokenForInvalidRenew;
 }
 
 TestUtils.prototype.GetStaticInvalidAccessToken = function() {
@@ -96,7 +96,7 @@ TestUtils.prototype.GetExpectedAuthFailedHeader = function() {
 
 TestUtils.prototype.GetExpectedAuthTokenExpiredHeader = function() {
     
-  return 'Bearer realm="' + serverConfig.name + '", error="invalid_token", error_description="Access token expired. Please refresh your token or login again."';
+  return 'Bearer realm="' + serverConfig.name + '", error="invalid_token", error_description="Access token expired. Please renew your token or login again."';
 }
 
 TestUtils.prototype.GetExpectedAuthTokenInvalidHeader = function() {
@@ -112,6 +112,11 @@ TestUtils.prototype.GetExpectedAuthRefreshTokenExpiredHeader = function() {
 TestUtils.prototype.GetExpectedAuthRefreshTokenInvalidHeader = function() {
     
   return 'Bearer realm="' + serverConfig.name + '", error="invalid_token", error_description="Invalid Refresh token provided. Please retry with a valid refresh token, or login again to obtain a new access token."';
+}
+
+TestUtils.prototype.GetExpectedTokenMissingHeader = function() {
+
+  return 'Bearer realm="' + serverConfig.name + '", error="missing_token", error_description="Missing refresh or access token. Please retry with both a valid access and refresh token, or login again to obtain a new access token."';
 }
 
 TestUtils.prototype.GetAuthorizedRequest = function() {
@@ -141,46 +146,46 @@ TestUtils.prototype.GetInvalidRequest = function() {
     });
 }
 
-TestUtils.prototype.GetAuthorizedRefreshRequest = function() {
+TestUtils.prototype.GetAuthorizedRenewRequest = function() {
     
-    var staticAuthorizedAccessTokenForRefresh = this.GetStaticAuthorizedAccessTokenForRefresh();
+    var staticAuthorizedAccessTokenForRenew = this.GetStaticAuthorizedAccessTokenForRenew();
     var staticValidRefreshTokenForValidAccessToken = this.GetStaticValidRefreshTokenForValidAccessToken();
     
     return this.GetRequestWithHeaders( {
-        'x_access_token': staticAuthorizedAccessTokenForRefresh,
+        'x_access_token': staticAuthorizedAccessTokenForRenew,
         'x_refresh_token': staticValidRefreshTokenForValidAccessToken
     });
 }
 
-TestUtils.prototype.GetRefreshForExpiredSessionRequest = function() {
+TestUtils.prototype.GetRenewForExpiredSessionRequest = function() {
     
-    var staticExpiredAccessTokenForRefresh = this.GetStaticExpiredAccessTokenForRefresh();
+    var staticExpiredAccessTokenForRenew = this.GetStaticExpiredAccessTokenForRenew();
     var staticValidRefreshTokenForExpiredAccessToken = this.GetStaticValidRefreshTokenForExpiredAccessToken();
     
     return this.GetRequestWithHeaders( {
-        'x_access_token':  staticExpiredAccessTokenForRefresh,
+        'x_access_token':  staticExpiredAccessTokenForRenew,
         'x_refresh_token': staticValidRefreshTokenForExpiredAccessToken
     });
 }
 
-TestUtils.prototype.GetExpiredRefreshForExpiredSessionRequest = function() {
+TestUtils.prototype.GetExpiredRenewForExpiredSessionRequest = function() {
     
-    var staticExpiredAccessTokenForExpiredRefresh = this.GetStaticExpiredAccessTokenForExpiredRefresh();
+    var staticExpiredAccessTokenForExpiredRenew = this.GetStaticExpiredAccessTokenForExpiredRenew();
     var staticExpiredRefreshTokenForExpiredAccessToken = this.GetStaticExpiredRefreshTokenForExpiredAccessToken();
     
     return this.GetRequestWithHeaders( {
-        'x_access_token': staticExpiredAccessTokenForExpiredRefresh,
+        'x_access_token': staticExpiredAccessTokenForExpiredRenew,
         'x_refresh_token': staticExpiredRefreshTokenForExpiredAccessToken
     });
 }
 
-TestUtils.prototype.GetInvalidRefreshForExpiredSessionRequest = function() {
+TestUtils.prototype.GetInvalidRenewForExpiredSessionRequest = function() {
     
-    var staticExpiredAccessTokenForInvalidRefresh = this.GetStaticExpiredAccessTokenForInvalidRefresh();
+    var staticExpiredAccessTokenForInvalidRenew = this.GetStaticExpiredAccessTokenForInvalidRenew();
     var staticInvalidRefreshTokenForExpiredAccessToken = this.GetStaticInvalidRefreshTokenForExpiredAccessToken();
     
     return this.GetRequestWithHeaders( {
-        'x_access_token':  staticExpiredAccessTokenForInvalidRefresh,
+        'x_access_token':  staticExpiredAccessTokenForInvalidRenew,
         'x_refresh_token': staticInvalidRefreshTokenForExpiredAccessToken
     });
 }

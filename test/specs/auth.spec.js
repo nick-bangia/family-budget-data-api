@@ -5,10 +5,10 @@ var invalidCredentials, validCredentials;
 var authorizedRequest = testUtils.GetAuthorizedRequest();
 var expiredRequest = testUtils.GetExpiredRequest();
 var invalidRequest = testUtils.GetInvalidRequest();
-var authorizedRefreshRequest = testUtils.GetAuthorizedRefreshRequest();
-var refreshForExpiredSessionRequest = testUtils.GetRefreshForExpiredSessionRequest();
-var expiredRefreshForExpiredSessionRequest = testUtils.GetExpiredRefreshForExpiredSessionRequest();
-var invalidRefreshForExpiredSessionRequest = testUtils.GetInvalidRefreshForExpiredSessionRequest();
+var authorizedRenewRequest = testUtils.GetAuthorizedRenewRequest();
+var renewForExpiredSessionRequest = testUtils.GetRenewForExpiredSessionRequest();
+var expiredRenewForExpiredSessionRequest = testUtils.GetExpiredRenewForExpiredSessionRequest();
+var invalidRenewForExpiredSessionRequest = testUtils.GetInvalidRenewForExpiredSessionRequest();
 
 // expected headers
 var expectedNoAuthHeader = testUtils.GetExpectedNoAuthProvidedHeader();
@@ -17,10 +17,11 @@ var expectedAuthTokenExpiredHeader = testUtils.GetExpectedAuthTokenExpiredHeader
 var expectedAuthTokenInvalidHeader = testUtils.GetExpectedAuthTokenInvalidHeader();
 var expectedAuthRefreshTokenExpiredHeader = testUtils.GetExpectedAuthRefreshTokenExpiredHeader();
 var expectedAuthRefreshTokenInvalidHeader = testUtils.GetExpectedAuthRefreshTokenInvalidHeader();
+var expectedTokenMissingHeader = testUtils.GetExpectedTokenMissingHeader();
 
 // URLs for testing
 loginUrl = testUtils.GetRootURL() + '/login';
-refreshUrl = testUtils.GetRootURL() + '/login/refresh';
+renewUrl = testUtils.GetRootURL() + '/renew';
 allAccountsUrl = testUtils.GetRootURL() + '/accounts/all';
 
 // test credentials
@@ -86,8 +87,9 @@ describe('Authorization Testing', function() {
     
     it ('should return an auth token object to be used in future requests.', function() {
       expect('access_token' in results.data[0]).to.be.true;
+      expect('access_expires_on' in results.data[0]).to.be.true;
       expect('refresh_token' in results.data[0]).to.be.true;
-      expect('expires_on' in results.data[0]).to.be.true;
+      expect('refresh_expires_on' in results.data[0]).to.be.true;
     });
   });
     
@@ -145,9 +147,9 @@ describe('Authorization Testing', function() {
     });
   });
   
-  describe('when a valid refresh request is made with a valid, non-expired access token', function() {
+  describe('when a valid renew request is made with a valid, non-expired access token', function() {
     before(function(done) {
-      authorizedRefreshRequest.get( { url: refreshUrl }, function(err, resp, body) {
+      authorizedRenewRequest.get( { url: renewUrl }, function(err, resp, body) {
         response = resp;
         results = JSON.parse(body);
         done(err);
@@ -168,14 +170,15 @@ describe('Authorization Testing', function() {
     
     it ('should return an auth token object to be used in future requests.', function() {
       expect('access_token' in results.data[0]).to.be.true;
+      expect('access_expires_on' in results.data[0]).to.be.true;
       expect('refresh_token' in results.data[0]).to.be.true;
-      expect('expires_on' in results.data[0]).to.be.true;
+      expect('refresh_expires_on' in results.data[0]).to.be.true;
     });
   });
     
-  describe('when a valid refresh request is made with a valid, expired access token', function() {
+  describe('when a valid renew request is made with a valid, expired access token', function() {
     before(function(done) {
-      refreshForExpiredSessionRequest.get( { url: refreshUrl }, function(err, resp, body) {
+      renewForExpiredSessionRequest.get( { url: renewUrl }, function(err, resp, body) {
         response = resp;
         results = JSON.parse(body);
         done(err);
@@ -196,8 +199,9 @@ describe('Authorization Testing', function() {
     
     it ('should return an auth token object to be used in future requests.', function() {
       expect('access_token' in results.data[0]).to.be.true;
+      expect('access_expires_on' in results.data[0]).to.be.true;
       expect('refresh_token' in results.data[0]).to.be.true;
-      expect('expires_on' in results.data[0]).to.be.true;
+      expect('refresh_expires_on' in results.data[0]).to.be.true;
     });
       
     describe('A following request should be allowed to be made with the new access token', function() {
@@ -223,9 +227,9 @@ describe('Authorization Testing', function() {
     });
   });
     
-  describe('when a valid, expired access token and an expired refresh token are used to refresh the session', function() {
+  describe('when a valid, expired access token and an expired refresh token are used to renew the session', function() {
     before(function(done) {
-      expiredRefreshForExpiredSessionRequest.get( {url: refreshUrl}, function(err, resp, body) {
+      expiredRenewForExpiredSessionRequest.get( {url: renewUrl}, function(err, resp, body) {
         response = resp;
         results = JSON.parse(body);
         done(err);
@@ -241,9 +245,9 @@ describe('Authorization Testing', function() {
     });
   });
     
-  describe('when a valid, expired access token and an invalid refresh token are used to refresh the session', function() {
+  describe('when a valid, expired access token and an invalid refresh token are used to renew the session', function() {
     before(function(done) {
-      invalidRefreshForExpiredSessionRequest.get( { url: refreshUrl }, function(err, resp, body) {
+      invalidRenewForExpiredSessionRequest.get( { url: renewUrl }, function(err, resp, body) {
         response = resp;
         results = JSON.parse(body);
         done(err);
@@ -256,6 +260,42 @@ describe('Authorization Testing', function() {
       
     it ('should challenge the user with the proper www-authenticate header', function() {
       expect(response.headers['www-authenticate']).to.equal(expectedAuthRefreshTokenInvalidHeader);
+    });
+  });
+
+  describe('when a renew request is made without a refresh token present', function() {
+    before(function(done) {
+      authorizedRequest.get( { url: renewUrl }, function(err, resp, body) {
+        response = resp;
+        results = JSON.parse(body);
+        done(err);
+      });    
+    });
+      
+    it ('should not be authorized', function() {
+      expect(response.statusCode).to.equal(401);
+    });
+    
+    it ('should challenge the user with the proper www-authenticate header', function() {
+      expect(response.headers['www-authenticate']).to.equal(expectedTokenMissingHeader);    
+    });
+  });
+ 
+  describe('when a renew request is made without an access token present', function() {
+    before(function(done) {
+      request.get( { url: renewUrl }, function(err, resp, body) {
+        response = resp;
+        results = JSON.parse(body);
+        done(err);
+      });    
+    });
+      
+    it ('should not be authorized', function() {
+      expect(response.statusCode).to.equal(401);
+    });
+    
+    it ('should challenge the user with the proper www-authenticate header', function() {
+      expect(response.headers['www-authenticate']).to.equal(expectedTokenMissingHeader);    
     });
   });
 });

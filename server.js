@@ -36,7 +36,8 @@ var CategoryModule = require('./modules/CategoryModule');
 var SubcategoryModule = require('./modules/SubcategoryModule');
 var LineItemModule = require('./modules/LineItemModule');
 var BudgetAllowanceModule = require('./modules/BudgetAllowanceModule');
-var AccessChecker = require('./middleware/apiaccess');
+var AccessChecker = require('./middleware/api-accessible');
+var RenewChecker = require('./middleware/api-renewable');
 var HttpAuthentication = require('./middleware/httpAuth');
 
 // initialize the server variable
@@ -85,7 +86,7 @@ var allQueries = { account: AccountQueries, auth: AuthorizedUserQueries, cat: Ca
 var queryUtils = new QueryUtils();
 queryUtils.NormalizeQueries(allQueries, function(normalizedQueries) {
 	// instantiate the authorizedUserModule to get a list of authorized users of this API
-	var authorizedUserModule = new AuthorizedUserModule(dbUtils, normalizedQueries.auth, serverConfig.authIntervalInMinutes);
+	var authorizedUserModule = new AuthorizedUserModule(dbUtils, normalizedQueries.auth, serverConfig.authIntervalInMinutes, serverConfig.refreshTokenValidForMinutes);
 
 	if (serverConfig.authEnabled) {
         authorizedUserModule.GetAll(function(authorizedUsers) {
@@ -97,8 +98,12 @@ queryUtils.NormalizeQueries(allQueries, function(normalizedQueries) {
                 encode: true
             }));
         
-        // regex for token middleware - /^(?!\/login)(.+)$/
-        server.use(/^(?!\/login)(.+)$/, new AccessChecker(serverConfig.name, dbUtils, normalizedQueries.auth.CheckAccess));
+        // regex for access token middleware - /^(?!(\/login|\/renew))(.+)$/ - only require AccessChecker middleware for routes that are not
+        // /login or /renew
+        server.use(/^(?!(\/login|\/renew))(.+)$/, new AccessChecker(serverConfig.name, dbUtils, normalizedQueries.auth.CheckAccessible));
+        
+        // regex for refresh token middleware - /^(\/renew)$/ - only require RenewChecker middleware for routes that match /renew
+        server.use(/^(\/renew)$/, new RenewChecker(serverConfig.name, dbUtils, normalizedQueries.auth.CheckRenewable));
 		
         // continue configuring server
         ConfigureServer(server, normalizedQueries);	
@@ -110,12 +115,12 @@ queryUtils.NormalizeQueries(allQueries, function(normalizedQueries) {
 });
 
 function ConfigureServer(server, normalizedQueries) {  
-  // configure the payload parser middleware to parse the payload for any route that adds or updates a list
+  // configure the payload parser middleware to parse the payload for any route that adds or updates a list, or performs a search
     server.use(/^.+\/(update|add|search)$/, ApiServer.payloadParser());
 
     // add supported modules
     server.addModule('v1', 'authorization', new AuthorizedUserModule(dbUtils, normalizedQueries.auth,
-        serverConfig.authIntervalInMinutes));
+        serverConfig.authIntervalInMinutes, serverConfig.refreshTokenValidForMinutes));
     server.addModule('v1', 'paymentMethods', new PaymentMethodModule(dbUtils, normalizedQueries.pm));
     server.addModule('v1', 'accounts', new AccountModule(dbUtils, normalizedQueries.account));
     server.addModule('v1', 'categories', new CategoryModule(dbUtils, normalizedQueries.cat));

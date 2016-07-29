@@ -33,11 +33,12 @@ ResponseUtils.prototype.Serve401 = function(response, authType, realm, error, de
   });
 }
 
-ResponseUtils.prototype.Serve500 = function(response, reason) {
-
-  response.serveJSON( { error: reason }, {
-      httpStatusCode: 500
-  });
+ResponseUtils.prototype.Serve500 = function(response, errorObject) {
+  
+  response.serveJSON(
+      errorObject, 
+      { httpStatusCode: 500 }
+  );
 }
 
 module.exports = ResponseUtils;

@@ -1,10 +1,16 @@
-SET @authorizedUser = ?;
+SET @currentToken = ?;
 SET @newAccessToken = ?;
 SET @authorizedInterval = ?;
 SET @refreshToken = ?;
 SET @refreshInterval = ?;
 SET @accessExpires = DATE_ADD(NOW(), INTERVAL @authorizedInterval MINUTE);
 SET @refreshExpires = DATE_ADD(@accessExpires, INTERVAL @refreshInterval MINUTE);
+SET @authorizedUser = null;
+
+-- Get the authorized user for the current access token
+SELECT AuthorizedUser INTO @authorizedUser
+FROM AccessToken at
+WHERE at.AccessToken = @currentToken COLLATE utf8_general_ci;
 
 -- Delete any open sessions for this user
 DELETE FROM AccessToken

@@ -1,5 +1,7 @@
 {
   "SelectAll": "SELECT au.Username, au.Password FROM AuthorizedUser au WHERE au.IsActive = 1",
   "Login": "file://./resources/LoginQuery.sql",
-  "CheckAccess": "file://./resources/CheckAccess.sql"
+  "RenewAccess": "file://./resources/RenewAccess.sql",
+  "CheckAccessible": "file://./resources/CheckAccessible.sql",
+  "CheckRenewable": "file://./resources/CheckRenewable.sql"
 }

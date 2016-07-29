@@ -8,9 +8,9 @@ module.exports = function (realm, dbUtils, checkAccess) {
   }
   
   return function (request, response, next) {
-    // if no access token is provided, fail the authentication
+    // if no access token is provided, fail the request
     if (request.headers.x_access_token === undefined) {
-      onAuthFailed(response, realm);
+      onAuthFailed(response, realm, 'missing_token', 'Missing access token. Please retry with a valid access token, or login again to obtain a new access token.');
       return next(null, true)
     }
     
@@ -22,14 +22,14 @@ module.exports = function (realm, dbUtils, checkAccess) {
         if (dbResponse.getStatus() == "ok") {
           var dataUtils = new DataUtils();
           dataUtils.ProcessRowsInParallel(dbResponse.getData(), function(accessResult) {
-            // if the accessResult array has at least 1 item, check that it's isAuthorized property is true
+            // if the accessResult array has at least 1 item, check that it's authorizationState property is true
             if (accessResult.length > 0) {
               if (accessResult[0].authorizationState == 'AUTHORIZED') {
                 allowed = true;
               } else if (accessResult[0].authorizationState == 'NOT AUTHORIZED') {
                 onAuthFailed(response, realm, 'invalid_token', 'Invalid access token provided. Please login to obtain a valid access token.');     
-              } else if (accessResult[0].authoriztionState == 'EXPIRED') {
-                onAuthFailed(response, realm, 'invalid_token', 'Expired token provided. Please refresh your session, or login to obtain a valid token');
+              } else if (accessResult[0].authorizationState == 'EXPIRED') {
+                onAuthFailed(response, realm, 'invalid_token', 'Access token expired. Please renew your token or login again.');
               }
                 
               // call the next item in the chain, specifying whether to stop or continue execution
