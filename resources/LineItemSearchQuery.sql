@@ -41,8 +41,9 @@ SELECT
 	`fli`.`PaymentMethodKey`,
 	`pm`.`PaymentMethodName`,
 	`a`.`AccountName`,
+    `g`.`GoalKey`,
+    `g`.`GoalAmount`,
 	`fli`.`StatusId`,
-	`sc`.`IsGoal`,
     `fli`.`IsTaxDeductible`,
 	`fli`.`LastUpdatedDate`
 FROM
@@ -57,6 +58,8 @@ FROM
 	DaysOfWeek dow ON fli.DayOfWeekId = dow.DayOfWeekId
 	INNER JOIN
 	dimAccount a ON sc.AccountKey = a.AccountKey
+    LEFT OUTER JOIN
+    dimGoal g ON sc.GoalKey = g.GoalKey
 	INNER JOIN
 	dimPaymentMethod pm ON fli.PaymentMethodKey = pm.PaymentMethodKey
 WHERE

@@ -21,8 +21,9 @@ function LineItem() {
   this.paymentMethodKey = '';
   this.paymentMethodName = '';
   this.accountName = '';
+  this.goalKey = '';
+  this.goalAmount = '';
   this.statusId = 0;
-  this.isGoal = false;
   this.isTaxDeductible = false;
   this.lastUpdated = new Date();
 }
@@ -191,20 +192,28 @@ LineItem.prototype.setAccountName = function(value) {
   this.accountName = value;
 }
 
+LineItem.prototype.getGoalKey = function() {
+  return this.goalKey;
+}
+
+LineItem.prototype.setGoalKey = function(value) {
+  this.goalKey = value;
+}
+
+LineItem.prototype.getGoalAmount = function() {
+  return this.goalAmount;
+}
+
+LineItem.prototype.setGoalAmount = function(value) {
+  this.goalAmount = value;
+}
+
 LineItem.prototype.getStatusId = function() {
   return this.statusId;
 }
 
 LineItem.prototype.setStatusId = function(value) {
   this.statusId = value;
-}
-
-LineItem.prototype.getIsGoal = function() {
-  return this.isGoal;
-}
-
-LineItem.prototype.setIsGoal = function(value) {
-  this.isGoal = value ? true : false;
 }
 
 LineItem.prototype.getIsTaxDeductible = function() {

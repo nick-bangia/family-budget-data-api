@@ -1,0 +1,12 @@
+{
+  "data": [
+    {
+      "goalAmount": 1000.00,
+      "estimatedCompletionDate": "2016-12-31"
+    },
+    {
+      "goalAmount": 250.00,
+      "estimatedCompletionDate": "2017-03-31"
+    }
+  ]
+}

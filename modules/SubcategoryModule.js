@@ -19,10 +19,10 @@ function SubcategoryModule(dbUtility, queries) {
     sc.setCategoryName(row.CategoryName);
     sc.setAccountKey(row.AccountKey);
     sc.setAccountName(row.AccountName);
+    sc.setGoalKey(row.GoalKey);
     sc.setSubcategoryName(row.SubcategoryName);
     sc.setSubcategoryPrefix(row.SubcategoryPrefix);
     sc.setIsActive(row.IsActive);
-    sc.setIsGoal(row.IsGoal);
     sc.setIsAllocatable(row.IsAllocatable);
     sc.setLastUpdated(row.LastUpdatedDate);
 
@@ -48,11 +48,11 @@ function SubcategoryModule(dbUtility, queries) {
     // convert the given object to a Subcategory and update it in the DB
     subcategoryObject.__proto__ = Subcategory.prototype;
     var params = [subcategoryObject.getCategoryKey(), 
-                  subcategoryObject.getAccountKey(), 
+                  subcategoryObject.getAccountKey(),
+                  subcategoryObject.getGoalKey(),
                   subcategoryObject.getSubcategoryName(), 
                   subcategoryObject.getSubcategoryPrefix(),
                   subcategoryObject.getIsActive(), 
-                  subcategoryObject.getIsGoal(),
                   subcategoryObject.getIsAllocatable(),
                   subcategoryObject.getSubcategoryKey()];    
     
@@ -76,10 +76,10 @@ function SubcategoryModule(dbUtility, queries) {
     var params = [newKey, 
                   subcategoryObject.getCategoryKey(), 
                   subcategoryObject.getAccountKey(),
+                  subcategoryObject.getGoalKey(),
                   subcategoryObject.getSubcategoryName(), 
                   subcategoryObject.getSubcategoryPrefix(),
                   subcategoryObject.getIsActive(), 
-                  subcategoryObject.getIsGoal(),
                   subcategoryObject.getIsAllocatable()];
     
     self.dbUtility.SingleRowCUDQueryWithParams(self.queries.InsertRow, params, function(insertResult) {

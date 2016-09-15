@@ -25,8 +25,9 @@ var IsALineItem = function(data) {
           'paymentMethodKey' in data &&
           'paymentMethodName' in data &&
           'accountName' in data &&
+          'goalKey' in data &&
+          'goalAmount' in data &&
           'statusId' in data &&
-          'isGoal' in data &&
           'isTaxDeductible' in data &&
           'lastUpdated' in data
          );

@@ -36,7 +36,8 @@ function LineItemModule(dbUtility, queries) {
     item.setPaymentMethodName(row.PaymentMethodName);
     item.setAccountName(row.AccountName);
     item.setStatusId(row.StatusId);
-    item.setIsGoal(row.IsGoal);
+    item.setGoalKey(row.GoalKey);
+    item.setGoalAmount(row.GoalAmount);
     item.setIsTaxDeductible(row.IsTaxDeductible);
     item.setLastUpdated(row.LastUpdatedDate);
 

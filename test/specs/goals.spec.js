@@ -1,33 +1,26 @@
 var fs = require('fs');
-var newSubcategories = require('../data/subcategories/newSubcategories');
-var updatedSubcategories = require('../data/subcategories/updatedSubcategories');
+var newGoals = require('../data/goals/newGoals');
+var updatedGoals = require('../data/goals/updatedGoals');
 var url, response, results;
 var authorizedRequest = testUtils.GetAuthorizedRequest();
 
-var IsASubcategory = function(data) {
-  return ('subcategoryKey' in data &&
-          'categoryKey' in data &&
-          'categoryName' in data &&
-          'accountKey' in data &&
-          'accountName' in data &&
-          'goalKey' in data &&
-          'subcategoryName' in data &&
-          'subcategoryPrefix' in data &&
-          'isActive' in data &&
-          'isAllocatable' in data &&
+var IsAGoal = function(data) {
+  return ('goalKey' in data &&
+          'goalAmount' in data &&
+          'estimatedCompletionDate' in data &&
           'lastUpdated' in data
          );
 }
 
-describe('Subcategories', function() {
+describe('Goals', function() {
   
   before(function() {
     url = testUtils.GetRootURL();
   });
   
-  describe('when a request is made to /subcategories/all', function() {
+  describe('when a request is made to /goals/all', function() {
     before(function(done) {
-      authorizedRequest.get( {url: url + '/subcategories/all' }, function (err, resp, body) {
+      authorizedRequest.get( {url: url + '/goals/all' }, function (err, resp, body) {
         response = resp;
         results = JSON.parse(body);
         done(err);
@@ -38,19 +31,19 @@ describe('Subcategories', function() {
       expect(response.statusCode).to.equal(200);
     });
     
-    it ('should return a success object with a valid list of subcategories', function() {
+    it ('should return a success object with a valid list of goals', function() {
       // test the standard expectations for a successful result
       testUtils.TestStandardExpectationsForSuccessfulResult(results, 1);
       
-      // list items are subcategories
-      expect(IsASubcategory(results.data[0])).to.be.true;
+      // list items are goals
+      expect(IsAGoal(results.data[0])).to.be.true;
     });
   });
   
-  describe('when a request is made to add subcategories (/subcategories/add)', function() {
+  describe('when a request is made to add goals (/goals/add)', function() {
     before(function(done) {
-      fs.createReadStream('./test/data/subcategories/newSubcategories.json').pipe(
-        authorizedRequest.put( {url: url + '/subcategories/add' }, function (err, resp, body) {
+      fs.createReadStream('./test/data/goals/newGoals.json').pipe(
+        authorizedRequest.put( {url: url + '/goals/add' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);
@@ -62,7 +55,7 @@ describe('Subcategories', function() {
       expect(response.statusCode).to.equal(200);
     });
     
-    it ('should return a success object with a valid list of responses per subcategory added', function() {
+    it ('should return a success object with a valid list of responses per goal added', function() {
       // test the standard expectations for a successful result
       testUtils.TestStandardExpectationsForSuccessfulResult(results, 1);
       
@@ -70,15 +63,15 @@ describe('Subcategories', function() {
       testUtils.TestStandardExpectationsForSuccessfulPutResult(results.data, newSubcategories.data.length);      
     });
     
-    it ('should have subcategory objects in the successful result', function() {
-        expect(IsASubcategory(results.data[0].data)).to.be.true;
+    it ('should have goal objects in the successful result', function() {
+      expect(IsAGoal(results.data[0].data)).to.be.true;
     });
   });
   
-  describe('when a request is made to update subcategories (/subcategories/update)', function() {
+  describe('when a request is made to update goals (/goals/update)', function() {
     before(function(done) {
-      fs.createReadStream('./test/data/subcategories/updatedSubcategories.json').pipe(
-        authorizedRequest.put( {url: url + '/subcategories/update' }, function (err, resp, body) {
+      fs.createReadStream('./test/data/goals/updatedGoals.json').pipe(
+        authorizedRequest.put( {url: url + '/goals/update' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);
@@ -90,12 +83,12 @@ describe('Subcategories', function() {
       expect(response.statusCode).to.equal(200);
     });
     
-    it ('should return a success object with a valid list of responses per subcategory updated', function() {
+    it ('should return a success object with a valid list of responses per goal updated', function() {
       // test the standard expectations for all results
       testUtils.TestStandardExpectationsForSuccessfulResult(results, 1);
       
       // test the standard expectations for a put result
-      testUtils.TestStandardExpectationsForSuccessfulPutResult(results.data, updatedSubcategories.data.length);
+      testUtils.TestStandardExpectationsForSuccessfulPutResult(results.data, updatedGoals.data.length);
              
       // test individual results for the update operation. We should expect 1 success and 1 failure due to no rows affected
       expect(results.data.filter( testUtils.TestSuccessfulResult ).length).to.be.above(0);
@@ -103,16 +96,16 @@ describe('Subcategories', function() {
       expect(results.data.filter( testUtils.TestNoResultsResult ).length).to.be.above(0);
     });
     
-    it ('should have subcategory objects in the successful result', function() {
-      expect(IsASubcategory(results.data[0].data)).to.be.true;
+    it ('should have goal objects in the successful result', function() {
+      expect(IsAGoal(results.data[0].data)).to.be.true;
     });
   });
   
-  describe('when a request is made to add subcategories but has an invalid JSON body', function() {
+  describe('when a request is made to add goal but has an invalid JSON body', function() {
     
     before(function(done) {
       fs.createReadStream('./test/data/invalidFormat.json').pipe(
-        authorizedRequest.put( {url: url + '/subcategories/add' }, function (err, resp, body) {
+        authorizedRequest.put( {url: url + '/goals/add' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);
@@ -130,11 +123,11 @@ describe('Subcategories', function() {
     });
   });
   
-  describe('when a request is made to update subcategories but has an invalid JSON body', function() {
+  describe('when a request is made to update goals but has an invalid JSON body', function() {
     
     before(function(done) {
       fs.createReadStream('./test/data/invalidFormat.json').pipe(
-        authorizedRequest.put( {url: url + '/subcategories/update' }, function (err, resp, body) {
+        authorizedRequest.put( {url: url + '/goals/update' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);
@@ -152,11 +145,11 @@ describe('Subcategories', function() {
     });
   });
   
-  describe('when a request is made to add a subcategory with incomplete data', function() {
+  describe('when a request is made to add a goal with incomplete data', function() {
     
     before(function(done) {
-      fs.createReadStream('./test/data/subcategories/insufficientAddData.json').pipe(
-        authorizedRequest.put( {url: url + '/subcategories/add' }, function (err, resp, body) {
+      fs.createReadStream('./test/data/goals/insufficientAddData.json').pipe(
+        authorizedRequest.put( {url: url + '/goals/add' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);
@@ -174,11 +167,11 @@ describe('Subcategories', function() {
     });
   });
   
-  describe('when a request is made to update a subcategories with incomplete data', function() {
+  describe('when a request is made to update a goals with incomplete data', function() {
     
     before(function(done) {
-      fs.createReadStream('./test/data/subcategories/insufficientUpdateData.json').pipe(
-        authorizedRequest.put( {url: url + '/subcategories/update' }, function (err, resp, body) {
+      fs.createReadStream('./test/data/goals/insufficientUpdateData.json').pipe(
+        authorizedRequest.put( {url: url + '/goals/update' }, function (err, resp, body) {
           response = resp;
           results = JSON.parse(body);
           done(err);

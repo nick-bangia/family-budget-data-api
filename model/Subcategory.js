@@ -7,10 +7,10 @@ function Subcategory() {
   this.categoryName = '';
   this.accountKey = '';
   this.accountName = '';
+  this.goalKey = '';
   this.subcategoryName = '';
   this.subcategoryPrefix = '';
   this.isActive = true;
-  this.isGoal = false;
   this.isAllocatable = false;
   this.lastUpdated = new Date();
 }
@@ -59,6 +59,14 @@ Subcategory.prototype.setAccountName = function(value) {
   this.accountName = value;
 }
 
+Subcategory.prototype.getGoalKey = function() {
+  return this.goalKey;
+}
+
+Subcategory.prototype.setGoalKey = function(value) {
+  this.goalKey = value;
+}
+
 Subcategory.prototype.getSubcategoryName = function() {
   return this.subcategoryName;
 }
@@ -81,14 +89,6 @@ Subcategory.prototype.getIsActive = function() {
 
 Subcategory.prototype.setIsActive = function(value) {
   this.isActive = value ? true : false;
-}
-
-Subcategory.prototype.getIsGoal = function() {
-  return this.isGoal;
-}
-
-Subcategory.prototype.setIsGoal = function(value) {
-  this.isGoal = value ? true : false;
 }
 
 Subcategory.prototype.getIsAllocatable = function() {
