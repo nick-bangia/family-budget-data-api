@@ -1,0 +1,7 @@
+{
+  "SelectAll": "SELECT g.GoalKey, sc.SubcategoryName AS `GoalName`, g.GoalAmount, g.EstimatedCompletionDate, g.LastUpdatedDate FROM dimSubcategory sc INNER JOIN dimGoal g ON sc.GoalKey = g.GoalKey",
+  "UpdateRow": "UPDATE dimGoal g SET g.GoalAmount = ?, g.EstimatedCompletionDate = ?, g.LastUpdatedDate = NOW() WHERE g.GoalKey = ?",
+  "InsertRow": "INSERT INTO dimGoal (GoalKey, GoalAmount, EstimatedCompletionDate, LastUpdatedDate) VALUES (?, ?, ?, NOW())",
+  "GetRowWithKey": "SELECT g.GoalKey, g.GoalAmount, g.EstimatedCompletionDate, g.LastUpdatedDate FROM dimGoal g WHERE g.GoalKey = ?"
+}
+

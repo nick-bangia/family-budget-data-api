@@ -60,7 +60,7 @@ describe('Goals', function() {
       testUtils.TestStandardExpectationsForSuccessfulResult(results, 1);
       
       // test the standard expectations for a put result
-      testUtils.TestStandardExpectationsForSuccessfulPutResult(results.data, newSubcategories.data.length);      
+      testUtils.TestStandardExpectationsForSuccessfulPutResult(results.data, newGoals.data.length);      
     });
     
     it ('should have goal objects in the successful result', function() {

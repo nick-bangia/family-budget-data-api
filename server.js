@@ -34,6 +34,7 @@ var PaymentMethodModule = require('./modules/PaymentMethodModule');
 var AccountModule = require('./modules/AccountModule');
 var CategoryModule = require('./modules/CategoryModule');
 var SubcategoryModule = require('./modules/SubcategoryModule');
+var GoalModule = require('./modules/GoalModule');
 var LineItemModule = require('./modules/LineItemModule');
 var BudgetAllowanceModule = require('./modules/BudgetAllowanceModule');
 var AccessChecker = require('./middleware/api-accessible');
@@ -79,10 +80,11 @@ var CategoryQueries = require('./queries/CategoryQueries');
 var LineItemQueries = require('./queries/LineItemQueries');
 var PaymentMethodQueries = require('./queries/PaymentMethodQueries');
 var SubcategoryQueries = require('./queries/SubcategoryQueries');
+var GoalQueries = require('./queries/GoalQueries');
 var BudgetAllowanceQueries = require('./queries/BudgetAllowanceQueries');
 
 // normalize all queries
-var allQueries = { account: AccountQueries, auth: AuthorizedUserQueries, cat: CategoryQueries, item: LineItemQueries, pm: PaymentMethodQueries, subcat: SubcategoryQueries, allowances: BudgetAllowanceQueries };
+var allQueries = { account: AccountQueries, auth: AuthorizedUserQueries, cat: CategoryQueries, item: LineItemQueries, pm: PaymentMethodQueries, subcat: SubcategoryQueries, goals: GoalQueries, allowances: BudgetAllowanceQueries };
 var queryUtils = new QueryUtils();
 queryUtils.NormalizeQueries(allQueries, function(normalizedQueries) {
 	// instantiate the authorizedUserModule to get a list of authorized users of this API
@@ -127,6 +129,7 @@ function ConfigureServer(server, normalizedQueries) {
     server.addModule('v1', 'subcategories', new SubcategoryModule(dbUtils, normalizedQueries.subcat));
     server.addModule('v1', 'lineItems', new LineItemModule(dbUtils, normalizedQueries.item));
     server.addModule('v1', 'budgetAllowances', new BudgetAllowanceModule(dbUtils, normalizedQueries.allowances));
+    server.addModule('v1', 'goals', new GoalModule(dbUtils, normalizedQueries.goals));
 	
 	// add supported routes
 	server.router.addRoutes(routesConfig);
