@@ -1,7 +1,8 @@
+var KeyedObject = require('./KeyedObject');
 var Random = require('random-js');
 
 function LineItem() {
-  this.uniqueKey = '';
+  // initialize properties
   this.year = 2015;
   this.monthId = 1
   this.month = 'January';
@@ -26,18 +27,19 @@ function LineItem() {
   this.statusId = 0;
   this.isTaxDeductible = false;
   this.lastUpdated = new Date();
+
+  // subclass from KeyedObject
+  KeyedObject.apply(this, arguments);
 }
 
-LineItem.prototype.getNewKey = function() {
-  return Random.uuid4(Random.engines.mt19937().autoSeed());
-}
+LineItem.prototype = new KeyedObject();
 
 LineItem.prototype.getUniqueKey = function() {
-  return this.uniqueKey;
+  return this.key;
 }
 
 LineItem.prototype.setUniqueKey = function(value) {
-  this.uniqueKey = value;
+  this.key = value;
 }
 
 LineItem.prototype.getYear = function() {
@@ -89,7 +91,7 @@ LineItem.prototype.setDayOfWeek = function(value) {
 }
 
 LineItem.prototype.getCategoryKey = function() {
-  return this.categoryKey;
+  return this.dataUtils.Escape(this.categoryKey);
 }
 
 LineItem.prototype.setCategoryKey = function(value) {
@@ -105,7 +107,7 @@ LineItem.prototype.setCategoryName = function(value) {
 }
 
 LineItem.prototype.getSubcategoryKey = function() {
-  return this.subcategoryKey;
+  return this.dataUtils.Escape(this.subcategoryKey);
 }
 
 LineItem.prototype.setSubcategoryKey = function(value) {
@@ -129,7 +131,7 @@ LineItem.prototype.setSubcategoryPrefix = function(value) {
 }
 
 LineItem.prototype.getDescription = function() {
-  return this.description;
+  return this.dataUtils.Escape(this.description);
 }
 
 LineItem.prototype.setDescription = function(value) {
@@ -169,7 +171,7 @@ LineItem.prototype.setQuarter = function(value) {
 }
 
 LineItem.prototype.getPaymentMethodKey = function() {
-  return this.paymentMethodKey;
+  return this.dataUtils.Escape(this.paymentMethodKey);
 }
 
 LineItem.prototype.setPaymentMethodKey = function(value) {
@@ -190,14 +192,6 @@ LineItem.prototype.getAccountName = function() {
 
 LineItem.prototype.setAccountName = function(value) {
   this.accountName = value;
-}
-
-LineItem.prototype.getGoalKey = function() {
-  return this.goalKey;
-}
-
-LineItem.prototype.setGoalKey = function(value) {
-  this.goalKey = value;
 }
 
 LineItem.prototype.getGoalAmount = function() {

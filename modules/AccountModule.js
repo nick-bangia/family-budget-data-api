@@ -40,8 +40,8 @@ function AccountModule(dbUtility, queries) {
   this.UpdateAccountInDatabase = function(accountObject, callback) {
     // convert the given object to a Account and update it in the DB
     accountObject.__proto__ = Account.prototype;
-    var params = [accountObject.getAccountName(), accountObject.getIsActive(), accountObject.getAccountKey()];    
-    
+    var params = [accountObject.getAccountName(), accountObject.getIsActive(), accountObject.getAccountKey()];
+
     self.dbUtility.SingleRowCUDQueryWithParams(self.queries.UpdateRow, params, function(updateResult) {
       // once the update query is complete, get the updated row, and return to callback
       if (updateResult.status == 'ok') {

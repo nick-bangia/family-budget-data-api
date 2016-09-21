@@ -1,7 +1,7 @@
 {
-  "SelectAll": "SELECT g.GoalKey, sc.SubcategoryName AS `GoalName`, g.GoalAmount, g.EstimatedCompletionDate, g.LastUpdatedDate FROM dimSubcategory sc INNER JOIN dimGoal g ON sc.GoalKey = g.GoalKey",
-  "UpdateRow": "UPDATE dimGoal g SET g.GoalAmount = ?, g.EstimatedCompletionDate = ?, g.LastUpdatedDate = NOW() WHERE g.GoalKey = ?",
-  "InsertRow": "INSERT INTO dimGoal (GoalKey, GoalAmount, EstimatedCompletionDate, LastUpdatedDate) VALUES (?, ?, ?, NOW())",
-  "GetRowWithKey": "SELECT g.GoalKey, g.GoalAmount, g.EstimatedCompletionDate, g.LastUpdatedDate FROM dimGoal g WHERE g.GoalKey = ?"
+  "SelectAll": "SELECT g.GoalKey, c.CategoryKey, c.CategoryName, a.AccountKey, a.AccountName, sc.SubcategoryName AS `GoalName`, sc.SubcategoryPrefix AS `GoalPrefix`, g.GoalAmount, g.EstimatedCompletionDate, g.LastUpdatedDate FROM dimGoal g INNER JOIN dimSubcategory sc ON g.GoalKey = sc.SubcategoryKey INNER JOIN dimCategory c ON sc.CategoryKey = c.CategoryKey INNER JOIN dimAccount a ON sc.AccountKey = a.AccountKey",
+  "UpdateRow": "file://./resources/UpdateGoal.sql",
+  "InsertRow": "file://./resources/InsertGoal.sql",
+  "GetRowWithKey": "SELECT g.GoalKey, c.CategoryKey, c.CategoryName, a.AccountKey, a.AccountName, sc.SubcategoryName AS `GoalName`, sc.SubcategoryPrefix AS `GoalPrefix`, g.GoalAmount, g.EstimatedCompletionDate, g.LastUpdatedDate FROM dimGoal g INNER JOIN dimSubcategory sc ON g.GoalKey = sc.SubcategoryKey INNER JOIN dimCategory c ON sc.CategoryKey = c.CategoryKey INNER JOIN dimAccount a ON sc.AccountKey = a.AccountKey WHERE g.GoalKey = ?"
 }
 

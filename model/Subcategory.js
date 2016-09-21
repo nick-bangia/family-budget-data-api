@@ -1,34 +1,38 @@
+var KeyedObject = require('./KeyedObject');
 var Random = require('random-js');
 
 function Subcategory() {
   // initialize properties
-  this.subcategoryKey = '';
   this.categoryKey = '';
   this.categoryName = '';
   this.accountKey = '';
   this.accountName = '';
-  this.goalKey = '';
-  this.subcategoryName = '';
-  this.subcategoryPrefix = '';
+  this.name = '';
+  this.prefix = '';
   this.isActive = true;
   this.isAllocatable = false;
   this.lastUpdated = new Date();
+
+  // subclass from BaseModel
+  KeyedObject.apply(this, arguments);
 }
+
+Subcategory.prototype = new KeyedObject();
 
 Subcategory.prototype.getNewKey = function() {
   return Random.uuid4(Random.engines.mt19937().autoSeed());
 }
 
 Subcategory.prototype.getSubcategoryKey = function() {
-  return this.subcategoryKey;
+  return this.key;
 }
 
 Subcategory.prototype.setSubcategoryKey = function(value) {
-  this.subcategoryKey = value;
+  this.key = value;
 }
 
 Subcategory.prototype.getCategoryKey = function() {
-  return this.categoryKey;
+  return this.dataUtils.Escape(this.categoryKey);
 }
 
 Subcategory.prototype.setCategoryKey = function(value) {
@@ -44,7 +48,7 @@ Subcategory.prototype.setCategoryName = function(value) {
 }
 
 Subcategory.prototype.getAccountKey = function() {
-  return this.accountKey;
+  return this.dataUtils.Escape(this.accountKey);
 }
 
 Subcategory.prototype.setAccountKey = function(value) {
@@ -59,28 +63,20 @@ Subcategory.prototype.setAccountName = function(value) {
   this.accountName = value;
 }
 
-Subcategory.prototype.getGoalKey = function() {
-  return this.goalKey;
-}
-
-Subcategory.prototype.setGoalKey = function(value) {
-  this.goalKey = value;
-}
-
 Subcategory.prototype.getSubcategoryName = function() {
-  return this.subcategoryName;
+  return this.dataUtils.Escape(this.name);
 }
 
 Subcategory.prototype.setSubcategoryName = function(value) {
-  this.subcategoryName = value;
+  this.name = value;
 }
 
 Subcategory.prototype.getSubcategoryPrefix = function() {
-  return this.subcategoryPrefix;
+  return this.dataUtils.Escape(this.prefix);
 }
 
 Subcategory.prototype.setSubcategoryPrefix = function(value) {
-  this.subcategoryPrefix = value;
+  this.prefix = value;
 }
 
 Subcategory.prototype.getIsActive = function() {

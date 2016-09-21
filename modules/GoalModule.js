@@ -15,9 +15,16 @@ function GoalModule(dbUtility, queries) {
     var g = new Goal();
 
     g.setGoalKey(row.GoalKey);
+    g.setCategoryKey(row.CategoryKey);
+    g.setCategoryName(row.CategoryName);
+    g.setAccountKey(row.AccountKey);
+    g.setAccountName(row.AccountName);
     g.setGoalName(row.GoalName);
+    g.setGoalPrefix(row.GoalPrefix);
     g.setGoalAmount(row.GoalAmount);
     g.setEstimatedCompletionDate(row.EstimatedCompletionDate);
+    g.setIsActive(row.IsActive);
+    g.setIsAllocatable(row.IsAllocatable);
     g.setLastUpdated(row.LastUpdatedDate);
 
     // push the Goal to callback
@@ -41,13 +48,18 @@ function GoalModule(dbUtility, queries) {
   this.UpdateGoalInDatabase = function(goalObject, callback) {
     // convert the given object to a Goal and update it in the DB
     goalObject.__proto__ = Goal.prototype;
-    var params = [goalObject.getGoalAmount(), 
+    var params = [goalObject.getGoalKey(),
+                  goalObject.getCategoryKey(),
+                  goalObject.getAccountKey(),
+                  goalObject.getGoalName(),
+                  goalObject.getGoalPrefix(),
+                  goalObject.getGoalAmount(), 
                   goalObject.getEstimatedCompletionDate(),
-                  goalObject.getGoalKey()];
+                  goalObject.getIsActive(),
+                  goalObject.getIsAllocatable()];
     
     self.dbUtility.SingleRowCUDQueryWithParams(self.queries.UpdateRow, params, function(updateResult) {
       // once the update query is complete, get the updated row, and return to callback
-      console.log(updateResult);
       if (updateResult.status == 'ok') {
         // get the updated row
         self.ReadSingleGoalFromDatabase(goalObject.getGoalKey(), function(readResult) {
@@ -64,8 +76,14 @@ function GoalModule(dbUtility, queries) {
     goalObject.__proto__ = Goal.prototype;
     var newKey = goalObject.getNewKey();
     var params = [newKey, 
-                  goalObject.getGoalAmount(),
-                  goalObject.getEstimatedCompletionDate()];
+                  goalObject.getCategoryKey(),
+                  goalObject.getAccountKey(),
+                  goalObject.getGoalName(),
+                  goalObject.getGoalPrefix(),
+                  goalObject.getGoalAmount(), 
+                  goalObject.getEstimatedCompletionDate(),
+                  goalObject.getIsActive(),
+                  goalObject.getIsAllocatable()];
     
     self.dbUtility.SingleRowCUDQueryWithParams(self.queries.InsertRow, params, function(insertResult) {
       // once the insert query is successful, get the newly inserted row, and return to callback

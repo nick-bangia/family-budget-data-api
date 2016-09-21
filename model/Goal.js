@@ -1,32 +1,38 @@
-var Random = require('random-js');
+var Subcategory = require('./Subcategory');
 
 function Goal() {
   // initialize properties
-  this.goalKey = '';
-  this.goalName = '';
   this.goalAmount = 0.0;
   this.estimatedCompletionDate = new Date();
-  this.lastUpdated = new Date();
+
+  // subclass from Subcategory
+  Subcategory.apply(this, arguments);
 }
 
-Goal.prototype.getNewKey = function() {
-  return Random.uuid4(Random.engines.mt19937().autoSeed());
-}
+Goal.prototype = new Subcategory();
 
 Goal.prototype.getGoalKey = function() {
-  return this.goalKey;
+  return this.key;
 }
 
 Goal.prototype.setGoalKey = function(value) {
-  this.goalKey = value;
+  this.key = value;
 }
 
 Goal.prototype.getGoalName = function() {
-  return this.goalName;
+  return this.dataUtils.Escape(this.name);
 }
 
 Goal.prototype.setGoalName = function(value) {
-  this.goalName = value;
+  this.name = value;
+}
+
+Goal.prototype.getGoalPrefix = function() {
+  return this.dataUtils.Escape(this.prefix);
+}
+
+Goal.prototype.setGoalPrefix = function(value) {
+  this.prefix = value;
 }
 
 Goal.prototype.getGoalAmount = function() {
@@ -43,14 +49,6 @@ Goal.prototype.getEstimatedCompletionDate = function() {
 
 Goal.prototype.setEstimatedCompletionDate = function(value) {
   this.estimatedCompletionDate = value;
-}
-
-Goal.prototype.getLastUpdated = function() {
-  return this.lastUpdated;
-}
-
-Goal.prototype.setLastUpdated = function(value) {
-  this.lastUpdated = value;
 }
 
 module.exports = Goal;

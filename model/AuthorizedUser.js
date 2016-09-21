@@ -1,9 +1,16 @@
+var BaseModel = require('./BaseModel');
+
 function AuthorizedUser() {
   // initialize properties
   this.username = '';
   this.password = '';
   this.isActive = false;
+
+  // subclass from BaseModel
+  BaseModel.apply(this, arguments);
 }
+
+AuthorizedUser.prototype = new BaseModel();
 
 AuthorizedUser.prototype.getUsername = function() {
   return this.username;

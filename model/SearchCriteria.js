@@ -1,8 +1,11 @@
+var BaseModel = require('./BaseModel');
+
 function SearchCriteria() {
+  // initialize properties
   this.uniqueKey = 'nil';
   this.dateCompareOperator = 'nil';
-  this.minDate = 'nil';
-  this.maxDate = 'nil';
+  this.minDate = new Date();
+  this.maxDate = new Date();
   this.year = 0;
   this.quarter = 0;
   this.month = 0;
@@ -19,11 +22,16 @@ function SearchCriteria() {
   this.paymentMethodKey = 'nil';
   this.status = -1;
   this.isTaxDeductible = false;
-  this.updatedAfter = 'nil';
+  this.updatedAfter = new Date();
+
+  // subclass from BaseModel
+  BaseModel.apply(this, arguments);
 }
 
+SearchCriteria.prototype = new BaseModel();
+
 SearchCriteria.prototype.getUniqueKey = function() {
-  return this.uniqueKey;
+  return this.dataUtils.Escape(this.uniqueKey);
 }
 
 SearchCriteria.prototype.setUniqueKey = function(value) {
@@ -31,7 +39,7 @@ SearchCriteria.prototype.setUniqueKey = function(value) {
 }
 
 SearchCriteria.prototype.getDateCompareOperator = function() {
-  return this.dateCompareOperator;
+  return this.dataUtils.Escape(this.dateCompareOperator);
 }
 
 SearchCriteria.prototype.setDateCompareOperator = function(value) {
@@ -95,7 +103,7 @@ SearchCriteria.prototype.setDayOfWeek = function(value) {
 }
 
 SearchCriteria.prototype.getDescriptionContains = function() {
-  return this.descriptionContains;
+  return this.dataUtils.Escape(this.descriptionContains);
 }
 
 SearchCriteria.prototype.setDescriptionContains = function(value) {
@@ -103,7 +111,7 @@ SearchCriteria.prototype.setDescriptionContains = function(value) {
 }
 
 SearchCriteria.prototype.getCategoryKey = function() {
-  return this.categoryKey;
+  return this.dataUtils.Escape(this.categoryKey);
 }
 
 SearchCriteria.prototype.setCategoryKey = function(value) {
@@ -111,7 +119,7 @@ SearchCriteria.prototype.setCategoryKey = function(value) {
 }
 
 SearchCriteria.prototype.getSubcategoryKey = function() {
-  return this.subcategoryKey;
+  return this.dataUtils.Escape(this.subcategoryKey);
 }
 
 SearchCriteria.prototype.setSubcategoryKey = function(value) {
@@ -119,7 +127,7 @@ SearchCriteria.prototype.setSubcategoryKey = function(value) {
 }
 
 SearchCriteria.prototype.getAmountCompareOperator = function() {
-  return this.amountCompareOperator;
+  return this.dataUtils.Escape(this.amountCompareOperator);
 }
 
 SearchCriteria.prototype.setAmountCompareOperator = function(value) {
@@ -159,7 +167,7 @@ SearchCriteria.prototype.setSubtype = function(value) {
 }
 
 SearchCriteria.prototype.getPaymentMethodKey = function() {
-  return this.paymentMethodKey;
+  return this.dataUtils.Escape(this.paymentMethodKey);
 }
 
 SearchCriteria.prototype.setPaymentMethodKey = function(value) {

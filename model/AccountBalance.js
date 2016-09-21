@@ -1,15 +1,22 @@
+var BaseModel = require('./BaseModel');
 var CategoryBalance = require('./CategoryBalance');
 
 function AccountBalance() {
-	this.accountName = '';
+	// initialize properties
+  this.accountName = '';
   this.reconciledAmount = 0;
   this.pendingAmount = 0;
   this.latestTransactionDate = new Date();
   this.categories = [new CategoryBalance()];
+
+  // subclass from BaseModel
+  BaseModel.apply(this, arguments)
 }
 
+AccountBalance.prototype = new BaseModel();
+
 AccountBalance.prototype.getAccountName = function() {
-  return this.accountName;
+  return this.dataUtils.Escape(this.accountName);
 }
 
 AccountBalance.prototype.setAccountName = function(value) {

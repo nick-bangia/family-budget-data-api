@@ -110,7 +110,6 @@ CREATE TABLE IF NOT EXISTS `FamilyBudget`.`dimSubcategory` (
   `SubcategoryKey` CHAR(36) NOT NULL,
   `CategoryKey` CHAR(36) NOT NULL,
   `AccountKey` CHAR(36) NOT NULL,
-  `GoalKey` CHAR(36) NULL,
   `SubcategoryName` VARCHAR(100) NOT NULL,
   `SubcategoryPrefix` VARCHAR(10) NOT NULL,
   `IsActive` TINYINT(1) NOT NULL,
@@ -126,12 +125,7 @@ CREATE TABLE IF NOT EXISTS `FamilyBudget`.`dimSubcategory` (
 	FOREIGN KEY (`AccountKey`)
 	REFERENCES `FamilyBudget`.`dimAccount` (`AccountKey`)
 	ON DELETE NO ACTION
-	ON UPDATE NO ACTION,
-  CONSTRAINT `fk_dimSubcategory_dimGoal1`
-    FOREIGN KEY (`GoalKey`)
-    REFERENCES `FamilyBudget`.`dimGoal` (`GoalKey`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+	ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 SHOW WARNINGS;
@@ -150,7 +144,12 @@ CREATE TABLE IF NOT EXISTS `FamilyBudget`.`dimGoal` (
   `GoalAmount` DECIMAL(7,2) NOT NULL,
   `EstimatedCompletionDate` DATETIME NULL,
   `LastUpdatedDate` DATETIME NULL,
-  PRIMARY KEY (`GoalKey`))
+  PRIMARY KEY (`GoalKey`),
+  CONSTRAINT `fk_dimGoal_dimSubcategory1`
+    FOREIGN KEY (`GoalKey`)
+	  REFERENCES `FamilyBudget`.`dimSubcategory` (`SubcategoryKey`)
+	  ON DELETE NO ACTION
+	  ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 SHOW WARNINGS;
@@ -342,7 +341,6 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_Pending` AS
       `fli`.`PaymentMethodKey` AS `PaymentMethodKey`,
       `pm`.`PaymentMethodName` AS `PaymentMethodName`,
       `a`.`AccountName` AS `AccountName`,
-      `g`.`GoalKey` AS `GoalKey`,
       `g`.`GoalAmount` AS `GoalAmount`,
       `fli`.`StatusId` AS `StatusId`,
       `fli`.`IsTaxDeductible` AS `IsTaxDeductible`,
@@ -352,7 +350,7 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_Pending` AS
       join `dimSubcategory` `sc` ON (`fli`.`SubcategoryKey` = `sc`.`SubcategoryKey`)
       join `dimAccount` `a` ON (`sc`.`AccountKey` = `a`.`AccountKey`)
       join `dimCategory` `c` ON (`sc`.`CategoryKey` = `c`.`CategoryKey`)
-      left outer join `dimGoal` `g` ON (`sc`.`GoalKey` = `g`.`GoalKey`)
+      left outer join `dimGoal` `g` ON (`sc`.`SubcategoryKey` = `g`.`GoalKey`)
       join `Months` `m` ON (`fli`.`MonthId` = `m`.`MonthId`)
       join `DaysOfWeek` `dow` ON (`fli`.`DayOfWeekId` = `dow`.`DayOfWeekId`)
       join `dimPaymentMethod` `pm` ON (`fli`.`PaymentMethodKey` = `pm`.`PaymentMethodKey`))
@@ -428,7 +426,6 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledPriorMonths_Condensed` AS
       'CONDENSED_KEYS' AS `PaymentMethodKey`,
       'CONDENSED ENTRIES' AS `PaymentMethodName`,
       `a`.`AccountName` AS `AccountName`,
-      `g`.`GoalKey` AS `GoalKey`,
       `g`.`GoalAmount` AS `GoalAmount`,
       0 AS `StatusId`,
       `fli`.`IsTaxDeductible` AS `IsTaxDeductible`,
@@ -438,7 +435,7 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledPriorMonths_Condensed` AS
       join `dimSubcategory` `sc` ON (`fli`.`SubcategoryKey` = `sc`.`SubcategoryKey`)
       join `dimCategory` `c` ON (`sc`.`CategoryKey` = `c`.`CategoryKey`)
       join `dimAccount` `a` ON (`sc`.`AccountKey` = `a`.`AccountKey`)
-      left outer join `dimGoal` `g` ON (`sc`.`GoalKey` = `g`.`GoalKey`)
+      left outer join `dimGoal` `g` ON (`sc`.`SubcategoryKey` = `g`.`GoalKey`)
       join `Months` `m` ON (`fli`.`MonthId` = `m`.`MonthId`))
     where
       ((`fli`.`StatusId` = 0)
@@ -485,7 +482,6 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledCurrentMonth` AS
       `fli`.`PaymentMethodKey` AS `PaymentMethodKey`,
       `pm`.`PaymentMethodName` AS `PaymentMethodName`,
       `a`.`AccountName` AS `AccountName`,
-      `g`.`GoalKey` AS `GoalKey`,
       `g`.`GoalAmount` AS `GoalAmount`,
       `fli`.`StatusId` AS `StatusId`,
       `IsTaxDeductible` AS `IsTaxDeductible`,
@@ -495,7 +491,7 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledCurrentMonth` AS
         join `dimSubcategory` `sc` ON (`fli`.`SubcategoryKey` = `sc`.`SubcategoryKey`)
         join `dimAccount` `a` ON (`sc`.`AccountKey` = `a`.`AccountKey`)
         join `dimCategory` `c` ON (`sc`.`CategoryKey` = `c`.`CategoryKey`)
-        left outer join `dimGoal` `g` ON (`sc`.`GoalKey` = `g`.`GoalKey`)
+        left outer join `dimGoal` `g` ON (`sc`.`SubcategoryKey` = `g`.`GoalKey`)
         join `Months` `m` ON (`fli`.`MonthId` = `m`.`MonthId`)
         join `DaysOfWeek` `dow` ON (`fli`.`DayOfWeekId` = `dow`.`DayOfWeekId`)
         join `dimPaymentMethod` `pm` ON (`fli`.`PaymentMethodKey` = `pm`.`PaymentMethodKey`))
@@ -503,6 +499,35 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledCurrentMonth` AS
         ((`fli`.`StatusId` = 0)
         and (concat(`fli`.`MonthId`, `fli`.`Year`) = concat(month(NOW()), year(NOW())))
         and (`sc`.`IsActive` = 1));
+
+-- -----------------------------------------------------
+-- View  `FamilyBudget`.`GoalSummary`
+-- -----------------------------------------------------
+DROP VIEW IF EXISTS `FamilyBudget`.`GoalSummary`;
+SHOW WARNINGS;
+
+CREATE VIEW `FamilyBudget`.`GoalSummary` AS
+	SELECT
+		`a`.`AccountName` AS `AccountName`,
+		`c`.`CategoryKey` AS `CategoryKey`,
+      	`c`.`CategoryName` AS `CategoryName`,
+      	`sc`.`SubcategoryKey` AS `SubcategoryKey`,
+      	`sc`.`SubcategoryName` AS `SubcategoryName`,
+		SUM(`fli`.`Amount`) AS `TotalAmount`,
+		AVG(`g`.`GoalAmount`) AS `GoalAmount`,
+		MAX(`fli`.`LastUpdatedDate`) AS `LastUpdatedDate`
+	FROM
+		`factLineItem` `fli`
+		join `dimSubcategory` `sc` ON (`fli`.`SubcategoryKey` = `sc`.`SubcategoryKey`)
+		join `dimAccount` `a` ON (`sc`.`AccountKey` = `a`.`AccountKey`)
+		join `dimCategory` `c` ON (`sc`.`CategoryKey` = `c`.`CategoryKey`)
+		join `dimGoal` `g` ON (`sc`.`SubcategoryKey` = `g`.`GoalKey`)
+	GROUP BY
+		`a`.`AccountName`,
+		`c`.`CategoryKey`,
+		`c`.`CategoryName`,
+		`sc`.`SubcategoryKey`,
+		`sc`.`SubcategoryName`;
 
 -- -----------------------------------------------------
 -- Initial data for months, days of weeks, status, subtype, and type

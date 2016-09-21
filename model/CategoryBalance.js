@@ -1,16 +1,23 @@
+var BaseModel = require('./BaseModel');
 var SubcategoryBalance = require('./SubcategoryBalance');
 
 function CategoryBalance() {
-	this.accountName = '';
+  // initialize properties
+  this.accountName = '';
   this.categoryName = '';
-	this.reconciledAmount = 0;
-	this.pendingAmount = 0;
-	this.latestTransactionDate = new Date();
+  this.reconciledAmount = 0;
+  this.pendingAmount = 0;
+  this.latestTransactionDate = new Date();
   this.subcategories = [new SubcategoryBalance()];
+
+  // subclass from BaseModel
+  BaseModel.apply(this, arguments);
 }
 
+CategoryBalance.prototype = new BaseModel();
+
 CategoryBalance.prototype.getAccountName = function() {
-	return this.accountName;
+	return this.dataUtils.Escape(this.accountName);
 }
 
 CategoryBalance.prototype.setAccountName = function(value) {
@@ -18,7 +25,7 @@ CategoryBalance.prototype.setAccountName = function(value) {
 }
 
 CategoryBalance.prototype.getCategoryName = function() {
-	return this.categoryName;
+	return this.dataUtils.Escape(this.categoryName);
 }
 
 CategoryBalance.prototype.setCategoryName = function(value) {

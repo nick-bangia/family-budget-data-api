@@ -1,12 +1,12 @@
 {
   "data": [
     {
-      "categoryKey": "94362FED-9C13-4894-A995-1002FF012E91",
+      "key": "94362FED-9C13-4894-A995-1002FF012E91",
       "categoryName": "Test Category #1 - Updated",
       "isActive": false
     },
     {
-      "categoryKey": "1615C5D9-3D68-4DBB-896E-C23C7F59CECE",
+      "key": "1615C5D9-3D68-4DBB-896E-C23C7F59CECE",
       "categoryName": "Test Unknown Category Updated",
       "isActive": true
     }

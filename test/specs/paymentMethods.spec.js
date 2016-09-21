@@ -5,7 +5,7 @@ var url, response, results;
 var authorizedRequest = testUtils.GetAuthorizedRequest();
 
 var IsAPaymentMethod = function(data) {
-  return ('paymentMethodKey' in data &&
+  return ('key' in data &&
           'paymentMethodName' in data &&
           'isActive' in data &&
           'lastUpdated' in data

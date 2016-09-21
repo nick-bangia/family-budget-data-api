@@ -224,7 +224,6 @@ DBUtils.prototype.SingleRowCUDQueryWithParams = function(theQuery, params, query
         sql: theQuery,
         values: params
       }, function (err, rows, fields) {
-        
         if (err) {
           // set the error response fields if a query error occurred
           dbResponse.setStatus("failure");
@@ -241,12 +240,29 @@ DBUtils.prototype.SingleRowCUDQueryWithParams = function(theQuery, params, query
           // return the caller with error response
           queryComplete(dbResponse);
         } else {
-          if (rows.affectedRows == 0) {
-            // set the error response fields if no rows were affected
+          var rowsAffected = false;
+          // check if row is an array, and if so, loop through and check if there were any rows affected
+          // if so, set the rowsAffected flag
+          if (rows.length > 1) {
+            for (var i = 0; i < rows.length; i++) {
+              if (rows[i].affectedRows > 0) {
+                rowsAffected = true;
+              }
+            }
+          } else {
+            // else if rows is not an array, just check the object's rowsAffected property and set the flag if applicable
+            if (rows.affectedRows > 0) {
+              rowsAffected = true;
+            }
+          }
+
+          // if no rows were affected, set the error response accordingly
+          if (!rowsAffected) {
             dbResponse.setStatus("failure");
             dbResponse.setReason("Query did not affect any rows");
             dbResponse.setData(params);
           }
+          
           // return to the caller with the success response
           queryComplete(dbResponse);
         }

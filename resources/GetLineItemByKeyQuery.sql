@@ -19,7 +19,6 @@ SELECT
 	fli.PaymentMethodKey,
 	pm.PaymentMethodName,
 	a.AccountName,
-    g.GoalKey,
     g.GoalAmount,
 	fli.StatusId,
     fli.IsTaxDeductible,
@@ -33,7 +32,7 @@ FROM
 	INNER JOIN
 	dimAccount a on sc.AccountKey = a.AccountKey
     LEFT OUTER JOIN
-    dimGoal g on sc.GoalKey = g.GoalKey
+    dimGoal g on sc.SubcategoryKey = g.GoalKey
 	INNER JOIN
 	dimPaymentMethod pm on fli.PaymentMethodKey = pm.PaymentMethodKey
 	INNER JOIN

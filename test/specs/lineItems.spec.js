@@ -5,7 +5,7 @@ var url, response, results;
 var authorizedRequest = testUtils.GetAuthorizedRequest();
 
 var IsALineItem = function(data) {
-  return ('uniqueKey' in data &&
+  return ('key' in data &&
           'year' in data &&
           'monthId' in data &&
           'month' in data &&
@@ -25,7 +25,6 @@ var IsALineItem = function(data) {
           'paymentMethodKey' in data &&
           'paymentMethodName' in data &&
           'accountName' in data &&
-          'goalKey' in data &&
           'goalAmount' in data &&
           'statusId' in data &&
           'isTaxDeductible' in data &&

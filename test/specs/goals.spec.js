@@ -5,7 +5,15 @@ var url, response, results;
 var authorizedRequest = testUtils.GetAuthorizedRequest();
 
 var IsAGoal = function(data) {
-  return ('goalKey' in data &&
+  return ('key' in data &&
+          'categoryKey' in data &&
+          'categoryName' in data &&
+          'accountKey' in data &&
+          'accountName' in data &&
+          'name' in data &&
+          'prefix' in data &&
+          'isActive' in data &&
+          'isAllocatable' in data &&
           'goalAmount' in data &&
           'estimatedCompletionDate' in data &&
           'lastUpdated' in data

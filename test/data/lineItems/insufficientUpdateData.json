@@ -1,7 +1,7 @@
 {
   "data": [
     {
-      "uniqueKey": "D5C0BD73-DA78-46D1-9D7D-63C6D1204C1E",
+      "key": "D5C0BD73-DA78-46D1-9D7D-63C6D1204C1E",
       "monthId": 2,
       "dayOfWeekId": 5,
       "year": 2015,
@@ -13,7 +13,7 @@
       "statusId": 0
     },
     {
-      "uniqueKey": "05731617-F8DB-479C-9C39-3973B7268191",
+      "key": "05731617-F8DB-479C-9C39-3973B7268191",
       "monthId": 2,
       "day": 14,
       "dayOfWeekId": 0,

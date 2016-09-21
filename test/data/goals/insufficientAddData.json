@@ -1,6 +1,20 @@
 {
   "data": [
     {
+      "categoryKey": "809E0230-DDCE-4E5E-97DF-7C472D775537",
+      "accountKey": "C5F1F81B-6FE6-41A5-8830-A5B6A19AB514",
+      "prefix": "G1",
+      "goalAmount": 300.00,
+      "isActive": true,
+      "isAllocatable": true
+    },
+    {
+      "categoryKey": "2B7F5E4C-3516-4496-B7EC-DA2F7B294AB0",
+      "accountKey": "C5F1F81B-6FE6-41A5-8830-A5B6A19AB514",
+      "name": "Goal Test 2",
+      "prefix": "G2",
+      "isActive": true,
+      "isAllocatable": false
     }
   ]
 }

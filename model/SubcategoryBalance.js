@@ -1,9 +1,17 @@
+var BaseModel = require('./BaseModel');
+
 function SubcategoryBalance() {
+	// initialize properties
 	this.subcategoryName = '';
 	this.reconciledAmount = 0;
 	this.pendingAmount = 0;
 	this.latestTransactionDate = new Date();
+
+	// subclass from BaseModel
+	BaseModel.apply(this, arguments);
 }
+
+SubcategoryBalance.prototype = new BaseModel();
 
 SubcategoryBalance.prototype.getSubcategoryName = function() {
 	return this.subcategoryName;

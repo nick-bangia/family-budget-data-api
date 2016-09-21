@@ -1,11 +1,11 @@
 {
   "data": [
     {
-      "paymentMethodKey": "014F798B-EA55-49CA-A77F-FFB8A86D6827",
+      "key": "014F798B-EA55-49CA-A77F-FFB8A86D6827",
       "isActive": false
     },
     {
-      "paymentMethodKey": "D7F42491-311A-467E-B6DD-82D736B817E5",
+      "key": "D7F42491-311A-467E-B6DD-82D736B817E5",
       "paymentMethodName": "Attempt to Update Payment Method"
     }
   ]

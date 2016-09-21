@@ -1,27 +1,28 @@
+var KeyedObject = require('./KeyedObject');
 var Random = require('random-js');
 
 function Category() {
   // initialize properties
-  this.categoryKey = '';
   this.categoryName = '';
   this.isActive = true;
   this.lastUpdated = new Date();
+
+  // subclass from KeyedObject
+  KeyedObject.apply(this, arguments);
 }
 
-Category.prototype.getNewKey = function() {
-  return Random.uuid4(Random.engines.mt19937().autoSeed());
-}
+Category.prototype = new KeyedObject();
 
 Category.prototype.getCategoryKey = function() {
-  return this.categoryKey;
+  return this.key;
 }
 
 Category.prototype.setCategoryKey = function(value) {
-  this.categoryKey = value;
+  this.key = value;
 }
 
 Category.prototype.getCategoryName = function() {
-  return this.categoryName;
+  return this.dataUtils.Escape(this.categoryName);
 }
 
 Category.prototype.setCategoryName = function(value) {

@@ -90,4 +90,15 @@ DataUtil.prototype.ProcessList = function(dataArray, rowProcessor, processingCom
   });
 }
 
+DataUtil.prototype.Escape = function(toBeEscaped) {
+  var self = this;
+
+  // escape the variable toBeEscaped of different gotchas such as nulls, undefined, empty string, etc...
+  if (toBeEscaped == '') {
+    toBeEscaped = null;
+  }
+
+  return toBeEscaped;
+}
+
 module.exports = DataUtil;

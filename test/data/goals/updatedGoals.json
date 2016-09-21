@@ -1,14 +1,26 @@
 {
   "data": [
     {
-      "goalKey": "1D3AA3D5-EEA3-4212-8B93-9E98882D2DEE",
-      "goalAmount": "250.00",
-      "estimatedCompletionDate": "2016-12-31"
+      "key": "5AA0B1F1-64AE-43C2-9F31-3B1248728799",
+      "categoryKey": "24FF3283-8DA0-43D9-A18F-C2D7C2B865A0",
+      "accountKey": "6AF4155F-289F-40BA-94D4-1A6E14F3990A",
+      "name": "Subcategory Test #13 - Updated",
+      "prefix": "TSC13U",
+      "goalAmount": 800.00,
+      "estimatedCompletionDate": "2016-12-31",
+      "isActive": false,
+      "isAllocatable": true
     },
     {
-      "goalKey": "43C79456-B4F2-46AF-9239-11B43F097A56",
-      "goalAmount": "1000.00",
-      "estimatedCompletionDate": "2017-03-31"
+      "key": "6D54EC6A-29FF-4A0E-B18D-D534722CF1BF",
+      "categoryKey": "24FF3283-8DA0-43D9-A18F-C2D7C2B865A0",
+      "accountKey": "6AF4155F-289F-40BA-94D4-1A6E14F3990A",
+      "name": "Subcategory Testing #3 - Attempted",
+      "prefix": "SC3",
+      "goalAmount": 1000.00,
+      "estimatedCompletionDate": "2017-12-31",
+      "isActive": true,
+      "isAllocatable": false
     }
   ]
 }

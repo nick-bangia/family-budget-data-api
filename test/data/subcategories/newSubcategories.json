@@ -3,18 +3,16 @@
     {
       "categoryKey": "809E0230-DDCE-4E5E-97DF-7C472D775537",
       "accountKey": "C5F1F81B-6FE6-41A5-8830-A5B6A19AB514",
-      "goalKey":  "1D3AA3D5-EEA3-4212-8B93-9E98882D2DEE",
-      "subcategoryName": "Subcategory Test 1",
-      "subcategoryPrefix": "SC1",
+      "name": "Subcategory Test 1",
+      "prefix": "SC1",
       "isActive": true,
       "isAllocatable": true
     },
     {
       "categoryKey": "2B7F5E4C-3516-4496-B7EC-DA2F7B294AB0",
       "accountKey": "BB7A1AEA-3B00-4C5D-B457-E53EC818D82E",
-      "goalKey": "C156F25B-3BD7-4418-B1B8-7B57B23B79E8",
-      "subcategoryName": "Subcategory Test 2",
-      "subcategoryPrefix": "SC2",
+      "name": "Subcategory Test 2",
+      "prefix": "SC2",
       "isActive": true,
       "isAllocatable": false
     }

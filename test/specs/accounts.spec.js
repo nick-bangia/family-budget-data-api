@@ -5,7 +5,7 @@ var url, response, results;
 var authorizedRequest = testUtils.GetAuthorizedRequest();
 
 var IsAnAccount = function(data) {
-  return ('accountKey' in data &&
+  return ('key' in data &&
           'accountName' in data &&
           'isActive' in data &&
           'lastUpdated' in data

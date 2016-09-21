@@ -1,12 +1,12 @@
 {
   "data": [
     {
-      "accountKey": "6AF4155F-289F-40BA-94D4-1A6E14F3990A",
+      "key": "6AF4155F-289F-40BA-94D4-1A6E14F3990A",
       "accountName": "Test Account #1 - Savings",
       "isActive": false
     },
     {
-      "accountKey": "927C79B5-0EF2-484D-85B8-9E64BCDB21FA",
+      "key": "927C79B5-0EF2-484D-85B8-9E64BCDB21FA",
       "accountName": "Test Account #2 - Checking",
       "isActive": true
     }

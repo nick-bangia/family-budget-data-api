@@ -1,27 +1,28 @@
+var KeyedObject = require('./KeyedObject');
 var Random = require('random-js');
 
 function PaymentMethod() {
   // initialize properties
-  this.paymentMethodKey = '';
   this.paymentMethodName = '';
   this.isActive = false;
   this.lastUpdated = new Date();
+
+  // subclass from KeyedObject
+  KeyedObject.apply(this, arguments);
 }
 
-PaymentMethod.prototype.getNewKey = function() {
-  return Random.uuid4(Random.engines.mt19937().autoSeed());
-}
+PaymentMethod.prototype = new KeyedObject();
 
 PaymentMethod.prototype.getPaymentMethodKey = function() {
-  return this.paymentMethodKey;
+  return this.key;
 }
 
 PaymentMethod.prototype.setPaymentMethodKey = function(value) {
-  this.paymentMethodKey = value;
+  this.key = value;
 }
 
 PaymentMethod.prototype.getPaymentMethodName = function() {
-  return this.paymentMethodName;
+  return this.dataUtils.Escape(this.paymentMethodName);
 }
 
 PaymentMethod.prototype.setPaymentMethodName = function(value) {

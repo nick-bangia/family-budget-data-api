@@ -5,14 +5,13 @@ var url, response, results;
 var authorizedRequest = testUtils.GetAuthorizedRequest();
 
 var IsASubcategory = function(data) {
-  return ('subcategoryKey' in data &&
+  return ('key' in data &&
           'categoryKey' in data &&
           'categoryName' in data &&
           'accountKey' in data &&
           'accountName' in data &&
-          'goalKey' in data &&
-          'subcategoryName' in data &&
-          'subcategoryPrefix' in data &&
+          'name' in data &&
+          'prefix' in data &&
           'isActive' in data &&
           'isAllocatable' in data &&
           'lastUpdated' in data

@@ -1,12 +1,24 @@
 {
   "data": [
     {
-      "goalAmount": 1000.00,
-      "estimatedCompletionDate": "2016-12-31"
+      "categoryKey": "809E0230-DDCE-4E5E-97DF-7C472D775537",
+      "accountKey": "C5F1F81B-6FE6-41A5-8830-A5B6A19AB514",
+      "name": "Goal Test 1",
+      "prefix": "G1",
+      "goalAmount": 300.00,
+      "estimatedCompletionDate": "2016-12-31",
+      "isActive": true,
+      "isAllocatable": true
     },
     {
-      "goalAmount": 250.00,
-      "estimatedCompletionDate": "2017-03-31"
+      "categoryKey": "2B7F5E4C-3516-4496-B7EC-DA2F7B294AB0",
+      "accountKey": "BB7A1AEA-3B00-4C5D-B457-E53EC818D82E",
+      "name": "Goal Test 2",
+      "prefix": "G2",
+      "goalAmount": 500.00,
+      "estimatedCompletionDate": "2017-03-31",
+      "isActive": true,
+      "isAllocatable": false
     }
   ]
 }

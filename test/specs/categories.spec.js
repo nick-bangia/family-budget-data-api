@@ -5,7 +5,7 @@ var url, response, results;
 var authorizedRequest = testUtils.GetAuthorizedRequest();
 
 var IsACategory = function(data) {
-  return ('categoryKey' in data &&
+  return ('key' in data &&
           'categoryName' in data &&
           'isActive' in data &&
           'lastUpdated' in data

@@ -1,27 +1,28 @@
+var KeyedObject = require('./KeyedObject');
 var Random = require('random-js');
 
 function Account() {
   // initialize properties
-  this.accountKey = '';
   this.accountName = '';
   this.isActive = true;
   this.lastUpdated = new Date();
+
+  // subclass from KeyedObject
+  KeyedObject.apply(this, arguments);
 }
 
-Account.prototype.getNewKey = function() {
-  return Random.uuid4(Random.engines.mt19937().autoSeed());
-}
+Account.prototype = new KeyedObject();
 
 Account.prototype.getAccountKey = function() {
-  return this.accountKey;
+  return this.key;
 }
 
 Account.prototype.setAccountKey = function(value) {
-  this.accountKey = value;
+  this.key = value;
 }
 
 Account.prototype.getAccountName = function() {
-  return this.accountName;
+  return this.dataUtils.Escape(this.accountName);
 }
 
 Account.prototype.setAccountName = function(value) {

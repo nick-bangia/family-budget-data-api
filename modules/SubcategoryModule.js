@@ -19,7 +19,6 @@ function SubcategoryModule(dbUtility, queries) {
     sc.setCategoryName(row.CategoryName);
     sc.setAccountKey(row.AccountKey);
     sc.setAccountName(row.AccountName);
-    sc.setGoalKey(row.GoalKey);
     sc.setSubcategoryName(row.SubcategoryName);
     sc.setSubcategoryPrefix(row.SubcategoryPrefix);
     sc.setIsActive(row.IsActive);
@@ -49,7 +48,6 @@ function SubcategoryModule(dbUtility, queries) {
     subcategoryObject.__proto__ = Subcategory.prototype;
     var params = [subcategoryObject.getCategoryKey(), 
                   subcategoryObject.getAccountKey(),
-                  subcategoryObject.getGoalKey(),
                   subcategoryObject.getSubcategoryName(), 
                   subcategoryObject.getSubcategoryPrefix(),
                   subcategoryObject.getIsActive(), 
@@ -76,7 +74,6 @@ function SubcategoryModule(dbUtility, queries) {
     var params = [newKey, 
                   subcategoryObject.getCategoryKey(), 
                   subcategoryObject.getAccountKey(),
-                  subcategoryObject.getGoalKey(),
                   subcategoryObject.getSubcategoryName(), 
                   subcategoryObject.getSubcategoryPrefix(),
                   subcategoryObject.getIsActive(), 
