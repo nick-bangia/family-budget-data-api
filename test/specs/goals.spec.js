@@ -20,6 +20,15 @@ var IsAGoal = function(data) {
          );
 }
 
+var IsAGoalSummary = function(data) {
+  return ('goalName' in data &&
+          'goalAmount' in data &&
+          'totalSaved' in data &&
+          'targetCompletionDate' in data &&
+          'lastUpdated' in data
+         );
+}
+
 describe('Goals', function() {
   
   before(function() {
@@ -195,5 +204,29 @@ describe('Goals', function() {
       expect(results.data[0].status).to.equal('failure');
       expect(results.data[0].reason).to.have.string('Bad Input - Missing Required Fields!');
     });
+  });
+
+  describe('when a request is made to /goals/summary', function() {
+
+    before(function(done) {
+      authorizedRequest.get( {url: url + '/goals/summary' }, function (err, resp, body) {
+        response = resp;
+        results = JSON.parse(body);
+        done(err);
+      });
+    });
+
+    it ('should be authorized & OK', function() {
+      expect(response.statusCode).to.equal(200);
+    });
+    
+    it ('should return a success object with a valid list of goal summaries', function() {
+      // test the standard expectations for a successful result
+      testUtils.TestStandardExpectationsForSuccessfulResult(results, 1);
+      
+      // list items are goals
+      expect(IsAGoalSummary(results.data[0])).to.be.true;
+    });
+
   });
 });

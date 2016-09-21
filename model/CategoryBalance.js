@@ -17,7 +17,7 @@ function CategoryBalance() {
 CategoryBalance.prototype = new BaseModel();
 
 CategoryBalance.prototype.getAccountName = function() {
-	return this.dataUtils.Escape(this.accountName);
+	return this.Escape(this.accountName);
 }
 
 CategoryBalance.prototype.setAccountName = function(value) {
@@ -25,7 +25,7 @@ CategoryBalance.prototype.setAccountName = function(value) {
 }
 
 CategoryBalance.prototype.getCategoryName = function() {
-	return this.dataUtils.Escape(this.categoryName);
+	return this.Escape(this.categoryName);
 }
 
 CategoryBalance.prototype.setCategoryName = function(value) {

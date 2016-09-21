@@ -5,7 +5,6 @@ function PaymentMethod() {
   // initialize properties
   this.paymentMethodName = '';
   this.isActive = false;
-  this.lastUpdated = new Date();
 
   // subclass from KeyedObject
   KeyedObject.apply(this, arguments);
@@ -22,7 +21,7 @@ PaymentMethod.prototype.setPaymentMethodKey = function(value) {
 }
 
 PaymentMethod.prototype.getPaymentMethodName = function() {
-  return this.dataUtils.Escape(this.paymentMethodName);
+  return this.Escape(this.paymentMethodName);
 }
 
 PaymentMethod.prototype.setPaymentMethodName = function(value) {
@@ -35,14 +34,6 @@ PaymentMethod.prototype.getIsActive = function() {
 
 PaymentMethod.prototype.setIsActive = function(value) {
   this.isActive = value ? true : false;
-}
-
-PaymentMethod.prototype.getLastUpdated = function() {
-  return this.lastUpdated;
-}
-
-PaymentMethod.prototype.setLastUpdated = function(value) {
-  this.lastUpdated = value;
 }
 
 module.exports = PaymentMethod;

@@ -14,7 +14,7 @@ function SubcategoryBalance() {
 SubcategoryBalance.prototype = new BaseModel();
 
 SubcategoryBalance.prototype.getSubcategoryName = function() {
-	return this.subcategoryName;
+	return this.Escape(this.subcategoryName);
 }
 
 SubcategoryBalance.prototype.setSubcategoryName = function(value) {

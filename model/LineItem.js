@@ -26,7 +26,6 @@ function LineItem() {
   this.goalAmount = '';
   this.statusId = 0;
   this.isTaxDeductible = false;
-  this.lastUpdated = new Date();
 
   // subclass from KeyedObject
   KeyedObject.apply(this, arguments);
@@ -91,7 +90,7 @@ LineItem.prototype.setDayOfWeek = function(value) {
 }
 
 LineItem.prototype.getCategoryKey = function() {
-  return this.dataUtils.Escape(this.categoryKey);
+  return this.Escape(this.categoryKey);
 }
 
 LineItem.prototype.setCategoryKey = function(value) {
@@ -107,7 +106,7 @@ LineItem.prototype.setCategoryName = function(value) {
 }
 
 LineItem.prototype.getSubcategoryKey = function() {
-  return this.dataUtils.Escape(this.subcategoryKey);
+  return this.Escape(this.subcategoryKey);
 }
 
 LineItem.prototype.setSubcategoryKey = function(value) {
@@ -131,7 +130,7 @@ LineItem.prototype.setSubcategoryPrefix = function(value) {
 }
 
 LineItem.prototype.getDescription = function() {
-  return this.dataUtils.Escape(this.description);
+  return this.Escape(this.description);
 }
 
 LineItem.prototype.setDescription = function(value) {
@@ -171,7 +170,7 @@ LineItem.prototype.setQuarter = function(value) {
 }
 
 LineItem.prototype.getPaymentMethodKey = function() {
-  return this.dataUtils.Escape(this.paymentMethodKey);
+  return this.Escape(this.paymentMethodKey);
 }
 
 LineItem.prototype.setPaymentMethodKey = function(value) {
@@ -216,14 +215,6 @@ LineItem.prototype.getIsTaxDeductible = function() {
 
 LineItem.prototype.setIsTaxDeductible = function(value) {
   this.isTaxDeductible = value ? true : false;
-}
-
-LineItem.prototype.getLastUpdated = function() {
-  return this.lastUpdated;
-}
-
-LineItem.prototype.setLastUpdated = function(value) {
-  this.lastUpdated = value;
 }
 
 module.exports = LineItem;

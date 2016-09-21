@@ -31,7 +31,7 @@ function SearchCriteria() {
 SearchCriteria.prototype = new BaseModel();
 
 SearchCriteria.prototype.getUniqueKey = function() {
-  return this.dataUtils.Escape(this.uniqueKey);
+  return this.Escape(this.uniqueKey);
 }
 
 SearchCriteria.prototype.setUniqueKey = function(value) {
@@ -39,7 +39,7 @@ SearchCriteria.prototype.setUniqueKey = function(value) {
 }
 
 SearchCriteria.prototype.getDateCompareOperator = function() {
-  return this.dataUtils.Escape(this.dateCompareOperator);
+  return this.Escape(this.dateCompareOperator);
 }
 
 SearchCriteria.prototype.setDateCompareOperator = function(value) {
@@ -103,7 +103,7 @@ SearchCriteria.prototype.setDayOfWeek = function(value) {
 }
 
 SearchCriteria.prototype.getDescriptionContains = function() {
-  return this.dataUtils.Escape(this.descriptionContains);
+  return this.Escape(this.descriptionContains);
 }
 
 SearchCriteria.prototype.setDescriptionContains = function(value) {
@@ -111,7 +111,7 @@ SearchCriteria.prototype.setDescriptionContains = function(value) {
 }
 
 SearchCriteria.prototype.getCategoryKey = function() {
-  return this.dataUtils.Escape(this.categoryKey);
+  return this.Escape(this.categoryKey);
 }
 
 SearchCriteria.prototype.setCategoryKey = function(value) {
@@ -119,7 +119,7 @@ SearchCriteria.prototype.setCategoryKey = function(value) {
 }
 
 SearchCriteria.prototype.getSubcategoryKey = function() {
-  return this.dataUtils.Escape(this.subcategoryKey);
+  return this.Escape(this.subcategoryKey);
 }
 
 SearchCriteria.prototype.setSubcategoryKey = function(value) {
@@ -127,7 +127,7 @@ SearchCriteria.prototype.setSubcategoryKey = function(value) {
 }
 
 SearchCriteria.prototype.getAmountCompareOperator = function() {
-  return this.dataUtils.Escape(this.amountCompareOperator);
+  return this.Escape(this.amountCompareOperator);
 }
 
 SearchCriteria.prototype.setAmountCompareOperator = function(value) {
@@ -167,7 +167,7 @@ SearchCriteria.prototype.setSubtype = function(value) {
 }
 
 SearchCriteria.prototype.getPaymentMethodKey = function() {
-  return this.dataUtils.Escape(this.paymentMethodKey);
+  return this.Escape(this.paymentMethodKey);
 }
 
 SearchCriteria.prototype.setPaymentMethodKey = function(value) {

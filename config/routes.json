@@ -16,6 +16,7 @@
   ["/goals/all", "v1/goals#GetAll"],
   ["/goals/update", "v1/goals#UpdateList"],
   ["/goals/add", "v1/goals#InsertList"],
+  ["/goals/summary", "v1/goals#GetGoalSummary"],
   ["/lineItems/all", "v1/lineItems#GetAll"],
   ["/lineItems/update", "v1/lineItems#UpdateList"],
   ["/lineItems/add", "v1/lineItems#InsertList"],

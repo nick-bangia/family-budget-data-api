@@ -20,7 +20,7 @@ Goal.prototype.setGoalKey = function(value) {
 }
 
 Goal.prototype.getGoalName = function() {
-  return this.dataUtils.Escape(this.name);
+  return this.Escape(this.name);
 }
 
 Goal.prototype.setGoalName = function(value) {
@@ -28,7 +28,7 @@ Goal.prototype.setGoalName = function(value) {
 }
 
 Goal.prototype.getGoalPrefix = function() {
-  return this.dataUtils.Escape(this.prefix);
+  return this.Escape(this.prefix);
 }
 
 Goal.prototype.setGoalPrefix = function(value) {

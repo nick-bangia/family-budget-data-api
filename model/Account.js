@@ -5,7 +5,6 @@ function Account() {
   // initialize properties
   this.accountName = '';
   this.isActive = true;
-  this.lastUpdated = new Date();
 
   // subclass from KeyedObject
   KeyedObject.apply(this, arguments);
@@ -22,7 +21,7 @@ Account.prototype.setAccountKey = function(value) {
 }
 
 Account.prototype.getAccountName = function() {
-  return this.dataUtils.Escape(this.accountName);
+  return this.Escape(this.accountName);
 }
 
 Account.prototype.setAccountName = function(value) {
@@ -35,14 +34,6 @@ Account.prototype.getIsActive = function() {
 
 Account.prototype.setIsActive = function(value) {
   this.isActive = value ? true : false;
-}
-
-Account.prototype.getLastUpdated = function() {
-  return this.lastUpdated;
-}
-
-Account.prototype.setLastUpdated = function(value) {
-  this.lastUpdated = value;
 }
 
 module.exports = Account;

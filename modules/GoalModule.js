@@ -1,5 +1,6 @@
 // requires
 var Goal = require('../model/Goal');
+var GoalSummary = require('../model/GoalSummary');
 var Response = require('../framework/service/Response');
 var DataUtils = require('../framework/service/utils/DataUtils');
 var ResponseUtils = require('../framework/service/utils/ResponseUtils');
@@ -29,6 +30,20 @@ function GoalModule(dbUtility, queries) {
 
     // push the Goal to callback
     callback(g);
+  }
+
+  this.ConvertRowToGoalSummary = function(row, callback) {
+    // convert the given row into a Goal Summary and push it to callback
+    var gs = new GoalSummary();
+
+    gs.setGoalName(row.GoalName);
+    gs.setGoalAmount(row.GoalAmount);
+    gs.setTotalSaved(row.TotalSaved);
+    gs.setTargetCompletionDate(row.TargetCompletionDate);
+    gs.setLastUpdated(row.LastUpdatedDate);
+
+    // push the Goal Summary to callback
+    callback(gs);
   }
   
   this.ReadSingleGoalFromDatabase = function(goalKey, callback) {
@@ -109,15 +124,15 @@ GoalModule.prototype.GetAll = {
         // check if the query was successful
         if (dbResponse.getStatus() == "ok") {
 
-          // if successful, get an array of Subcategories
+          // if successful, get an array of Goals
           var dataUtils = new DataUtils();
-          dataUtils.ProcessRowsInParallel(dbResponse.getData(), function(subcategories) {
+          dataUtils.ProcessRowsInParallel(dbResponse.getData(), function(goals) {
 
             //  wrap it in a response object
             var getAllResponse = new Response();
-            getAllResponse.setData(subcategories);
+            getAllResponse.setData(goals);
                   
-            // serve the categories as JSON
+            // serve the goals as JSON
             response.serveJSON(getAllResponse);
           });
 
@@ -187,6 +202,37 @@ GoalModule.prototype.InsertList = {
   
     // allow the request to continue processing
     request.resume();
+  }
+}
+
+GoalModule.prototype.GetGoalSummary = {
+
+  get: function(request, response) {
+    var self = this;
+    
+    this.dbUtility.SelectRows(self.queries.GetSummary, self.ConvertRowToGoalSummary, 
+      function(dbResponse) {
+        // check if the query was successful
+        if (dbResponse.getStatus() == "ok") {
+
+          // if successful, get an array of Goal Summaries
+          var dataUtils = new DataUtils();
+          dataUtils.ProcessRowsInParallel(dbResponse.getData(), function(goalSummaries) {
+
+            //  wrap it in a response object
+            var getSummariesResponse = new Response();
+            getSummariesResponse.setData(goalSummaries);
+                  
+            // serve the goal summaries as JSON
+            response.serveJSON(getSummariesResponse);
+          });
+
+        } else {
+          // query failed, so return the failure response
+          response.serveJSON(dbResponse);
+        }
+      }
+    );
   }
 }
 

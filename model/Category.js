@@ -5,7 +5,6 @@ function Category() {
   // initialize properties
   this.categoryName = '';
   this.isActive = true;
-  this.lastUpdated = new Date();
 
   // subclass from KeyedObject
   KeyedObject.apply(this, arguments);
@@ -22,7 +21,7 @@ Category.prototype.setCategoryKey = function(value) {
 }
 
 Category.prototype.getCategoryName = function() {
-  return this.dataUtils.Escape(this.categoryName);
+  return this.Escape(this.categoryName);
 }
 
 Category.prototype.setCategoryName = function(value) {
@@ -35,14 +34,6 @@ Category.prototype.getIsActive = function() {
 
 Category.prototype.setIsActive = function(value) {
   this.isActive = value ? true : false;
-}
-
-Category.prototype.getLastUpdated = function() {
-  return this.lastUpdated;
-}
-
-Category.prototype.setLastUpdated = function(value) {
-  this.lastUpdated = value;
 }
 
 module.exports = Category;

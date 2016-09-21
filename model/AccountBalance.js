@@ -16,7 +16,7 @@ function AccountBalance() {
 AccountBalance.prototype = new BaseModel();
 
 AccountBalance.prototype.getAccountName = function() {
-  return this.dataUtils.Escape(this.accountName);
+  return this.Escape(this.accountName);
 }
 
 AccountBalance.prototype.setAccountName = function(value) {

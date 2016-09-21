@@ -11,7 +11,6 @@ function Subcategory() {
   this.prefix = '';
   this.isActive = true;
   this.isAllocatable = false;
-  this.lastUpdated = new Date();
 
   // subclass from BaseModel
   KeyedObject.apply(this, arguments);
@@ -32,7 +31,7 @@ Subcategory.prototype.setSubcategoryKey = function(value) {
 }
 
 Subcategory.prototype.getCategoryKey = function() {
-  return this.dataUtils.Escape(this.categoryKey);
+  return this.Escape(this.categoryKey);
 }
 
 Subcategory.prototype.setCategoryKey = function(value) {
@@ -48,7 +47,7 @@ Subcategory.prototype.setCategoryName = function(value) {
 }
 
 Subcategory.prototype.getAccountKey = function() {
-  return this.dataUtils.Escape(this.accountKey);
+  return this.Escape(this.accountKey);
 }
 
 Subcategory.prototype.setAccountKey = function(value) {
@@ -64,7 +63,7 @@ Subcategory.prototype.setAccountName = function(value) {
 }
 
 Subcategory.prototype.getSubcategoryName = function() {
-  return this.dataUtils.Escape(this.name);
+  return this.Escape(this.name);
 }
 
 Subcategory.prototype.setSubcategoryName = function(value) {
@@ -72,7 +71,7 @@ Subcategory.prototype.setSubcategoryName = function(value) {
 }
 
 Subcategory.prototype.getSubcategoryPrefix = function() {
-  return this.dataUtils.Escape(this.prefix);
+  return this.Escape(this.prefix);
 }
 
 Subcategory.prototype.setSubcategoryPrefix = function(value) {
@@ -93,14 +92,6 @@ Subcategory.prototype.getIsAllocatable = function() {
 
 Subcategory.prototype.setIsAllocatable = function(value) {
   this.isAllocatable = value ? true : false;
-}
-
-Subcategory.prototype.getLastUpdated = function() {
-  return this.lastUpdated;
-}
-
-Subcategory.prototype.setLastUpdated = function(value) {
-  this.lastUpdated = value;
 }
 
 module.exports = Subcategory;
