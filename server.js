@@ -23,6 +23,9 @@ if (process.env.TEST_ENV || options.indexOf('t') > -1) {
 var serverConfig = require(serverConfigPath);
 var dbConfig = require(dbConfigPath);
 
+// change the working directory for the process to the configured one
+process.chdir(serverConfig.workingDir);
+
 /* BEGIN SETTING UP THE API SERVER */
 //---------------------------------//
 // required classes
