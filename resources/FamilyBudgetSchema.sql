@@ -33,9 +33,11 @@ DROP TABLE IF EXISTS `FamilyBudget`.`AccessToken`;
 SHOW WARNINGS;
 CREATE TABLE IF NOT EXISTS `FamilyBudget`.`AccessToken` (
 	`AuthorizedUser` VARCHAR(100) NOT NULL,
-	`Token`	   VARCHAR(36) NOT NULL,
-	`Expires`  DATETIME NOT NULL,
-	PRIMARY KEY (`AuthorizedUser`, `Token`))
+	`AccessToken` VARCHAR(36) NOT NULL,
+	`AccessExpires`  DATETIME NOT NULL,
+    `RefreshToken` VARCHAR(36) NOT NULL,
+    `RefreshExpires` DATETIME NOT NULL,
+	PRIMARY KEY (`AuthorizedUser`, `AccessToken`))
 ENGINE = InnoDB;
 
 SHOW WARNINGS;
