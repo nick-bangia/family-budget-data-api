@@ -2,6 +2,7 @@
   "name": "Family Budget API",
   "port": 8080,
   "timeout": 15000,
+  "workingDir": "./",
   "tls": {
     "enabled": false,
     "serverCertFile": "./config/keys/family-budget-cert.pem",

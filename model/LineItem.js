@@ -22,7 +22,6 @@ function LineItem() {
   this.paymentMethodKey = '';
   this.paymentMethodName = '';
   this.accountName = '';
-  this.goalKey = '';
   this.goalAmount = '';
   this.statusId = 0;
   this.isTaxDeductible = false;
