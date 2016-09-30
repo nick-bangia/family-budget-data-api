@@ -563,8 +563,9 @@ INSERT INTO Subtypes (SubtypeId, SubtypeName) VALUES (1, 'Credit');
 
 INSERT INTO Types (TypeId, TypeName) VALUES (0, 'Expense');
 INSERT INTO Types (TypeId, TypeName) VALUES (1, 'Allocation');
-INSERT INTO Types (TypeId, TypeName) VALUES (2, 'Journal Entry');
+INSERT INTO Types (TypeId, TypeName) VALUES (2, 'Adjustment');
 INSERT INTO Types (TypeId, TypeName) VALUES (3, 'Income');
+INSERT INTO Types (TypeId, TypeName) VALUES (4, 'Journal Entry');
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
