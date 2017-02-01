@@ -362,12 +362,12 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_Pending` AS
 SHOW WARNINGS;
 
 -- -----------------------------------------------------
--- View  `FamilyBudget`.`ActiveLineItems_ReconciledPriorMonths_Condensed`
+-- View  `FamilyBudget`.`ActiveLineItems_ReconciledHistoricalMonths_Condensed`
 -- -----------------------------------------------------
-DROP VIEW IF EXISTS `FamilyBudget`.`ActiveLineItems_ReconciledPriorMonths_Condensed`;
+DROP VIEW IF EXISTS `FamilyBudget`.`ActiveLineItems_ReconciledHistoricalMonths_Condensed`;
 SHOW WARNINGS;
 
-CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledPriorMonths_Condensed` AS
+CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledHistoricalMonths_Condensed` AS
     select 
       'CONDENSED_KEYS' AS `UniqueKey`,
       `fli`.`MonthId`,
@@ -441,7 +441,7 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledPriorMonths_Condensed` AS
       join `Months` `m` ON (`fli`.`MonthId` = `m`.`MonthId`))
     where
       ((`fli`.`StatusId` = 0)
-      and (concat(`fli`.`MonthId`, `fli`.`Year`) <> concat(month(NOW()), year(NOW())))
+      and (str_to_date(concat(`fli`.`MonthId`, '-', `fli`.`DayOfMonth`, '-', `fli`.`Year`), '%m-%d-%Y') < DATE_ADD(str_to_date(concat(month(NOW()), '-01-', year(NOW())), '%m-%d-%Y'), INTERVAL (1) -3 MONTH))
       and (`sc`.`IsActive` = 1))
     group by 
       `fli`.`SubcategoryKey`,
@@ -457,12 +457,12 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledPriorMonths_Condensed` AS
       `fli`.`IsTaxDeductible`;
 
 -- -----------------------------------------------------
--- View  `FamilyBudget`.`ActiveLineItems_ReconciledCurrentMonth`
+-- View  `FamilyBudget`.`ActiveLineItems_ReconciledRecentMonths`
 -- -----------------------------------------------------
-DROP VIEW IF EXISTS `FamilyBudget`.`ActiveLineItems_ReconciledCurrentMonth`;
+DROP VIEW IF EXISTS `FamilyBudget`.`ActiveLineItems_ReconciledRecentMonths`;
 SHOW WARNINGS;
 
-CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledCurrentMonth` AS
+CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledRecentMonths` AS
     select 
       `fli`.`UniqueKey` AS `UniqueKey`,
       `fli`.`MonthId` AS `MonthId`,
@@ -499,7 +499,7 @@ CREATE VIEW `FamilyBudget`.`ActiveLineItems_ReconciledCurrentMonth` AS
         join `dimPaymentMethod` `pm` ON (`fli`.`PaymentMethodKey` = `pm`.`PaymentMethodKey`))
     where
         ((`fli`.`StatusId` = 0)
-        and (concat(`fli`.`MonthId`, `fli`.`Year`) = concat(month(NOW()), year(NOW())))
+        and (str_to_date(concat(`fli`.`MonthId`, '-', `fli`.`DayOfMonth`, '-', `fli`.`Year`), '%m-%d-%Y') >= DATE_ADD(str_to_date(concat(month(NOW()), '-01-', year(NOW())), '%m-%d-%Y'), INTERVAL (1) -3 MONTH))
         and (`sc`.`IsActive` = 1));
 
 -- -----------------------------------------------------
