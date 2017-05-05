@@ -7,7 +7,7 @@ function AccountBalance() {
   this.reconciledAmount = 0;
   this.pendingAmount = 0;
   this.latestTransactionDate = new Date();
-  this.categories = [new CategoryBalance()];
+  this.items = [new CategoryBalance()];
 
   // subclass from BaseModel
   BaseModel.apply(this, arguments)
@@ -48,11 +48,11 @@ AccountBalance.prototype.setLatestTransactionDate = function(value) {
 }
 
 AccountBalance.prototype.getCategories = function() {
-  return this.categories;
+  return this.items;
 }
 
 AccountBalance.prototype.setCategories = function(value) {
-  this.categories = value;
+  this.items = value;
 }
 
 module.exports = AccountBalance;

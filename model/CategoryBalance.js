@@ -8,7 +8,7 @@ function CategoryBalance() {
   this.reconciledAmount = 0;
   this.pendingAmount = 0;
   this.latestTransactionDate = new Date();
-  this.subcategories = [new SubcategoryBalance()];
+  this.items = [new SubcategoryBalance()];
 
   // subclass from BaseModel
   BaseModel.apply(this, arguments);
@@ -57,11 +57,11 @@ CategoryBalance.prototype.setLatestTransactionDate = function(value) {
 }
 
 CategoryBalance.prototype.getSubcategories = function() {
-	return this.subcategories;
+	return this.items;
 }
 
 CategoryBalance.prototype.setSubcategories = function(value) {
-	this.subcategories = value;
+	this.items = value;
 }
 
 module.exports = CategoryBalance;

@@ -7,17 +7,17 @@ var IsABudgetAllowance = function(data) {
           'reconciledAmount' in data &&
           'pendingAmount' in data &&
           'latestTransactionDate' in data &&
-          'categories' in data &&
-          'accountName' in data.categories[0] &&
-          'name' in data.categories[0] &&
-          'reconciledAmount' in data.categories[0] &&
-          'pendingAmount' in data.categories[0] &&
-          'latestTransactionDate' in data.categories[0] &&
-          'subcategories' in data.categories[0] &&
-          'name' in data.categories[0].subcategories[0] &&
-          'reconciledAmount' in data.categories[0].subcategories[0] &&
-          'pendingAmount' in data.categories[0].subcategories[0] &&
-          'latestTransactionDate' in data.categories[0].subcategories[0]
+          'items' in data &&
+          'accountName' in data.items[0] &&
+          'name' in data.items[0] &&
+          'reconciledAmount' in data.items[0] &&
+          'pendingAmount' in data.items[0] &&
+          'latestTransactionDate' in data.items[0] &&
+          'items' in data.items[0] &&
+          'name' in data.items[0].items[0] &&
+          'reconciledAmount' in data.items[0].items[0] &&
+          'pendingAmount' in data.items[0].items[0] &&
+          'latestTransactionDate' in data.items[0].items[0]
          );
 }
 
