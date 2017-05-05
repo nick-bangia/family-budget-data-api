@@ -16,13 +16,13 @@ function BudgetAllowanceModule(dbUtility, queries) {
     
     // initialize a AccountBalance with this Account's information
     var acctBalance = new AccountBalance();
-    acctBalance.setAccountName(row.AccountName);
+    acctBalance.setName(row.AccountName);
     acctBalance.setReconciledAmount(row.ReconciledAmount);
     acctBalance.setPendingAmount(row.PendingAmount);
     acctBalance.setLatestTransactionDate(row.LatestTransactionDate);
     
     // execute a second query to get the actual budget allowances for this given category
-    self.dbUtility.SelectRowsWithParams(self.queries.SelectCategories, [acctBalance.getAccountName()], self.GetCategoryBalances, false,
+    self.dbUtility.SelectRowsWithParams(self.queries.SelectCategories, [acctBalance.getName()], self.GetCategoryBalances, false,
       function(dbResponse) {
         // check if the query was successful
         if (dbResponse.getStatus() == "ok") {
@@ -50,7 +50,7 @@ function BudgetAllowanceModule(dbUtility, queries) {
     // initialize a CategoryBalance with this Category's information
     var catBalance = new CategoryBalance();
     catBalance.setAccountName(row.AccountName);
-    catBalance.setCategoryName(row.CategoryName);
+    catBalance.setName(row.CategoryName);
     catBalance.setReconciledAmount(row.ReconciledAmount);
     catBalance.setPendingAmount(row.PendingAmount);
     catBalance.setLatestTransactionDate(row.LatestTransactionDate);
@@ -58,7 +58,7 @@ function BudgetAllowanceModule(dbUtility, queries) {
     // execute a second query to get the actual budget allowances for this given category
     self.dbUtility.SelectRowsWithParams(
       self.queries.SelectSubcategories, 
-      [catBalance.getAccountName(), catBalance.getCategoryName()], 
+      [catBalance.getAccountName(), catBalance.getName()], 
       self.ConvertRowToSubcategoryBalance,
       false,
       function(dbResponse) {
@@ -86,7 +86,7 @@ function BudgetAllowanceModule(dbUtility, queries) {
   this.ConvertRowToSubcategoryBalance = function(row, callback) {
     // populate a SubcategoryBalance with values from this row, and provide back to the callback
     var scBalance = new SubcategoryBalance();
-    scBalance.setSubcategoryName(row.SubcategoryName);
+    scBalance.setName(row.SubcategoryName);
     scBalance.setReconciledAmount(row.ReconciledAmount);
     scBalance.setPendingAmount(row.PendingAmount);
     scBalance.setLatestTransactionDate(row.LatestTransactionDate);

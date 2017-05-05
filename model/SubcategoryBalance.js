@@ -2,7 +2,7 @@ var BaseModel = require('./BaseModel');
 
 function SubcategoryBalance() {
 	// initialize properties
-	this.subcategoryName = '';
+	this.name = '';
 	this.reconciledAmount = 0;
 	this.pendingAmount = 0;
 	this.latestTransactionDate = new Date();
@@ -13,12 +13,12 @@ function SubcategoryBalance() {
 
 SubcategoryBalance.prototype = new BaseModel();
 
-SubcategoryBalance.prototype.getSubcategoryName = function() {
-	return this.Escape(this.subcategoryName);
+SubcategoryBalance.prototype.getName = function() {
+	return this.Escape(this.name);
 }
 
-SubcategoryBalance.prototype.setSubcategoryName = function(value) {
-	this.subcategoryName = value;
+SubcategoryBalance.prototype.setName = function(value) {
+	this.name = value;
 }
 
 SubcategoryBalance.prototype.getReconciledAmount = function() {

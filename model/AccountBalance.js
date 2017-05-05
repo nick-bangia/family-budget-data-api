@@ -3,7 +3,7 @@ var CategoryBalance = require('./CategoryBalance');
 
 function AccountBalance() {
 	// initialize properties
-  this.accountName = '';
+  this.name = '';
   this.reconciledAmount = 0;
   this.pendingAmount = 0;
   this.latestTransactionDate = new Date();
@@ -15,12 +15,12 @@ function AccountBalance() {
 
 AccountBalance.prototype = new BaseModel();
 
-AccountBalance.prototype.getAccountName = function() {
-  return this.Escape(this.accountName);
+AccountBalance.prototype.getName = function() {
+  return this.Escape(this.name);
 }
 
-AccountBalance.prototype.setAccountName = function(value) {
-  this.accountName = value;
+AccountBalance.prototype.setName = function(value) {
+  this.name = value;
 }
 
 AccountBalance.prototype.getReconciledAmount = function() {

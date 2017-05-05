@@ -24,12 +24,12 @@ CategoryBalance.prototype.setAccountName = function(value) {
 	this.accountName = value;
 }
 
-CategoryBalance.prototype.getCategoryName = function() {
-	return this.Escape(this.categoryName);
+CategoryBalance.prototype.getName = function() {
+	return this.Escape(this.name);
 }
 
-CategoryBalance.prototype.setCategoryName = function(value) {
-	this.categoryName = value;
+CategoryBalance.prototype.setName = function(value) {
+	this.name = value;
 }
 
 CategoryBalance.prototype.getReconciledAmount = function() {
