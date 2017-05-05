@@ -8,6 +8,7 @@ var IsABudgetAllowance = function(data) {
           'pendingAmount' in data &&
           'latestTransactionDate' in data &&
           'categories' in data &&
+          'accountName' in data.categories[0] &&
           'name' in data.categories[0] &&
           'reconciledAmount' in data.categories[0] &&
           'pendingAmount' in data.categories[0] &&

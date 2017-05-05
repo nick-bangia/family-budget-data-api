@@ -4,7 +4,7 @@ var SubcategoryBalance = require('./SubcategoryBalance');
 function CategoryBalance() {
   // initialize properties
   this.accountName = '';
-  this.categoryName = '';
+  this.name = '';
   this.reconciledAmount = 0;
   this.pendingAmount = 0;
   this.latestTransactionDate = new Date();
